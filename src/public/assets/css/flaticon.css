@@ -1,0 +1,63 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 29/03/2018 09:57
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("../fonts/Flaticon.eot");
+  src: url("../fonts/Flaticon.eot?") format("embedded-opentype"),
+       url("../fonts/Flaticon.woff") format("woff"),
+       url("../fonts/Flaticon.ttf") format("truetype"),
+       url("../fonts/Flaticon.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("../fonts/Flaticon.svg") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+  font-family: Flaticon;
+font-style: normal;
+}
+
+.flaticon-language:before { content: "\f100"; }
+.flaticon-business:before { content: "\f101"; }
+.flaticon-strategical-planning:before { content: "\f102"; }
+.flaticon-solution:before { content: "\f103"; }
+.flaticon-reply:before { content: "\f104"; }
+.flaticon-puzzle:before { content: "\f105"; }
+.flaticon-facebook-placeholder-for-locate-places-on-maps:before { content: "\f106"; }
+.flaticon-placeholder-1:before { content: "\f107"; }
+.flaticon-piggy-bank:before { content: "\f108"; }
+.flaticon-arrows-1:before { content: "\f109"; }
+.flaticon-network:before { content: "\f10a"; }
+.flaticon-money-bag:before { content: "\f10b"; }
+.flaticon-minimize:before { content: "\f10c"; }
+.flaticon-megaphone:before { content: "\f10d"; }
+.flaticon-message:before { content: "\f10e"; }
+.flaticon-increasing-stocks-graphic-of-bars:before { content: "\f10f"; }
+.flaticon-technology:before { content: "\f110"; }
+.flaticon-group:before { content: "\f111"; }
+.flaticon-gears:before { content: "\f112"; }
+.flaticon-folder:before { content: "\f113"; }
+.flaticon-full-screen:before { content: "\f114"; }
+.flaticon-exam:before { content: "\f115"; }
+.flaticon-edit:before { content: "\f116"; }
+.flaticon-download-arrow:before { content: "\f117"; }
+.flaticon-dollar-analysis-bars-chart:before { content: "\f118"; }
+.flaticon-arrows:before { content: "\f119"; }
+.flaticon-creativity:before { content: "\f11a"; }
+.flaticon-compass:before { content: "\f11b"; }
+.flaticon-clock-circular-outline:before { content: "\f11c"; }
+.flaticon-smartphone-call:before { content: "\f11d"; }
+.flaticon-24-hours-phone-service:before { content: "\f11e"; }
+.flaticon-placeholder:before { content: "\f11f"; }
+.flaticon-graphic:before { content: "\f120"; }
+.flaticon-gestures:before { content: "\f121"; }

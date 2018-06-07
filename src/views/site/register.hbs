@@ -1,0 +1,294 @@
+{{#extend 'stylesheets'}}
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+<!-- BootStrap Stylesheet -->
+<link rel="stylesheet" href="/assets1/external/bootstrap/css/bootstrap.min.css">
+<!-- Font-Awesome Stylesheet -->
+<link rel="stylesheet" href="/assets1/external/font-awesome/css/font-awesome.min.css">
+
+
+<!-- Plugin Custom Stylesheet -->
+<link rel="stylesheet" href="/assets1/custom/css/form-wizard-blue.css">
+{{!-- <link href="switcher/switcher.css" rel="stylesheet"> --}}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+{{/extend}}
+
+<div class="breadcumb-area bg-with-black">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcumb">
+                        <h2 class="name">Forms</h2>
+                        <ul class="links">
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">Forms</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcumb-area-end -->
+
+    <section class="form-box">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                
+                    <!-- Form Wizard -->
+                    <div class="form-wizard form-header-classic form-body-classic">
+                    
+                        <form role="form" action="/store/create-store" method="post" enctype="multipart/form-data">
+
+                            <h3>Sign Up Your User Account</h3>
+                            <p>Fill all form field to go next step</p>
+                            
+                            <!-- Form progress -->
+                            <div class="form-wizard-steps form-wizard-tolal-steps-4">
+                                <div class="form-wizard-progress">
+                                    <div class="form-wizard-progress-line" data-now-value="12.25" data-number-of-steps="4" style="width: 12.25%;"></div>
+                                </div>
+                                <!-- Step 1 -->
+                                <div class="form-wizard-step active">
+                                    <div class="form-wizard-step-icon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
+                                    <p>Store Account</p>
+                                </div>
+                                <!-- Step 1 -->
+                                
+                                <!-- Step 2 -->
+                                <div class="form-wizard-step">
+                                    <div class="form-wizard-step-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                    <p>Branch Account</p>
+                                </div>
+                                <!-- Step 2 -->
+
+                                <!-- Step 3 -->
+                                <div class="form-wizard-step">
+                                    <div class="form-wizard-step-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                                    <p>Administrator Account</p>
+                                </div>
+                                <!-- Step 3 -->
+                                
+                                <!-- Step 4 -->
+                                
+                                <div class="form-wizard-step">
+                                    <div class="form-wizard-step-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+                                    <p>Success</p>
+                                </div>
+                                <!-- Step 4 -->
+                            </div>
+                            <!-- Form progress -->
+                            
+                            
+                            <!-- Form Step 1 -->
+                            <fieldset>
+                                <!-- Progress Bar -->
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <h4>Account Information: <span>Step 1 - 4</span></h4>
+                                <div class="form-group">
+                                    <label>Company Name / Bussines Name: <span>*</span></label>
+                                    <input type="text" name="name" placeholder="Company Name / Bussines Name" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email: <span>*</span></label>
+                                    <input type="email" name="email" placeholder="Email" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number: <span>*</span></label>
+                                    <input type="number" name="phone" placeholder="Phone Number" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Short Code: <span>*</span></label>
+                                    <input type="text" name="shortCode" placeholder="Short Code" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Website: <span>*</span></label>
+                                    <input type="text" name="website" placeholder="Company Website" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Business Type: <span>*</span></label>
+                                    <select name="businessType" class="form-control required">
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="retail">Retail</option>
+                                        <option value="retails_and_wholesale">Retails And Wholesale</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Select Country: <span>*</span></label>
+                                    <select name="country" class="form-control required">
+                                        <option value="Nigeria">Nigeria</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Select State: <span>*</span></label>
+                                    <select name="state" class="form-control required">
+                                        <option value="Lagos state">Lagos state</option>
+                                        <option value="Kwara state">Kwara state</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>City: <span>*</span></label>
+                                    <input type="text" name="city" placeholder="City" class="form-control required">
+                                </div>
+                                <h4>Company Logo:</h4>
+                                <div style="clear:both;"></div>
+                                    <div class="form-group image-upload">
+                                        <div class="setting image_picker">
+                                            <br/><h3 class="text-center">Upload Logo</h3>
+                                            <div class="settings_wrap">
+                                            <label class="drop_target">
+                                                <div class="image_preview"></div>
+                                                <input id="inputFile" type="file" name="logo"/>
+                                            </label>
+                                            <div class="settings_actions vertical"><a class="disabled" data-action="remove_current_image"><i class="fa fa-trash" aria-hidden="true"></i> Remove Image</a></div>
+                                            </div>
+                                        </div>							  
+                                    </div>
+                                <div class="form-wizard-buttons">
+                                    <button type="button" class="btn btn-next">Next</button>
+                                </div>
+                            </fieldset>
+                            <!-- Form Step 1 -->
+
+                            <!-- Form Step 2 -->
+                            <fieldset>
+                                <!-- Progress Bar -->
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <h4>Branch Information : <span>Step 2 - 4</span></h4>
+                                <div class="form-group">
+                                    <label>Branch Name: <span>*</span></label>
+                                    <input type="text" name="branch_name" placeholder="Branch Name" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Branch Address: <span>*</span></label>
+                                    <textarea rows="2" name="branch_address" class="form-control required"></textarea>    
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number: <span>*</span></label>
+                                    <input type="number" name="branch_phone" placeholder="Phone Number" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Select Country: <span>*</span></label>
+                                    <select name="branch_country" class="form-control required">
+                                        <option value="Nigeria">Nigeria</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Select State: <span>*</span></label>
+                                    <select name="branch_state" class="form-control required">
+                                        <option value="Lagos state">Lagos state</option>
+                                        <option value="Kwara state">Kwara state</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>City: <span>*</span></label>
+                                    <input type="text" name="branch_city" placeholder="City" class="form-control required">
+                                </div>
+                                <div class="form-wizard-buttons">
+                                    <button type="button" class="btn btn-previous">Previous</button>
+                                    <button type="button" class="btn btn-next">Next</button>
+                                </div>
+                            </fieldset>
+                            <!-- Form Step 2 -->
+
+                            <!-- Form Step 3 -->
+                            <fieldset>
+                                <!-- Progress Bar -->
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <h4>Administrator Information : <span>Step 3 - 4</span></h4>
+                                <div class="form-group">
+                                    <label>First Name: <span>*</span></label>
+                                    <input type="text" name="firstname" placeholder="First Name" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Middle Name: </label>
+                                    <input type="text" name="middlename" placeholder="Middle Name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name: <span>*</span></label>
+                                    <input type="text" name="lastname" placeholder="Last Name" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Address: <span>*</span></label>
+                                    <textarea rows="2" name="admin_address" class="form-control required"></textarea>    
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number: <span>*</span></label>
+                                    <input type="number" name="admin_phone" placeholder="Phone Number" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>E-mail: <span>*</span></label>
+                                    <input type="email" name="admin_email" placeholder="E-mail" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password: <span>*</span></label>
+                                    <input type="password" name="password" placeholder="Password" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Comfirm Password: <span>*</span></label>
+                                    <input type="password" name="password" placeholder="Comfirm Password" class="form-control required">
+                                </div>
+                                <div class="form-wizard-buttons">
+                                    <button type="button" class="btn btn-previous">Previous</button>
+                                    <button type="button" class="btn btn-next">Next</button>
+                                </div>
+                            </fieldset>
+                            <!-- Form Step 3 -->
+                            
+                            <!-- Form Step 3 -->
+                            <fieldset>
+                                <!-- Progress Bar -->
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    </div>
+                                </div>
+                                <!-- Progress Bar -->
+                                <h4>Success Account: <span>Step 4 - 4</span></h4>
+                                <div style="clear:both;"></div>
+                                    <div class="success">
+                                            <h3>Sing Up Success</h3>
+                                            <div class="success-icon"><i class="fa fa-check" aria-hidden="true"></i></div>					  
+                                    </div>
+                                <div class="form-wizard-buttons">
+                                    <button type="button" class="btn btn-previous">Previous</button>
+                                    <button type="submit" class="btn btn-submit">Done</button>
+                                </div>
+                            </fieldset>
+                            <!-- Form Step 3 -->
+                        
+                        </form>
+                    
+                    </div>
+                    <!-- Form Wizard -->
+                </div>
+            </div>
+                
+        </div>
+    </section>
+
+
+{{#extend 'scripts'}}
+    <!-- Jquery JS -->
+    <script src="/assets1/external/jquery-1.11.1.min.js"></script>
+    <!-- bootStrap JS -->
+    <script src="/assets1/external/bootstrap/js/bootstrap.min.js"></script>
+    
+    <!-- Plugin Custom JS -->
+    <script src="/assets1/custom/js/form-wizard.js"></script>
+{{/extend}}

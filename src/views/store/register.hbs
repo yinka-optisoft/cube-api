@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Register | {{@defaultPageTitle}}</title>
+
+    <!-- Bootstrap -->
+    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/stylesheets/custom.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/css/toastr.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+
+    <style>
+
+.btn-file {
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    }      
+.btn-file > input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    transform: translate(-300px, 0) scale(4);
+    font-size: 23px;
+    direction: ltr;
+    cursor: pointer;
+    }
+    .fileinput {
+    margin-bottom: 9px;
+    display: inline-block;
+    }
+    .fileinput .uneditable-input {
+    display: inline-block;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    cursor: text;
+    }
+    .fileinput i + .fileinput-filename,
+    .fileinput .btn + .fileinput-filename {
+    padding-left: 5px;
+    }
+    .fileinput.fileinput-exists .close {
+    opacity: 1;
+    color: #dee0e4;
+    position: relative;
+    top: 3px;
+    margin-left: 5px;
+    }
+    .fileinput .thumbnail {
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    text-align: center;
+    }
+    .fileinput .thumbnail[data-trigger="fileinput"] {
+    cursor: pointer;
+    }
+    .fileinput .thumbnail:before,
+    .fileinput .thumbnail:after {
+    content: " ";
+    display: table;
+    }
+    .fileinput .thumbnail:after {
+    clear: both;
+    }
+    .fileinput .thumbnail > img {
+    max-height: 100%;
+    display: block;
+    }
+    .fileinput .btn {
+    vertical-align: middle;
+    }
+    .fileinput-exists .fileinput-new,
+    .fileinput-new .fileinput-exists {
+    display: none;
+    }
+    .fileinput-inline .fileinput-controls {
+    display: inline;
+    }
+    .fileinput .uneditable-input {
+    white-space: normal;
+    }
+    .fileinput-new .input-group .btn-file {
+    border-radius: 0 3px 3px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-xs,
+    .fileinput-new .input-group .btn-file.btn-sm {
+    border-radius: 0 2px 2px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-lg {
+    border-radius: 0 3px 3px 0;
+    }
+    .form-group.has-warning .fileinput .uneditable-input {
+    color: #574802;
+    border-color: #ffd78a;
+    }
+    .form-group.has-warning .fileinput .fileinput-preview {
+    color: #574802;
+    }
+    .form-group.has-warning .fileinput .thumbnail {
+    border-color: #ffd78a;
+    }
+    .form-group.has-error .fileinput .uneditable-input {
+    color: #ac1818;
+    border-color: #ffafbd;
+    }
+    .form-group.has-error .fileinput .fileinput-preview {
+    color: #ac1818;
+    }
+    .form-group.has-error .fileinput .thumbnail {
+    border-color: #ffafbd;
+    }
+    .form-group.has-success .fileinput .uneditable-input {
+    color: #045702;
+    border-color: #b4e8a8;
+    }
+    .form-group.has-success .fileinput .fileinput-preview {
+    color: #045702;
+    }
+    .form-group.has-success .fileinput .thumbnail {
+    border-color: #b4e8a8;
+    }
+    .input-group-addon:not(:first-child) {
+    border-left: 0;
+    }
+    .fileinput .uneditable-input,
+    .fileinput-new .input-group .btn-file {
+    display: table-cell !important;
+    }
+.modal-dialog{
+	border-radius: 5px 5px;
+	border-bottom: #ccc solid 7px;
+}
+.add_member_modal{
+	width: 60%;
+}
+@media (max-width: 768px) {
+	.add_member_modal{
+		width: 96%;
+	}
+}
+.quick-btn { background: #EEEEEE;
+  box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+  color: #444444;
+  display: inline-block;
+  height: 80px;
+  margin: 10px;
+  padding-top: 16px;
+  text-align: center;
+  text-decoration: none;
+  width: 90px;
+  position: relative;
+}
+.quick-btn span {
+  display: block;
+}
+.quick-btn .label {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+}
+.quick-btn:hover {
+  text-decoration: none;
+  color: #fff;
+  background-color: #4d7589;
+  box-shadow: 3px 4px 1px #ccc;
+}
+.quick-btn.small {
+  width: 40px;
+  height: 30px;
+  padding-top: 6px;
+}
+</style>
+
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="clearfix"></div>
+
+            <div class="row">
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Register Store</h2>
+                    {{#if toasts}}
+                    <div class="alert alert-success" id="success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                        <i class="icon-tick"></i><strong>{{toasts}}!</strong> 
+                    </div>
+                    {{/if}}
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <!-- Smart Wizard -->
+                        <div id="wizard" class="form_wizard wizard_horizontal">
+                            <ul class="wizard_steps">
+                                <li>
+                                    <a href="#step-1">
+                                    <span class="step_no">1</span>
+                                    <span class="step_descr">
+                                                        Step 1<br />
+                                                        <small>Register Store</small>
+                                                    </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-2">
+                                        <span class="step_no">2</span>
+                                        <span class="step_descr">
+                                            Step 2<br />
+                                            <small>Create Branch</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-3">
+                                        <span class="step_no">3</span>
+                                        <span class="step_descr">
+                                            Step 3<br />
+                                            <small>Create Branch</small>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="step-1">
+                                <form action="/store/create-store" class="form-horizontal form-label-left" method="post" enctype="multipart/form-data">
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Company Name / Bussines Name <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" name="name" id="name" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">E-mail <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="email" id="email" name="email" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Phone Number <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="number" id="phone" name="phone" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shortCode">Short Code <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="shortCode" name="shortCode" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="website">Website <span class="required"></span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="website" name="website" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Business Type</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="businessType" class="form-control">
+                                            <option value="manufacturing">Manufacturing</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="retails_and_wholesale">Retails And Wholesale</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Country</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="country" class="form-control">
+                                            <option value="Nigeria">Nigeria</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select State</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="state" class="form-control">
+                                            <option value="Lagos state">Lagos state</option>
+                                            <option value="Kwara state">Kwara state</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="city">City <span class="required"></span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="city" name="city" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                    </div>
+                                    {{!-- <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select City</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="city" class="form-control">
+                                            <option value="Lagos state">Lagos state</option>
+                                            <option value="Kwara state">Kwara state</option>
+                                        </select>
+                                    </div>
+                                    </div> --}}
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="logo">Company Logo / Bussines Logo <span class="required"></span>
+                                    </label>
+                                        <div class="fileinput fileinput-new col-md-6 col-sm-6 col-xs-12" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail" style="height: 150px;width:100%;" data-trigger="fileinput">
+                                                <img src="/images/boxed-pattern-3.png" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                            </div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
+                                            <div class="text-center">
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="fileinput-new">Select logo</span>
+                                                    <span class="fileinput-exists">Change logo</span>
+                                                    <input type="file" name="logo" accept="image/*" required>
+                                                </span>
+                                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-success">Register Store</button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                            <div id="step-2">
+                                <form action="/store/create-branch"class="form-horizontal form-label-left" method="POST">
+
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Branch Name <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" name="name" id="name" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Address <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <textarea rows="2" id="email" name="email" class="form-control col-md-7 col-xs-12" required></textarea>    
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Phone Number <span class="required">*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="number" id="phone" name="phone" class="form-control col-md-7 col-xs-12" required>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Country</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="country" class="form-control">
+                                            <option value="Nigeria">Nigeria</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select State</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select name="state" class="form-control">
+                                            <option value="Lagos state">Lagos state</option>
+                                            <option value="Kwara state">Kwara state</option>
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="city">City <span class="required"></span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="city" name="city" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-success">Register Store</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        <!-- End SmartWizard Content -->
+                        </div>
+                        <div class="separator text-center">
+                            <p class="change_link">Already a member ?
+                                <a href="/store" class="to_register"> Log in </a>
+                            </p>
+
+                            <div class="clearfix"></div>                
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/vendors/nprogress/nprogress.js"></script>
+    <!-- jQuery Smart Wizard -->
+    <script src="/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="/javascripts/custom.min.js"></script>
+
+    <script src="/javascripts/fileinput.js"></script>
+
+	
+  </body>
+</html>
