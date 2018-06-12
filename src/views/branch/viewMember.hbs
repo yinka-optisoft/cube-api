@@ -170,7 +170,11 @@
 
             </ul>
 
+            {{#if (ne users._roleId.name admin)}}
             <a class="btn btn-success" data-toggle="modal" data-target="#editmemberForm"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+            {{else}}
+
+            {{/if}}
             <br />
 
         </div>

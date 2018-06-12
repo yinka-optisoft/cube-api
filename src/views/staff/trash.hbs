@@ -1,0 +1,216 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+{{/extend}}
+
+
+<div class="">
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>Trash <i class="fa fa-trash"></i></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>E-mail</th>
+                        <th>Phone Number</th>
+                        <th>Branch</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {{#each staff}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{_roleId.name}}</td>
+                                <td id="name{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
+                                <td id="username{{_id}}">{{username}}</td>
+                                <td id="email{{_id}}">{{email}}</td>
+                                <td id="phone{{_id}}">{{phone}}</td>
+                                <td>{{_branchId.name}}</td>
+                                <td>
+                                    <button onclick="restoreMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Restore</i></button>
+
+                                    <button onclick="deleteMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">Delete</button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{#extend 'scripts'}}
+    <script src="/javascripts/fileinput.js"></script>
+    <!-- Datatables -->
+    <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+
+    <script>
+
+    function editmemberModal(id){
+
+        var name = $('#name'+id).html();
+        var username = $('#username'+id).html();
+        var email = $('#email'+id).html();
+        var phone = $('#phone'+id).html();
+
+        $('#ename').val(name);
+        $('#eusername').val(username);
+        $('#eemail').val(email);
+        $('#ephone').val(phone);
+        $("#editmemberModal").modal('show');
+    }
+
+
+// function to restore
+
+    function restoreMember(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to Restore?',
+			buttons: {
+				confirm: function () {
+					restore_user(id);
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+
+			}
+		});
+    }
+
+
+
+var restore_user = function(id){
+
+    console.log(id);
+
+         $.ajax({
+            type: "POST", // Post / Get method
+            url: "/admin/restore", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
+
+             if (response === "success") {
+                $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Restore Successfull',
+                    buttons: {
+                        ok: function () {
+                           location.reload(true)
+                        },
+                    }
+                });
+              }
+
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                    $.alert('Could not Restore');
+            }
+            });
+}
+
+
+// function to delete permanetly
+function deleteMember(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to Delete permanetly?',
+			buttons: {
+				confirm: function () {
+					delete_user(id);
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+
+			}
+		});
+    }
+
+
+
+var delete_user = function(id){
+
+         $.ajax({
+            type: "POST", // Post / Get method
+            url: "/admin/delete", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
+
+             if (response === "success") {
+                $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Delete Successfully',
+                    buttons: {
+                        ok: function () {
+                           location.reload(true)
+                        },
+                    }
+                });
+              }
+
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                    $.alert('Could not Banned');
+            }
+            });
+}
+
+</script>
+
+{{/extend}}

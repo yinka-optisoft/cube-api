@@ -1,8 +1,15 @@
 {{#if expressFlash}}
-    <div class="alert alert-success" id="success">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-    </button>
-        <i class="icon-tick"></i><strong>{{expressFlash}}!</strong> 
-    </div>
+    {{!-- <div class="text-center"> --}}
+        <div class="col-sm-12 col-offset-2 ">
+            <div class="alert alert-success" id="success">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                {{!-- <i class="icon-tick"></i><strong>{{expressFlash}}!</strong>  --}}
+                <div class="text-center">
+                    <strong>{{expressFlash}}!</strong>
+                </div>
+            </div>
+        </div>
+    {{!-- </div> --}}
 {{/if}}

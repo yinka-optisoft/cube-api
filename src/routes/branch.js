@@ -149,7 +149,12 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
 
                              } else {
                                req.flash('success', `Saved sucessfully! Your Username is ${member.username}`);
-                               res.redirect(`/branch/view/${ branchId}`);
+                               if (req.user._roleId === 'admin') {
+                                res.redirect('/admin/staff/');
+                               } else if (req.user._roleId === 'staff') {
+                                res.redirect(`/branch/view/${ branchId}`);
+                               }
+                              //  res.redirect(`/branch/view/${ branchId}`);
                              }
                            });
                        }
@@ -213,7 +218,7 @@ router.get('/user/view/:_userId', guard.ensureLoggedIn(), async (req, res, next)
   const user = await Account.findById(req.params._userId).populate('_roleId');
   const roles = await Role.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(user._branchId);
-  res.render('branch/viewMember', { user, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
+  res.render('branch/viewMember', { user, roles, branch, users: req.user, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 
@@ -277,7 +282,6 @@ router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
     }
   });
 });
-
 
 
 export default router;
