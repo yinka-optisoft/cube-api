@@ -110,6 +110,14 @@ app.use((err, req, res, next) => {
 });
 
 
+// helper for select tag option
+hbs.registerHelper('select', function(selected, options){
+  return options.fn(this).replace(new RegExp(' value=\"' + selected + '\"'), 
+  '$& selected="selected"').replace(new RegExp('>' + selected + '</option>'),
+  'selected="selected"$&');
+});
+
+
 // helper use for comparision and operator
 
 hbs.registerHelper({
@@ -151,7 +159,7 @@ hbs.registerHelper('JSON', function(value, options) {
 });
 
 
-hbs.registerPartials(`${__dirname}/views/partials`, () => {});
+// hbs.registerPartials(`${__dirname}/views/partials`, () => {});
 // hbs helpers
 hbs.registerHelper('link', function(text, options) {
   var attrs = [];

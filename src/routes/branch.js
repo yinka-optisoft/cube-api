@@ -4,6 +4,7 @@ import Store from '../models/store';
 import Branch from '../models/branch';
 import Account from '../models/account';
 import Role from '../models/role';
+import Category from '../models/category';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
@@ -87,8 +88,8 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
   router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
     const branch = await Branch.findById(req.params._branchId);
     const roles = await Role.find({ _storeId: req.session._storeId });
-    const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id });
-    res.render('branch/branchDashboard', { staff, roles, branch, expressFlash: req.flash('info'), layout: 'layouts/user' });
+    const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
+    res.render('branch/branchDashboard', { staff, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
   });
 
     
@@ -160,29 +161,59 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
 });
 
 
-// Ban member
-router.post('/member/ban', guard.ensureLoggedIn(), async (req, res) => {
+router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
   const user = await Account.findById(id);
-  
-  user.status = 0;
+
+  if (user.status === false){
+    user.status = 1;
+    user.save(function(err) {
+      if (err){
+        console.log(err);
+      } else {
+        res.send('success');
+      };
+    });
+  } else {
+    user.status = 0;
+    user.save(function(err) {
+      if (err){
+        console.log(err);
+      } else {
+        res.send('success');
+      };
+    });
+  }
+
+  /*user.status = 0;
+
   user.save(function(err) {
     if (err){
       console.log(err);
     } else {
       res.send('success');
     };
-  });
+  });*/
+
+  // res.send('success');
+
+
+  // const response = {
+  //   status: 200,
+  //   message: 'Branch delete successfully',
+  // };
+
+  // res.send(response);
 });
 
 
 // branch homepage
 router.get('/user/view/:_userId', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.params._userId);
+  const user = await Account.findById(req.params._userId).populate('_roleId');
   const roles = await Role.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(user._branchId);
-  res.render('branch/viewMember', { user, roles, branch, expressFlash: req.flash('info'), layout: 'layouts/user' });
+  res.render('branch/viewMember', { user, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 
@@ -227,6 +258,26 @@ router.post('/user/update/:_branchId', guard.ensureLoggedIn(), async (req, res, 
   });
 
 });
+
+
+// Add ctegory
+router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const branch = req.body._branchId;
+
+  const category = await Category();
+  category._storeId = req.session._storeId;
+  category.name = req.body.name;
+  await category.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Category Saved Successfully');
+      res.redirect(`/branch/view/${branch}`);
+    }
+  });
+});
+
 
 
 export default router;

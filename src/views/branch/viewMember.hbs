@@ -283,46 +283,56 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="_roleId" id="e_roleId" required>
+                                    {{#select user._roleId.name}}
                                     <option>Select Role</option>
                                     {{#each roles}}
                                         <option value="{{_id}}">{{name}}</option>
                                     {{/each}}
+                                    {{/select}}
                                 </select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="gender" id="egender" required>
+                                    {{#select user.gender}}
                                     <option>Select Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
+                                    {{/select}}
                                 </select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="country" id="ecountry" required>
+                                    {{#select user.country}}
                                     <option>Select Country</option>
                                     <option value="Nigeria">Nigeria</option>
+                                    {{/select}}
                                 </select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="state" id="estate" required>
+                                    {{#select user.state}}
                                     <option>Select State</option>
                                     <option value="Lagos State">Lagos State</option>
                                     <option value="Kwara State">Kwara State</option>
+                                    {{/select}}
                                 </select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="lga" id="elga" required>
+                                    {{#select user.lga}}
                                     <option>Select L.G.A</option>
                                     <option value="ikeja">Ikeja</option>
                                     <option value="ilorin">Ilorin</option>
+                                    {{/select}}
                                 </select>
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                                <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Address' required></textarea>
+                                <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Address' required>{{user.address}}</textarea>
                             </div>
 
                             <div class="form-group">
@@ -330,14 +340,14 @@
                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail" style="height: 170px;width:100%;" data-trigger="fileinput">
-                                            <img src="/images/boxed-pattern-3.png" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                            <img src="/images/member/{{user.passport}}" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
                                         <div class="text-center">
                                             <span class="btn btn-default btn-file">
                                                 <span class="fileinput-new">Select logo</span>
                                                 <span class="fileinput-exists">Change logo</span>
-                                                <input type="file" name="passport" value="{{user.passport}}" accept="image/*" required>
+                                                <input type="file" name="passport" value="/images/member/{{user.passport}}" accept="image/*" required>
                                             </span>
                                             <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
                                         </div>
