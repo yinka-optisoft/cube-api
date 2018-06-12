@@ -21,6 +21,8 @@ import index from './routes/index';
 import users from './routes/users';
 import store from './routes/store';
 import sadmin from './routes/sadmin';
+import admin from './routes/admin';
+import branch from './routes/branch';
 
 const app = express();
 
@@ -76,6 +78,8 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/store', store);
 app.use('/sadmin', sadmin);
+app.use('/admin', admin);
+app.use('/branch', branch);
 
 // passport account auth
 
@@ -104,6 +108,48 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+// helper use for comparision and operator
+
+hbs.registerHelper({
+  eq: (v1, v2) => {
+    return v1 === v2;
+  },
+  ne: (v1, v2) => {
+    return v1 !== v2;
+  },
+  lt: (v1, v2) => {
+    return v1 < v2;
+  },
+  gt: (v1, v2) => {
+    return v1 > v2;
+  },
+  lte: (v1, v2) => {
+    return v1 <= v2;
+  },
+  gte: (v1, v2) => {
+    return v1 >= v2;
+  },
+  and: (v1, v2) => {
+    return v1 && v2;
+  },
+  or: (v1, v2) => {
+    return v1 || v2;
+  }
+
+});
+
+
+// Used to increment index
+hbs.registerHelper('inc', function(value, options) {
+  return parseInt(value) + 1;
+});
+
+hbs.registerHelper('JSON', function(value, options) {
+  return new hbs.handlebars.SafeString(JSON.stringify(value));
+});
+
 
 hbs.registerPartials(`${__dirname}/views/partials`, () => {});
 // hbs helpers

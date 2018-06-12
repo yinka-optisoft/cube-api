@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const Store = new Schema({
-  name: String,
+  _businessId: { type: Schema.Types.ObjectId, ref: 'bussinesses' },
+  name: { type: String, required: true },
   phone: Number,
   email: String,
   shortCode: String,
   website: String,
-  businessType: { type: String, lowercase: true, trim: true,
-                  enum: ['manufacturing', 'retail', 'retails_and_wholesale'] },
+  address: { type: String, required: true },
   country: String,
   state: String,
   city: String,

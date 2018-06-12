@@ -5,19 +5,20 @@ import passportLocalMongoose from 'passport-local-mongoose';
 const Account = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
+  _roleId: { type: Schema.Types.ObjectId, ref: 'roles' },
   firstname: String,
   middlename: String,
   lastname: String,
   username: String,
   password: String,
-  // _role: { type: Schema.Types.ObjectId, ref: 'staffroles' },
-  // TODO: this need to be change back to dynamic staff rle
-  role: { type: String, lowercase: true, trim: true,
-    enum: ['admin', 'staff'] },
-  email: String,
+  email: { type: String, index: { unique: true } },
   phone: Number,
   address: String,
+  gender: String,
   passport: String,
+  country: String,
+  state: String,
+  lga: String,
   status: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });

@@ -2,6 +2,9 @@ import express from 'express';
 import passport from 'passport';
 import Store from '../models/store';
 import Branch from '../models/branch';
+import Role from '../models/role';
+import Category from '../models/category';
+import Bussiness from '../models/bussiness';
 import Account from '../models/account';
 import formidable from 'formidable';
 import fs from 'fs';
@@ -12,9 +15,33 @@ import { check, validationResult } from 'express-validator/check';
 const router = express.Router();
 
 
-router.get('/register', (req, res) => {
-  res.render('site/register', { msg: req.flash('info'), layout: 'layouts/site' });
+router.get('/register', async (req, res) => {
+  const bussiness = await Bussiness.find();
+  res.render('site/register', { bussiness, expressFlash: req.flash('info'), layout: 'layouts/site' });
 });
+
+
+router.get('/login', (req, res) => {
+  res.render('site/index', { expressFlash: req.flash('info'), user: req.user,
+                             error: req.flash('error'),
+                             layout: false });
+});
+
+
+router.post('/login', passport.authenticate('local',
+                                            { failureRedirect: '/login',
+                                              failureFlash: true }),
+            async (req, res, next) => {
+              const store = await Store.findById(req.user._storeId);
+              if (!store) res.redirect('/');
+              req.session._storeId = store._id;
+              req.session.save((err) => {
+                if (err) {
+                  return next(err);
+                }
+                res.redirect('/admin/dashboard');
+              });
+            });
 
 
 const generateUniqueID = async storeShort => {
@@ -25,165 +52,154 @@ const generateUniqueID = async storeShort => {
 };
 
 
-router.post('/create-store', guard.ensureLoggedIn(), async (req, res, next) => {
-    const form = new formidable.IncomingForm();
-  
-    form.parse(req, async (err, fields, files) => {
+// router.post('/create-store', guard.ensureLoggedIn(), async (req, res, next) => {
+router.post('/create-store', async (req, res, next) => {
+  const form = new formidable.IncomingForm();
 
-      // fields.checkBody('name', 'company name is required').isEmpty();
-      // fields.checkBody('email', 'company email is required').isEmail();
+  form.parse(req, async (err, fields, files) => {
 
-        try {
-        const newStore = new Store();
-        const logo = files.logo;
-        newStore.name = fields.name;
-        newStore.email = fields.email;
-        newStore.phone = fields.phone;
-        newStore.shortCode = fields.shortCode;
-        newStore.website = fields.website;
-        newStore.businessType = fields.businessType;
-        newStore.country = fields.country;
-        newStore.state = fields.state;
-        newStore.city = fields.city;
-        if (logo && logo.name) {
-            const name = `${Math.round(Math.random() * 10000)}.${logo.name.split('.').pop()}`;
-            const dest = path.join(__dirname, '..', 'public', 'images', 'store', name);
-        fs.readFile(logo.path, function(err, data) {
-          fs.writeFile(dest,
-                        data, function(err) {
-                          fs.unlink(logo.path, async (err) => {
-                            if (err) {
-                              res.status(500);
-                              res.json(err);
-                            } else {
-                            newStore.logo = name;
-                              await newStore.save(function(err) {
-                                if (err) {
+    // fields.checkBody('name', 'company name is required').isEmpty();
+    // fields.checkBody('email', 'company email is required').isEmail();
+
+      try {
+      const newStore = new Store();
+      const logo = files.logo;
+      newStore.name = fields.name;
+      newStore.email = fields.email;
+      newStore.phone = fields.phone;
+      newStore.address = fields.address;
+      newStore.shortCode = fields.shortCode;
+      newStore.website = fields.website;
+      newStore._businessId = fields.businessType;
+      newStore.country = fields.country;
+      newStore.state = fields.state;
+      newStore.city = fields.city;
+      if (logo && logo.name) {
+          const name = `${Math.round(Math.random() * 10000)}.${logo.name.split('.').pop()}`;
+          const dest = path.join(__dirname, '..', 'public', 'images', 'store', name);
+      fs.readFile(logo.path, function(err, data) {
+        fs.writeFile(dest,
+                      data, function(err) {
+                        fs.unlink(logo.path, async (err) => {
+                          if (err) {
+                            res.status(500);
+                            res.json(err);
+                          } else {
+                          newStore.logo = name;
+                            await newStore.save(function(err) {
+                              if (err) {
+                                console.log(err);
+                              } 
+                            });
+                            const newBranch = new Branch();
+                            newBranch._storeId = newStore._id;
+                            newBranch.name = fields.branch_name;
+                            newBranch.address = fields.branch_address;
+                            newBranch.phone = fields.branch_phone;
+                            newBranch.country = fields.branch_country;
+                            newBranch.state = fields.branch_state;
+                            newBranch.city = fields.branch_city;
+                            await newBranch.save(function(err) {
+                              if (err){
                                   console.log(err);
                                 } 
-                              });
-                              const newBranch = new Branch();
-                              newBranch._storeId = newStore._id;
-                              newBranch.name = fields.branch_name;
-                              newBranch.address = fields.branch_address;
-                              newBranch.phone = fields.branch_phone;
-                              newBranch.country = fields.branch_country;
-                              newBranch.state = fields.branch_state;
-                              newBranch.city = fields.branch_city;
-                              await newBranch.save(function(err) {
-                                if (err){
-                                   console.log(err);
-                                  } 
-                                  
-                              });
+                                
+                            });
 
-                              const newAdmin = fields;
-                              const password = newAdmin.password;
-                              delete newAdmin.password;
-                              newAdmin.role = 'admin';
-                              newAdmin._storeId = newStore._id;
-                              newAdmin._branchId = newBranch._id;
-                              newAdmin.username = await generateUniqueID(newStore.shortCode);
-                              newAdmin.firstname = fields.firstname;
-                              newAdmin.middlename = fields.middlename;
-                              newAdmin.lastname = fields.lastname;
-                              newAdmin.address = fields.admin_address;
-                              newAdmin.phone = fields.admin_phone;
-                              newAdmin.email = fields.admin_email;
-                              Account.register(new Account(newAdmin), password,
-                                (err, account) => {
-                                  if (err) {
-                                    // TODO: change to console later
-                                    // console.log(err);
-                                    res.status(500);
-                                    res.send(err);
-                                    return;
-                                  } else {
-                                    req.flash('info', `Saved Successfully! Your Username is ${student.username}, The student will be visible once admitted!`);
-                                    res.redirect('/');
-                                  }
-                              });
-                            }
-                          });
+                            const newAdmin = fields;
+                            const password = newAdmin.password;
+                            delete newAdmin.password;
+                            newAdmin.role = fields.role;
+                            newAdmin._storeId = newStore._id;
+                            newAdmin._branchId = newBranch._id;
+                            newAdmin.username = await generateUniqueID(newStore.shortCode);
+                            newAdmin.firstname = fields.firstname;
+                            newAdmin.middlename = fields.middlename;
+                            newAdmin.lastname = fields.lastname;
+                            newAdmin.address = fields.admin_address;
+                            newAdmin.phone = fields.admin_phone;
+                            newAdmin.email = fields.admin_email;
+                            Account.register(new Account(newAdmin), password,
+                              (err, account) => {
+                                if (err) {
+                                  console.log(err);
+                                } else {
+                                  req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
+                                  res.redirect('/login');
+                                }
+                            });
+                          }
                         });
-        });
-      }
-    } catch (e) {
-        console.log(e);
-    }
-    });
-  });
-
-
-router.post('/login',
-            passport.authenticate('local', { failureRedirect: '/login',
-                                             failureFlash: true }),
-            (req, res, next) => {
-              console.log(req);
-              req.session.save((err) => {
-                if (err)
-                  return next(err);
-                res.redirect('/sadmin/dashboard');
-              });
-            });
-
-
-router.get('/logout', guard.ensureLoggedIn(), (req, res, next) => {
-  // const user = req.user;
-
-  req.logout();
-  req.session.save((err) => {
-    if (err) {
-      return next(err);
-      } else {
-        res.redirect('/login'); 
-      }
-    /*else {
-      School.findById(user._schoolId, (err, school) => {
-
-        // send user to the right dashboard base on their role and school
-        if (user.role === 'admin') {
-          res.redirect('/login');
-        } else if (user.role === 'schooladmin') {
-          res.redirect(`/${school.shortCode}/login`);
-        } else if (user.role === 'staff') {
-          res.redirect(`/${school.shortCode}/login`);
-        } else if (user.role === 'student') {
-          res.redirect(`/${school.shortCode}/login`);
-        } else if (user.role === 'parent') {
-          res.redirect(`/${school.shortCode}/login`);
-        } else { res.redirect('/login'); }
-
+                      });
       });
-
-    }*/
+    }
+  } catch (e) {
+      console.log(e);
+  }
   });
 });
 
 
+// create account roles
+router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
+  const roles = await Role.find({ _storeId: req.session._storeId });
+  const category = await Category.find({ _storeId: req.session._storeId });
+  const bussiness = await Bussiness.find({ _storeId: req.session._storeId });
+  res.render('role/manage', { roles, category, bussiness, expressFlash: req.flash('success'), layout: 'layouts/user' });
+});
 
-  // router.post('/login', passport.authenticate('local', { failureRedirect: 'login',
-  //                                  failureFlash: true }),
-  // async (req, res, next) => {
-  //   // const school = await School.findById(req.user._schoolId);
-  //   // if (!school) res.redirect('/');
-  //   // req.session._schoolId = school._id;
-  //   // req.session._currentSession = school._currentSession;
-  //   // detect the current term
-  //   Term.findOne({ $and: [
-  //     { end: { $gte: new Date() } }, { start: { $lte: new Date() } }] }, (err, term) => {
-  //     if (!err) {
-  //       req.session._currentTerm = term._id;
-  //       req.session.save((err) => {
-  //         if (err)
-  //           return next(err);
-  //         res.redirect('/dashboard');
-  //       });
-  //     } else {
-  //       return next(err);
-  //     }
-  //   });
 
-  // });
+// update branch
+router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const role = await Role();
+
+  role._storeId = req.session._storeId;
+  role.name = req.body.name;
+  await role.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Role Saved Successfully');
+      res.redirect('/store/roles');
+    }
+  });
+});
+
+
+// Add ctegory
+router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const category = await Category();
+
+  category._storeId = req.session._storeId;
+  category.name = req.body.name;
+  await category.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Category Saved Successfully');
+      res.redirect('/store/roles');
+    }
+  });
+});
+
+
+// add bussiness type
+router.post('/bussiness', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const bussiness = await Bussiness();
+
+  bussiness.name = req.body.name;
+  await bussiness.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Bussiness Saved Successfully');
+      res.redirect('/store/roles');
+    }
+  });
+});
+
 
 export default router;

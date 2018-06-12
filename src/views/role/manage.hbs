@@ -1,0 +1,574 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    {{!-- <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css"> --}}
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+    </style>
+
+{{/extend}}
+
+
+
+<div class="text-center">
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newRole">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>Roles</span>
+    </a>
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newCategory">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>Category</span>
+    </a>
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newBussiness">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>Bussiness</span>
+    </a>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>Roles </h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each roles}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="name{{_id}}">{{name}}</td>
+                    <td>
+                        <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
+                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                        <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+    </div>
+
+
+    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>Category</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Categoy</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each category}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="name{{_id}}">{{name}}</td>
+                    <td>
+                        <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
+                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                        <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>Bussiness Type </h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Bussines Type</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each bussiness}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="name{{_id}}">{{name}}</td>
+                    <td>
+                        <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
+                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                        <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+    </div>
+
+
+    {{!-- <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>Category</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Categoy</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each category}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="name{{_id}}">{{name}}</td>
+                    <td>
+                        <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
+                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                        <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+    </div>
+
+    <div class="clearfix"></div> --}}
+
+</div>
+
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newRole">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Role</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/store/roles">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Role Name" required>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newCategory">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Category</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/store/category">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Category Name" required>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newBussiness">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Bussiness</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/store/bussiness">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Category Name" required>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="editbranchForm">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Branch</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/branch/update">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="name" id="ename" class="form-control" placeholder="Branch Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="email" id="eemail" class="form-control" placeholder="Branch E-mail" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="phone" id="ephone" class="form-control" placeholder="Branch Phone Number" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch Address <span class="required">*</span>
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Branch Address' required></textarea>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Country</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="country" id="ecountry" required>
+                            <option>Select Country</option>
+                            <option value="Nigeria">Nigeria</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" id="estate" name="state" required>
+                            <option>Select State</option>
+                            <option value="Lagos State">Lagos State</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="city" id="ecity" class="form-control" placeholder="City" required>
+                    </div>
+                    </div>
+                    <input type="hidden" name="_branchId" value="{{branch._id}}">
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+{{#extend 'scripts'}}
+    <!-- Datatables -->
+    {{!-- <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script> --}}
+
+<script>
+
+    function editbranchModal(id){
+        var name = $('#name'+id).html();
+        var email = $('#email'+id).html();
+        var phone = $('#phone'+id).html();
+        var address = $('#address'+id).html();
+
+
+        $('#ename').val(name);
+        $('#eemail').val(email);
+        $('#ephone').val(phone);
+        $('#eaddress').val(address);
+        $("#editbranchModal").modal('show');
+    }
+
+
+
+    /*function deleteBranch(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to delete permanently?',
+			buttons: {
+				confirm: function () {
+					delete_branch(id);
+                    console.log(delete_branch(id));
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+
+			}
+		});
+}
+
+
+
+var delete_branch = function(id){
+
+         $.ajax({
+            type: "POST", // Post / Get method
+            url: "/branch/delete", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
+
+             if (response === "success") {
+                $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Branch deleted Successfully',
+                    buttons: {
+                        ok: function () {
+                           location.reload(true)
+                        },
+                    }
+                });
+              }
+
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                    $.alert('Could not delete');
+            }
+            });
+}*/
+
+</script>
+
+{{/extend}}

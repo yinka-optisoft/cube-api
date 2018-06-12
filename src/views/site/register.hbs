@@ -110,15 +110,19 @@
                                     <input type="text" name="shortCode" placeholder="Short Code" class="form-control required">
                                 </div>
                                 <div class="form-group">
+                                    <label>Store Address: <span>*</span></label>
+                                    <textarea rows="2" name="address" class="form-control required"></textarea>    
+                                </div>
+                                <div class="form-group">
                                     <label>Website: <span>*</span></label>
                                     <input type="text" name="website" placeholder="Company Website" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Business Type: <span>*</span></label>
                                     <select name="businessType" class="form-control required">
-                                        <option value="manufacturing">Manufacturing</option>
-                                        <option value="retail">Retail</option>
-                                        <option value="retails_and_wholesale">Retails And Wholesale</option>
+                                        {{#each bussiness}}
+                                        <option value="{{_id}}">{{name}}</option>
+                                        {{/each}}
                                     </select>
                                 </div>
                                 <div class="form-group">
