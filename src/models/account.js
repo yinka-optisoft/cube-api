@@ -19,6 +19,7 @@ const Account = new Schema({
   country: String,
   state: String,
   lga: String,
+  moveDate: Date,
   status: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
