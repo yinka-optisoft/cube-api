@@ -191,19 +191,6 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
     });
   }
 
-  /*user.status = 0;
-
-  user.save(function(err) {
-    if (err){
-      console.log(err);
-    } else {
-      res.send('success');
-    };
-  });*/
-
-  // res.send('success');
-
-
   // const response = {
   //   status: 200,
   //   message: 'Branch delete successfully',

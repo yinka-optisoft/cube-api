@@ -60,7 +60,7 @@
     
     <div class="x_panel">
         <div class="x_title">
-        <h2>Default Example</h2>
+        <h2>All Branch</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -103,8 +103,16 @@
                     <td id="address{{_id}}">{{address}}
                          
                     <td>
-                        <button class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></button>
-                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                        {{!-- <a href="#" class="btn btn-primary btn-sm edit"><i class="fa fa-edit"></i></a> --}}
+                        {{!-- <button data-toggle="modal" data-id="{{_id}}" class="open-editBranch btn btn-primary btn-sm"><i class="fa fa-edit"></i></button> --}}
+                        {{!-- <button class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editBranch"><i class="fa fa-edit"></i></button> --}}
+
+
+
+                        <button data-toggle="modal" branchId="{{_id}}" name="{{name}}" email="{{email}}" phone="{{phone}}" address="{{address}}" country="{{country}}" state="{{state}}" city="{{city}}" data-target="#editBranch" class="btn btn-primary btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a> 
                         <button onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -200,7 +208,7 @@
 
 
 <!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="editbranchForm">
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="editBranch">
 <div class="modal-dialog modal-sm" style="width: 400px;">
     <div class="modal-content">
 
@@ -215,37 +223,37 @@
                 
                 <div class="x_content">
                 <br />
-                <form class="form-horizontal form-label-left" method="POST" action="/branch/update">
+                <form class="form-horizontal form-label-left" method="POST" action="/branch/update" id="branchForm">
 
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="name" id="ename" class="form-control" placeholder="Branch Name" required>
+                        <input type="text" name="name" id="name" class="form-control name" placeholder="Branch Name" required>
                     </div>
                     </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="email" id="eemail" class="form-control" placeholder="Branch E-mail" required>
+                        <input type="text" name="email" id="email" class="form-control email" placeholder="Branch E-mail" required>
                     </div>
                     </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" name="phone" id="ephone" class="form-control" placeholder="Branch Phone Number" required>
+                        <input type="number" name="phone" id="phone" class="form-control phone" placeholder="Branch Phone Number" required>
                     </div>
                     </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch Address <span class="required">*</span>
                     </label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Branch Address' required></textarea>
+                        <textarea class="form-control address" name="address" id="address" rows="2" placeholder='Branch Address' required></textarea>
                     </div>
                     </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Country</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="country" id="ecountry" required>
+                        <select class="form-control" name="country" id="country" required>
                             <option>Select Country</option>
                             <option value="Nigeria">Nigeria</option>
                         </select>
@@ -254,7 +262,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" id="estate" name="state" required>
+                        <select class="form-control" id="state" name="state" required>
                             <option>Select State</option>
                             <option value="Lagos State">Lagos State</option>
                         </select>
@@ -263,10 +271,10 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="city" id="ecity" class="form-control" placeholder="City" required>
+                        <input type="text" name="city" id="city" class="form-control" placeholder="City" required>
                     </div>
                     </div>
-                    <input type="hidden" name="_branchId" value="{{branch._id}}">
+                    <input type="hidden" name="_branchId" id="_branchId" value=""/>
                     <div class="ln_solid"></div>
                     <div class="form-group">
                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
@@ -300,19 +308,29 @@
 
 <script>
 
-    function editbranchModal(id){
+    
+    $('#editBranch').on('show.bs.modal', function (e) {
 
-        var name = $('#name'+id).html();
-        var email = $('#email'+id).html();
-        var phone = $('#phone'+id).html();
-        var address = $('#address'+id).html();
+        var opener = e.relatedTarget; // Button that triggered the modal
 
-        $('#ename').val(name);
-        $('#eemail').val(email);
-        $('#ephone').val(phone);
-        $('#eaddress').val(address);
-        $("#editbranchModal").modal('show');
-    }
+        var branchId = $(opener).attr('branchId'); // Extract info from data-* attributes
+        var name = $(opener).attr('name');
+        var email = $(opener).attr('email'); 
+        var phone = $(opener).attr('phone');
+        var address = $(opener).attr('address'); 
+        var country = $(opener).attr('country');
+        var state = $(opener).attr('state');
+        var city = $(opener).attr('city');
+
+        $('#branchForm').find('[name="_branchId"]').val(branchId);
+        $('#branchForm').find('[name="name"]').val(name);
+        $('#branchForm').find('[name="email"]').val(email);
+        $('#branchForm').find('[name="phone"]').val(phone);
+        $('#branchForm').find('[name="address"]').val(address);
+        $('#branchForm').find('[name="country"]').val(country);
+        $('#branchForm').find('[name="state"]').val(state);
+        $('#branchForm').find('[name="city"]').val(city);
+    });
 
 
 
@@ -335,7 +353,7 @@
 
 
 
-var delete_branch = function(id){
+    var delete_branch = function(id){
 
          $.ajax({
             type: "POST", // Post / Get method
@@ -361,7 +379,7 @@ var delete_branch = function(id){
                     $.alert('Could not delete');
             }
             });
-}
+    }
 
 </script>
 

@@ -167,24 +167,6 @@ router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
-// Add ctegory
-router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
-
-  const category = await Category();
-
-  category._storeId = req.session._storeId;
-  category.name = req.body.name;
-  await category.save(function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      req.flash('success', 'Category Saved Successfully');
-      res.redirect('/store/roles');
-    }
-  });
-});
-
-
 // add bussiness type
 router.post('/bussiness', guard.ensureLoggedIn(), async (req, res, next) => {
 
@@ -199,6 +181,61 @@ router.post('/bussiness', guard.ensureLoggedIn(), async (req, res, next) => {
       res.redirect('/store/roles');
     }
   });
+});
+
+
+// category page
+router.get('/categories', guard.ensureLoggedIn(), async (req, res) => {
+  const categories = await Category.find({ _storeId: req.session._storeId });
+  const category = await Category.findOne({ _storeId: req.session._storeId });
+  console.log(category);
+  res.render('product/category', { categories, category, expressFlash: req.flash('success'), layout: 'layouts/user' });
+});
+
+// Add ctegory
+router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const category = await Category();
+
+  category._storeId = req.session._storeId;
+  category.name = req.body.name;
+  category.discription = req.body.discription;
+  await category.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Category Saved Successfully');
+      res.redirect('/store/categories');
+    }
+  });
+});
+
+
+// update ctegory
+router.post('/category/update', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const category = await Category.findById(req.body._categoryId);
+
+  console.log(category);
+
+  category.name = req.body.name;
+  category.discription = req.body.discription;
+  await category.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'Category Update Successfully');
+      res.redirect('/store/categories');
+    }
+  });
+});
+
+
+// delete ctegory
+router.post('/category/delete', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  await Category.findById(req.body.id).remove();
+  res.send('success');
 });
 
 
