@@ -40,8 +40,8 @@ router.post('/login', passport.authenticate('local',
                   return next(err);
                 }
                 res.redirect('/admin/dashboard');
-              });
             });
+        });
 
 
 const generateUniqueID = async storeShort => {
@@ -142,10 +142,11 @@ router.post('/create-store', async (req, res, next) => {
 
 // create account roles
 router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
   const roles = await Role.find({ _storeId: req.session._storeId });
   const category = await Category.find({ _storeId: req.session._storeId });
   const bussiness = await Bussiness.find({ _storeId: req.session._storeId });
-  res.render('role/manage', { roles, category, bussiness, expressFlash: req.flash('success'), layout: 'layouts/user' });
+  res.render('role/manage', { user, roles, category, bussiness, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 

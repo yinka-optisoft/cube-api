@@ -23,35 +23,75 @@
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
         <h3>General</h3>
-        <ul class="nav side-menu">
-            <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/branch">Manage Branch</a></li>
+        {{#if (eq user.roleId 'admin')}}
+            <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/branch">Manage Branch</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Staff Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/admin/staff">Manage Staff</a></li>
+                    <li><a href="/admin/trash">Trash</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/store/categories">Categories</a></li>
+                    <li><a href="/product">Manage Product</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/supplier">Manage Suppliers</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/store/roles">Manage Roles</a></li>
+                </ul>
+                </li>
             </ul>
-            </li>
-            <li><a><i class="fa fa-user"></i> Staff Management <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/admin/staff">Manage Staff</a></li>
-                <li><a href="/admin/trash">Trash</a></li>
+        {{else if (eq user._roleId.name 'admin')}}
+            <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/branch">Manage Branch</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Staff Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/admin/staff">Manage Staff</a></li>
+                    <li><a href="/admin/trash">Trash</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/store/categories">Categories</a></li>
+                    <li><a href="/product">Manage Product</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/supplier">Manage Suppliers</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/store/roles">Manage Roles</a></li>
+                </ul>
+                </li>
             </ul>
-            </li>
-            <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/store/categories">Categories</a></li>
-                <li><a href="/product">Manage Product</a></li>
+        {{else if (eq user._roleId.name 'staff')}}
+            <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/branch">Manage Branch</a></li>
+                </ul>
+                </li>
             </ul>
-            </li>
-            <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/supplier">Manage Suppliers</a></li>
-            </ul>
-            </li>
-            <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/store/roles">Manage Roles</a></li>
-            </ul>
-            </li>
-        </ul>
+        {{/if}}
         </div>
 
     </div>

@@ -6,8 +6,10 @@ const Account = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _roleId: { type: Schema.Types.ObjectId, ref: 'roles' },
-  _supllyId: { type: String, lowercase: true, trim: true,
+  _supplierId: { type: String, lowercase: true, trim: true,
     enum: ['supplier'] }, // supplier
+  roleId: { type: String, lowercase: true, trim: true,
+    enum: ['admin'] }, // supplier
   firstname: String,
   middlename: String,
   lastname: String,

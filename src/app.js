@@ -25,6 +25,7 @@ import admin from './routes/admin';
 import branch from './routes/branch';
 import product from './routes/product';
 import supply from './routes/supply';
+import staff from './routes/staff';
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.use('/admin', admin);
 app.use('/branch', branch);
 app.use('/product', product);
 app.use('/supplier', supply);
+app.use('/staff', staff);
 
 // passport account auth
 
@@ -113,6 +115,8 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
+// helper for date format
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 // helper for select tag option
 hbs.registerHelper('select', function(selected, options){

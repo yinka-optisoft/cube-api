@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const Product = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
+  _supplierId: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _categoryId: { type: Schema.Types.ObjectId, ref: 'categories' },
   _fromId: { type: Schema.Types.ObjectId, ref: 'branches' },

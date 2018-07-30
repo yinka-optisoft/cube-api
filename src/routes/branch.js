@@ -24,8 +24,11 @@ const generateUniqueID = async storeShort => {
 
 // branch homepage
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
+
+    const user = await Account.findById(req.user._id).populate('_roleId');
+
     const branches = await Branch.find({ _storeId: req.session._storeId });
-    res.render('branch/manage', { expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
+    res.render('branch/manage', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
   });
 
 // create new branch
@@ -85,10 +88,11 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   // branch homepage
   router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
+    const user = await Account.findById(req.user._id).populate('_roleId');
     const branch = await Branch.findById(req.params._branchId);
     const roles = await Role.find({ _storeId: req.session._storeId });
     const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
-    res.render('branch/branchDashboard', { staff, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
+    res.render('branch/branchDashboard', { user, staff, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
   });
 
     
@@ -193,10 +197,11 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
 
 // branch homepage
 router.get('/user/view/:_userId', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.params._userId).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId');
+  const users = await Account.findById(req.params._userId).populate('_roleId');
   const roles = await Role.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(user._branchId);
-  res.render('branch/viewMember', { user, roles, branch, users: req.user, expressFlash: req.flash('success'), layout: 'layouts/user' });
+  res.render('branch/viewMember', { user, roles, branch, users, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 

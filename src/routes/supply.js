@@ -24,11 +24,21 @@ const generateUniqueID = async storeShort => {
   };
 
 
-router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
+router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
+    const user = await Account.findById(req.user._id).populate('_roleId');
     const suppliers = await Account.find({ _storeId: req.user._storeId, _supllyId: 'supplier' });
     const categories = await Category.find({ _storeId: req.session._storeId });
     const branches = await Branch.find({ _storeId: req.session._storeId });
-    res.render('supply/manage', { expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
+    res.render('supply/dashboard', { user, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
+});
+
+
+router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
+    const user = await Account.findById(req.user._id).populate('_roleId');
+    const suppliers = await Account.find({ _storeId: req.user._storeId, _supplierId: 'supplier' });
+    const categories = await Category.find({ _storeId: req.session._storeId });
+    const branches = await Branch.find({ _storeId: req.session._storeId });
+    res.render('supply/manage', { user, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
 });
 
 
@@ -61,7 +71,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         const supplier = await Account(req.body);
         supplier._storeId = req.user._storeId;
         supplier.username = await generateUniqueID(store.shortCode);
-        supplier._supllyId = 'supplier';
+        supplier._supplierId = 'supplier';
         
         Account.register(
             new Account(supplier), 'password', (err, account) => {
@@ -126,6 +136,13 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
     res.send('success');
   });
   
+
+router.get('/view/:id', guard.ensureLoggedIn(), async (req, res, next) => {
+    const user = await Account.findById(req.user._id).populate('_roleId');
+    const users = await Account.findById(req.params.id).populate('_roleId');
+    const products = await Product.find({ _storeId: req.user._storeId, _supplierId: req.params.id }).populate('_categoryId');
+    res.render('supply/view', { user, users, expressFlash: req.flash('info'), products, layout: 'layouts/user' });
+});
 
 
 export default router;

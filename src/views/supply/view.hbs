@@ -8,64 +8,15 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 
-    <style>
-        .quick-btn { background: #EEEEEE;
-        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
-        color: #444444;
-        display: inline-block;
-        height: 80px;
-        margin: 10px;
-        padding-top: 16px;
-        text-align: center;
-        text-decoration: none;
-        width: 90px;
-        position: relative;
-        }
-        .quick-btn span {
-        display: block;
-        }
-        .quick-btn .label {
-        position: absolute;
-        right: -5px;
-        top: -5px;
-        }
-        .quick-btn:hover {
-        text-decoration: none;
-        color: #fff;
-        background-color: #4d7589;
-        box-shadow: 3px 4px 1px #ccc;
-        }
-        .quick-btn.small {
-        width: 40px;
-        height: 30px;
-        padding-top: 6px;
-        }
-
-    </style>
-
 {{/extend}}
 
-{{# if errors }}
-    {{# each errors }}
-          <p class="alert alert-danger">{{ this.msg }}</p>
-    {{/each}}
-{{/if}}
-
-
-<div class="text-center">
-
-    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newProduct">
-    <i class="fa fa-plus fa-2x"></i>
-    <span>New Product</span>
-    </a>
-</div>    
 
 
 <div class="col-md-12 col-sm-12 col-xs-12">
     
     <div class="x_panel">
         <div class="x_title">
-        <h2>All Product</h2>
+        <h2>{{users.firstname}} {{users.middlename}} {{users.lastname}} Supply Record</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -89,11 +40,12 @@
             <thead>
             <tr>
                 <th>N/S</th>
-                <th>Name</th>
+                <th>Product Name</th>
                 <th>Category</th>
-                <th>Piece</th>
+                <th>Pieces</th>
                 <th>Price</th>
-                <th>Actions</th>
+                <th>Date</th>
+                {{!-- <th>Actions</th> --}}
             </tr>
             </thead>
 
@@ -106,8 +58,9 @@
                     <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
                     <td id="pieces{{_id}}">{{pieces}}</td>
                     <td id="price{{_id}}">{{price}}</td>
+                    <td id="createdAt{{_id}}">{{dateFormat createdAt "dddd, MMMM Do YYYY, h:mm:ss a"}}</td>
                          
-                    <td>
+                    {{!-- <td>
                         <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
@@ -115,7 +68,7 @@
                             <i class="fa fa-square-o"></i>
                         </button>
                         <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                    </td>
+                    </td> --}}
                 </tr>
                 {{/each}}
             </tbody>
@@ -230,12 +183,10 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="_supplierId" id="_supplierId" required>
-                            {{!-- {{#select product._supplierId.firstname}} --}}
-                                <option>Select Supplier</option>
-                                {{#each suppliers}}
-                                <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
-                                {{/each}}
-                            {{!-- {{/select}} --}}
+                            <option>Select Supplier</option>
+                            {{#each suppliers}}
+                            <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
+                            {{/each}}
                         </select>
                     </div>
                     </div>
@@ -388,16 +339,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
 <script>
-
-/*
-    function select_product(id){
-        $.ajax({
-            type: "GET",
-            url: '/product',
-            data: {id:id}
-        })
-    }*/
-
     
     $('#editProduct').on('show.bs.modal', function (e) {
 
@@ -411,12 +352,9 @@
         var pieces = $(opener).attr('pieces');
         var note = $(opener).attr('note');
 
-        console.log(categoryId);
-        console.log(supplierId);
-
         $('#productForm').find('[name="_productId"]').val(productId);
-        $('#productForm').find('[name="_categoryId"]').val(categoryId);
-        $('#productForm').find('[name="_supplierId"]').val(supplierId);
+        $('#productForm').find('[name="_categoryId.name"]').val(categoryId);
+        $('#productForm').find('[name="_supplierId.name"]').val(supplierId);
         $('#productForm').find('[name="name"]').val(name);
         $('#productForm').find('[name="price"]').val(price);
         $('#productForm').find('[name="pieces"]').val(pieces);

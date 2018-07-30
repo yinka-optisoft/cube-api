@@ -132,7 +132,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-        <h2>{{user.firstname}} {{user.lastname}} Profile</h2>
+        <h2>{{users.firstname}} {{users.lastname}} Profile</h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -155,22 +155,22 @@
             <div class="profile_img">
             <div id="crop-avatar">
                 <!-- Current avatar -->
-                <img class="img-responsive avatar-view" src="/images/member/{{user.passport}}" alt="{{user.firstname}}" title="Change the avatar">
+                <img class="img-responsive avatar-view" src="/images/member/{{users.passport}}" alt="{{user.firstname}}" title="Change the avatar">
             </div>
             </div>
-            <h3>{{user.lastname}} Profile</h3>
+            <h3>{{users.lastname}} Profile</h3>
 
             <ul class="list-unstyled user_data">
-            <li><i class="fa fa-map-marker user-profile-icon"></i> {{user.address}}
+            <li><i class="fa fa-map-marker user-profile-icon"></i> {{users.address}}
             </li>
 
             <li>
-                <i class="fa fa-briefcase user-profile-icon"></i> {{user._roleId.name}}
+                <i class="fa fa-briefcase user-profile-icon"></i> {{users._roleId.name}}
             </li>
 
             </ul>
 
-            {{#if (ne users._roleId.name admin)}}
+            {{#if (ne users.roleId admin and ne users.roleId admin)}}
             <a class="btn btn-success" data-toggle="modal" data-target="#editmemberForm"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
             {{else}}
 
@@ -199,31 +199,31 @@
                     <tbody>
                     <tr>
                         <td>Name</td>
-                        <td>{{user.firstname}} {{user.middlename}} {{user.lastname}}</td>
+                        <td>{{users.firstname}} {{users.middlename}} {{users.lastname}}</td>
                     </tr>
                     <tr>
                         <td>E-mail</td>
-                        <td>{{user.email}}</td>
+                        <td>{{users.email}}</td>
                     </tr>
                     <tr>
                         <td>Username</td>
-                        <td>{{user.username}}</td>
+                        <td>{{users.username}}</td>
                     </tr>
                     <tr>
                         <td>Phone Number</td>
-                        <td>{{user.phone}}</td>
+                        <td>{{users.phone}}</td>
                     </tr>
                     <tr>
                         <td>Country</td>
-                        <td>{{user.country}}</td>
+                        <td>{{users.country}}</td>
                     </tr>
                     <tr>
                         <td>State</td>
-                        <td>{{user.state}}</td>
+                        <td>{{users.state}}</td>
                     </tr>
                     <tr>
                         <td>L.G.A</td>
-                        <td>{{user.lga}}</td>
+                        <td>{{users.lga}}</td>
                     </tr>
                     </tbody>
                 </table>

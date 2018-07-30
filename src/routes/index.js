@@ -40,7 +40,7 @@ router.post('/login', passport.authenticate('local',
                                               failureFlash: true }),
             async (req, res, next) => {
               const store = await Store.findById(req.user._storeId);
-              const user = await Account.findById(req.user);
+              const user = await Account.findById(req.user._id).populate('_roleId');
 
               // check if user is ban
               if (user.status === false) {
@@ -53,7 +53,17 @@ router.post('/login', passport.authenticate('local',
                   if (err) {
                     return next(err);
                   }
-                  res.redirect('/admin/dashboard');
+
+                  if (user.roleId === 'admin') {
+                    res.redirect('/admin/dashboard');
+                  } else if (user._roleId === 'admin') {
+                    res.redirect('/admin/dashboard');
+                  } else if (user._roleId === 'staff') {
+                    res.redirect('/staff/dashboard');
+                  }
+                  //  else if (user._supllyId === 'supplier') {
+                  //   res.redirect('/supplier/dashboard');
+                  // }
                 });
               }
             });

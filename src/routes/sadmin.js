@@ -1,4 +1,5 @@
 import express from 'express';
+import Account from '../models/account';
 import passport from 'passport';
 import Store from '../models/store';
 import formidable from 'formidable';
@@ -9,8 +10,9 @@ import { check, validationResult } from 'express-validator/check';
 
 const router = express.Router();
 
-router.get('/dashboard', guard.ensureLoggedIn(), (req, res) => {
-  res.render('superadmin/dashboard', { layout: 'layouts/user' });
+router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
+  res.render('superadmin/dashboard', { user, layout: 'layouts/user' });
 });
 
 

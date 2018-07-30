@@ -22,26 +22,30 @@ const generateUniqueID = async storeShort => {
 
 
 router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
-  res.render('admin/dashboard', { layout: 'layouts/user' });
+  const user = await Account.findById(req.user._id).populate('_roleId');
+  res.render('admin/dashboard', { user, layout: 'layouts/user' });
 });
 
 
 // manage staff
 router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
+
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const roles = await Role.find({ _storeId: req.session._storeId });
   const staff = await Account.find({ _storeId: req.session._storeId })
                                     .populate('_roleId').populate('_branchId');
-  res.render('staff/staff', { staff, roles, branches, expressFlash: req.flash('success'), 
+  res.render('staff/staff', { user, staff, roles, branches, expressFlash: req.flash('success'), 
                               layout: 'layouts/user' });
 });
 
 
 // staff trash
 router.get('/trash', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
   const staff = await Account.find({ _storeId: req.session._storeId, status: 0 })
                                     .populate('_roleId').populate('_branchId');
-  res.render('staff/trash', { staff, layout: 'layouts/user' });
+  res.render('staff/trash', { user, staff, layout: 'layouts/user' });
 });
 
 
