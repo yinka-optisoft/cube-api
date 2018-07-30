@@ -25,8 +25,7 @@ const generateUniqueID = async storeShort => {
 // branch homepage
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
     const branches = await Branch.find({ _storeId: req.session._storeId });
-    const branch = await Branch.findOne({ _storeId: req.session._storeId });
-    res.render('branch/manage', { expressFlash: req.flash('info'), branches, branch, layout: 'layouts/user' });
+    res.render('branch/manage', { expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
   });
 
 // create new branch
@@ -41,7 +40,7 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
       newBranch.country = req.body.country;
       newBranch.state = req.body.state;
       newBranch.city = req.body.city;
-      newBranch.status = 1;
+      newBranch.status = true;
       newBranch.save(function(err) {
         if (err) {
           console.log(err);
@@ -99,14 +98,6 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   const id = req.body.id;
   await Branch.findById(id).remove();
   res.send('success');
-
-
-  // const response = {
-  //   status: 200,
-  //   message: 'Branch delete successfully',
-  // };
-
-  // res.send(response);
 });
 
 

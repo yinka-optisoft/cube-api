@@ -1,0 +1,363 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+    </style>
+
+{{/extend}}
+
+{{# if errors }}
+    {{# each errors }}
+          <p class="alert alert-danger">{{ this.msg }}</p>
+    {{/each}}
+{{/if}}
+
+
+<div class="text-center">
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newSupplier">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>New Supplier</span>
+    </a>
+</div>    
+
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>All Suppliers</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>N/S</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>E-mail</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+                {{#each suppliers}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="firstname{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
+                    <td id="phone{{_id}}">{{phone}}</td>
+                    <td id="email{{_id}}">{{email}}</td>
+                    <td id="address{{_id}}">{{address}}
+                         
+                    <td>
+                        <button title="Edit" data-toggle="modal" supplierId="{{_id}}" firstname="{{firstname}}" middlename="{{middlename}}" lastname="{{lastname}}" phone="{{phone}}" email="{{email}}" address="{{address}}" data-target="#editSupplier" class="btn btn-primary btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <a href="/supplier/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a> 
+                        <button title="Delete" onclick="deleteSupplier(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newSupplier">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add New Supplier</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/supplier">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">First Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="middlename" id="middlename" class="form-control" placeholder="Middle Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Last Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="email" id="email" class="form-control" placeholder="E-mail" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="phone" id="phone" class="form-control" placeholder="phone" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Address
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="address" id="address" rows="2" placeholder='Address'></textarea>
+                    </div>
+                    </div>
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="editSupplier">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Supplier</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/supplier/update" id="supplierForm">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">First Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Middle Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="middlename" id="middlename" class="form-control" placeholder="Middle Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Last Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="email" id="email" class="form-control" placeholder="E-mail" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Number</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="phone" id="phone" class="form-control" placeholder="phone" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Address
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="address" id="address" rows="2" placeholder='Address'></textarea>
+                    </div>
+                    </div>
+
+                    <input type="hidden" name="_supplierId" id="_supplierId" value=""/>
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
+{{#extend 'scripts'}}
+    <!-- Datatables -->
+    <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+<script>
+    
+    $('#editSupplier').on('show.bs.modal', function (e) {
+
+        var opener = e.relatedTarget; // Button that triggered the modal
+
+        var supplierId = $(opener).attr('supplierId'); // Extract info from data-* attributes
+        var firstname = $(opener).attr('firstname');
+        var middlename = $(opener).attr('middlename');
+        var lastname = $(opener).attr('lastname');
+        var phone = $(opener).attr('phone'); 
+        var email = $(opener).attr('email');
+        var address = $(opener).attr('address');
+        
+
+        $('#supplierForm').find('[name="_supplierId"]').val(supplierId);
+        $('#supplierForm').find('[name="firstname"]').val(firstname);
+        $('#supplierForm').find('[name="middlename"]').val(middlename);
+        $('#supplierForm').find('[name="lastname"]').val(lastname);
+        $('#supplierForm').find('[name="phone"]').val(phone);
+        $('#supplierForm').find('[name="email"]').val(email);
+        $('#supplierForm').find('[name="address"]').val(address);
+    });
+
+
+
+    function deleteSupplier(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to delete permanently?',
+			buttons: {
+				confirm: function () {
+					delete_supplier(id);
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+
+			}
+		});
+    }
+
+
+
+    var delete_supplier = function(id){
+
+         $.ajax({
+            type: "POST", // Post / Get method
+            url: "/supplier/delete", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
+
+             if (response === "success") {
+                $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Supplier deleted Successfully',
+                    buttons: {
+                        ok: function () {
+                           location.reload(true)
+                        },
+                    }
+                });
+              }
+
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                    $.alert('Could not delete');
+            }
+            });
+    }
+
+</script>
+
+{{/extend}}

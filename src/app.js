@@ -23,6 +23,8 @@ import store from './routes/store';
 import sadmin from './routes/sadmin';
 import admin from './routes/admin';
 import branch from './routes/branch';
+import product from './routes/product';
+import supply from './routes/supply';
 
 const app = express();
 
@@ -80,6 +82,8 @@ app.use('/store', store);
 app.use('/sadmin', sadmin);
 app.use('/admin', admin);
 app.use('/branch', branch);
+app.use('/product', product);
+app.use('/supplier', supply);
 
 // passport account auth
 
