@@ -58,6 +58,12 @@
     <i class="fa fa-plus fa-2x"></i>
     <span>New Product</span>
     </a>
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#moveProduct">
+    <i class="fa fa-square-o fa-2x"></i>
+    <span>Move Product</span>
+    </a>
+    
 </div>    
 
 
@@ -108,11 +114,11 @@
                     <td id="price{{_id}}">{{price}}</td>
                          
                     <td>
-                        <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
+                        <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button title="Move" data-toggle="modal" branchId="{{_id}}" data-target="#moveProduct" class="btn btn-primary btn-sm">
-                            <i class="fa fa-square-o"></i>
+                        <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
+                            <i class="fa fa-eye"></i>
                         </button>
                         <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </td>
@@ -142,6 +148,17 @@
                 <br />
                 <form class="form-horizontal form-label-left" method="POST" action="/product" id="save_branch">
 
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_branchId" id="_branchId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
@@ -225,7 +242,17 @@
                 <br />
                 <form class="form-horizontal form-label-left" method="POST" action="/product/update" id="productForm">
 
-
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_branchId" id="_branchId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
@@ -294,6 +321,61 @@
 
 
 <!-- Small modal -->
+{{!-- <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="viewProduct">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Product Details</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                    
+                <div class="x_content">
+                <br />
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_content">
+                                    <table class="table" id="viewTable">
+                                        <thead>
+                                            <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th>Pieces</th>
+                                            <th>Price</th>
+                                            <th>Supplier Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                            <th scope="row">#</th>
+                                            <td id="name"></td>
+                                            <td id="category"></td>
+                                            <td id="pieces"></td>
+                                            <td id="price"></td>
+                                            <td id="supplier"></td>
+                                            </tr>
+                                            <tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
+<!-- /modals -->
+
+
+<!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="moveProduct">
 <div class="modal-dialog modal-sm" style="width: 400px;">
     <div class="modal-content">
@@ -309,12 +391,12 @@
                 
                 <div class="x_content">
                 <br />
-                <form class="form-horizontal form-label-left" method="POST" action="/product/update" id="productForm">
+                <form class="form-horizontal form-label-left" method="POST" action="/product/move/product">
 
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Send From</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="_fromId" id="_fromId" required>
+                        <select class="form-control" name="fromId" id="fromId" required>
                             <option>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
@@ -325,11 +407,8 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Product</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="name" onchange="select_product(this.value)" required>
-                            <option>Select Product</option>
-                            {{#each products}}
-                            <option value="{{_id}}">{{name}}</option>
-                            {{/each}}
+                        <select onchange="getPieces(this.value)" class="form-control" name="productId" id="productId" required>
+                          
                         </select>
                     </div>
                     </div>
@@ -342,13 +421,13 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Enter Pieces</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                        <input type="number" onchange="countPieces(this.value)" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
                     </div>
                     </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Send To</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="_toId" id="_toId" required>
+                        <select class="form-control" name="toId" id="toId" required>
                             <option>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
@@ -389,17 +468,86 @@
 
 <script>
 
-/*
-    function select_product(id){
-        $.ajax({
-            type: "GET",
-            url: '/product',
-            data: {id:id}
-        })
-    }*/
+    $(document).ready(function() {
+        $("#fromId").change(function() {
+            var branchId = $("#fromId option:selected").val();
 
+            $.ajax({
+                type: 'POST',
+                url: '/product/get/product',
+                dataType: 'json',
+                data: { branchId: branchId },
+                success: function(data) {
+                    $('#productId').empty();
+                    $('#productId').append('<option>Select Product</option>');
+                    for(row in data) {
+                        $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.name));
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        });
+    });
+
+
+    function getPieces(id){
+
+        var branchId = $("#fromId option:selected").val();
+        var productId = id;
+
+        $.ajax({
+            type: 'POST',
+            url: '/product/get/pieces',
+            dataType: 'json',
+            data: { _productId: productId, branchId: branchId },
+            success: function(data) {
+                $('#get_pieces').empty();
+                $('#get_pieces').val(data.pieces);
+            },
+            error: function(jqXHR, textStatus, errorThrow) {
+                $.alert(errorThrow);
+            }
+        });
+    }
+
+    function countPieces(count){
+
+     var getPieces = $('#get_pieces').val();
+     var pieces =  count;
+
+     var sub = (getPieces - pieces);
+
+     $('#get_pieces').val(sub);
+    }
     
     $('#editProduct').on('show.bs.modal', function (e) {
+
+        var opener = e.relatedTarget; // Button that triggered the modal
+
+        var productId = $(opener).attr('productId'); // Extract info from data-* attributes
+        var categoryId = $(opener).attr('categoryId');
+        var supplierId = $(opener).attr('_supplierId');
+        var branchId = $(opener).attr('_branchId');
+        var name = $(opener).attr('name');
+        var price = $(opener).attr('price'); 
+        var pieces = $(opener).attr('pieces');
+        var note = $(opener).attr('note');
+
+        $('#productForm').find('[name="_productId"]').val(productId);
+        $('#productForm').find('[name="_categoryId"]').val(categoryId);
+        $('#productForm').find('[name="_supplierId"]').val(supplierId);
+        $('#productForm').find('[name="_branchId"]').val(branchId);
+        $('#productForm').find('[name="name"]').val(name);
+        $('#productForm').find('[name="price"]').val(price);
+        $('#productForm').find('[name="pieces"]').val(pieces);
+        $('#productForm').find('[name="note"]').val(note);
+    });
+
+
+// TODO: Come back latter
+    $('#viewProduct').on('show.bs.modal', function (e) {
 
         var opener = e.relatedTarget; // Button that triggered the modal
 
@@ -409,18 +557,13 @@
         var name = $(opener).attr('name');
         var price = $(opener).attr('price'); 
         var pieces = $(opener).attr('pieces');
-        var note = $(opener).attr('note');
 
-        console.log(categoryId);
-        console.log(supplierId);
-
-        $('#productForm').find('[name="_productId"]').val(productId);
-        $('#productForm').find('[name="_categoryId"]').val(categoryId);
-        $('#productForm').find('[name="_supplierId"]').val(supplierId);
-        $('#productForm').find('[name="name"]').val(name);
-        $('#productForm').find('[name="price"]').val(price);
-        $('#productForm').find('[name="pieces"]').val(pieces);
-        $('#productForm').find('[name="note"]').val(note);
+        $('#viewTable').find('[name="_productId"]').val(productId);
+        $('#viewTable').find('[id="category"]').val(categoryId);
+        $('#viewTable').find('[id="supplier"]').val(supplierId);
+        $('#viewTable').find('[id="name"]').val(name);
+        $('#viewTable').find('[id="price"]').val(price);
+        $('#viewTable').find('[id="pieces"]').val(pieces);
     });
 
 

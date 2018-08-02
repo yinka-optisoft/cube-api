@@ -187,10 +187,10 @@ router.post('/bussiness', guard.ensureLoggedIn(), async (req, res, next) => {
 
 // category page
 router.get('/categories', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
   const categories = await Category.find({ _storeId: req.session._storeId });
   const category = await Category.findOne({ _storeId: req.session._storeId });
-  console.log(category);
-  res.render('product/category', { categories, category, expressFlash: req.flash('success'), layout: 'layouts/user' });
+  res.render('product/category', { user, categories, category, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 // Add ctegory

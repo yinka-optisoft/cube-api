@@ -10,6 +10,8 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
+import Product from '../models/product';
+import BranchProduct from '../models/branchProduct';
 
 const router = express.Router();
 
@@ -264,6 +266,18 @@ router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
       res.redirect(`/branch/view/${branch}`);
     }
   });
+});
+
+
+router.get('/view/:_branchId/products', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
+  const branch = await Branch.findById(req.params._branchId);
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branch._id })
+                                      .populate(
+                                        { path: '_productId',
+                                          populate: { path: '_categoryId' } });
+
+  res.render('branch/branchProduct', { user, products, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 

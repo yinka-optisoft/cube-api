@@ -6,14 +6,13 @@ const Product = new Schema({
   _supplierId: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _categoryId: { type: Schema.Types.ObjectId, ref: 'categories' },
-  _fromId: { type: Schema.Types.ObjectId, ref: 'branches' },
-  _toId: { type: Schema.Types.ObjectId, ref: 'branches' },
+  _createdBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   name: String,
   pieces: Number,
   price: Number,
   expireDate: String,
   note: String,
-  moveDate: { type: Date, default: Date.now },
+  productImage: String,
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
