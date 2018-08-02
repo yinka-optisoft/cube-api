@@ -1,0 +1,1036 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+        .btn-file {
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    }      
+.btn-file > input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    transform: translate(-300px, 0) scale(4);
+    font-size: 23px;
+    direction: ltr;
+    cursor: pointer;
+    }
+    .fileinput {
+    margin-bottom: 9px;
+    display: inline-block;
+    }
+    .fileinput .uneditable-input {
+    display: inline-block;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    cursor: text;
+    }
+    .fileinput i + .fileinput-filename,
+    .fileinput .btn + .fileinput-filename {
+    padding-left: 5px;
+    }
+    .fileinput.fileinput-exists .close {
+    opacity: 1;
+    color: #dee0e4;
+    position: relative;
+    top: 3px;
+    margin-left: 5px;
+    }
+    .fileinput .thumbnail {
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    text-align: center;
+    }
+    .fileinput .thumbnail[data-trigger="fileinput"] {
+    cursor: pointer;
+    }
+    .fileinput .thumbnail:before,
+    .fileinput .thumbnail:after {
+    content: " ";
+    display: table;
+    }
+    .fileinput .thumbnail:after {
+    clear: both;
+    }
+    .fileinput .thumbnail > img {
+    max-height: 100%;
+    display: block;
+    }
+    .fileinput .btn {
+    vertical-align: middle;
+    }
+    .fileinput-exists .fileinput-new,
+    .fileinput-new .fileinput-exists {
+    display: none;
+    }
+    .fileinput-inline .fileinput-controls {
+    display: inline;
+    }
+    .fileinput .uneditable-input {
+    white-space: normal;
+    }
+    .fileinput-new .input-group .btn-file {
+    border-radius: 0 3px 3px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-xs,
+    .fileinput-new .input-group .btn-file.btn-sm {
+    border-radius: 0 2px 2px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-lg {
+    border-radius: 0 3px 3px 0;
+    }
+    .form-group.has-warning .fileinput .uneditable-input {
+    color: #574802;
+    border-color: #ffd78a;
+    }
+    .form-group.has-warning .fileinput .fileinput-preview {
+    color: #574802;
+    }
+    .form-group.has-warning .fileinput .thumbnail {
+    border-color: #ffd78a;
+    }
+    .form-group.has-error .fileinput .uneditable-input {
+    color: #ac1818;
+    border-color: #ffafbd;
+    }
+    .form-group.has-error .fileinput .fileinput-preview {
+    color: #ac1818;
+    }
+    .form-group.has-error .fileinput .thumbnail {
+    border-color: #ffafbd;
+    }
+    .form-group.has-success .fileinput .uneditable-input {
+    color: #045702;
+    border-color: #b4e8a8;
+    }
+    .form-group.has-success .fileinput .fileinput-preview {
+    color: #045702;
+    }
+    .form-group.has-success .fileinput .thumbnail {
+    border-color: #b4e8a8;
+    }
+    .input-group-addon:not(:first-child) {
+    border-left: 0;
+    }
+    .fileinput .uneditable-input,
+    .fileinput-new .input-group .btn-file {
+    display: table-cell !important;
+    }
+
+    </style>
+
+{{/extend}}
+
+
+<div class="">
+    <div class="row top_tiles">
+        <a href="/branch/view/{{branch._id}}/products">
+            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+                <div class="count">179</div>
+                <h3>All Products</h3>
+                <h4>View All Products.</h4>
+            </div>
+            </div>
+        </a>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-comments-o"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-check-square-o"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+    </div>
+    <div class="row top_tiles">
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-comments-o"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="tile-stats">
+            <div class="icon"><i class="fa fa-check-square-o"></i></div>
+            <div class="count">179</div>
+            <h3>New Sign ups</h3>
+            <p>Lorem ipsum psdea itgum rixt.</p>
+        </div>
+        </div>
+    </div>
+
+    {{!-- <div class="row">
+        <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>Transaction Summary <small>Weekly progress</small></h2>
+            <div class="filter">
+                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="demo-container" style="height:280px">
+                <div id="chart_plot_02" class="demo-placeholder"></div>
+                </div>
+                <div class="tiles">
+                <div class="col-md-4 tile">
+                    <span>Total Sessions</span>
+                    <h2>231,809</h2>
+                    <span class="sparkline11 graph" style="height: 160px;">
+                        <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
+                    </span>
+                </div>
+                <div class="col-md-4 tile">
+                    <span>Total Revenue</span>
+                    <h2>$231,809</h2>
+                    <span class="sparkline22 graph" style="height: 160px;">
+                        <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
+                    </span>
+                </div>
+                <div class="col-md-4 tile">
+                    <span>Total Sessions</span>
+                    <h2>231,809</h2>
+                    <span class="sparkline11 graph" style="height: 160px;">
+                            <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
+                    </span>
+                </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                <div>
+                <div class="x_title">
+                    <h2>Top Profiles</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                        </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <ul class="list-unstyled top_profiles scroll-view">
+                    <li class="media event">
+                    <a class="pull-left border-aero profile_thumb">
+                        <i class="fa fa-user aero"></i>
+                    </a>
+                    <div class="media-body">
+                        <a class="title" href="#">Ms. Mary Jane</a>
+                        <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                        <p> <small>12 Sales Today</small>
+                        </p>
+                    </div>
+                    </li>
+                    <li class="media event">
+                    <a class="pull-left border-green profile_thumb">
+                        <i class="fa fa-user green"></i>
+                    </a>
+                    <div class="media-body">
+                        <a class="title" href="#">Ms. Mary Jane</a>
+                        <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                        <p> <small>12 Sales Today</small>
+                        </p>
+                    </div>
+                    </li>
+                    <li class="media event">
+                    <a class="pull-left border-blue profile_thumb">
+                        <i class="fa fa-user blue"></i>
+                    </a>
+                    <div class="media-body">
+                        <a class="title" href="#">Ms. Mary Jane</a>
+                        <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                        <p> <small>12 Sales Today</small>
+                        </p>
+                    </div>
+                    </li>
+                    <li class="media event">
+                    <a class="pull-left border-aero profile_thumb">
+                        <i class="fa fa-user aero"></i>
+                    </a>
+                    <div class="media-body">
+                        <a class="title" href="#">Ms. Mary Jane</a>
+                        <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                        <p> <small>12 Sales Today</small>
+                        </p>
+                    </div>
+                    </li>
+                    <li class="media event">
+                    <a class="pull-left border-green profile_thumb">
+                        <i class="fa fa-user green"></i>
+                    </a>
+                    <div class="media-body">
+                        <a class="title" href="#">Ms. Mary Jane</a>
+                        <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                        <p> <small>12 Sales Today</small>
+                        </p>
+                    </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>Weekly Summary <small>Activity shares</small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            <div class="row" style="border-bottom: 1px solid #E0E0E0; padding-bottom: 5px; margin-bottom: 5px;">
+                <div class="col-md-7" style="overflow:hidden;">
+                <span class="sparkline_one" style="height: 160px; padding: 10px 25px;">
+                                <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
+                            </span>
+                <h4 style="margin:18px">Weekly sales progress</h4>
+                </div>
+
+                <div class="col-md-5">
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-4">
+                    <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                    <h4 style="margin:0">Bounce Rates</h4>
+                    </div>
+                    <div class="col-md-4">
+                    <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                    <h4 style="margin:0">New Traffic</h4>
+                    </div>
+                    <div class="col-md-4">
+                    <canvas class="canvasDoughnut" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                    <h4 style="margin:0">Device Share</h4>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div> --}}
+
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>{{branch.name}} Staff </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>E-mail</th>
+                        <th>Phone Number</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {{#each staff}}
+                    <tr>
+                        <td>{{inc @index}}</td>
+                        <td>{{_roleId.name}}</td>
+                        <td id="name{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
+                        <td id="username{{_id}}">{{username}}</td>
+                        <td id="email{{_id}}">{{email}}</td>
+                        <td id="phone{{_id}}">{{phone}}</td>
+                        <td>
+                            <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+
+                            {{#if (eq status true)}}
+                            <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Di-activate</i></button>
+                            {{else}}
+                            <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">activate</button>
+                            {{/if}}
+                        </td>
+                    </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="newStaff">
+<div class="modal-dialog modal-lg">
+{{!-- <div class="modal-dialog modal-lg" style="width: 400px;"> --}}
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Member</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <div class="col-md-12 col-xs-12">
+
+                    <form class="form-horizontal form-label-left input_mask" method="POST" action="/branch/member/{{branch._id}}" enctype="multipart/form-data">
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="inputSuccess2" name="firstname" placeholder="First Name" required>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control" id="inputSuccess3" name="middlename" placeholder="Middle Name">
+                        <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="lastname" id="inputSuccess2" placeholder="Last Name">
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" value="{{username}}" id="inputSuccess2" placeholder="Username" readonly>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="email" id="inputSuccess4" placeholder="Email">
+                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="password" id="inputSuccess2" placeholder="Password" required>
+                        <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="number" class="form-control" name="phone" id="inputSuccess5" placeholder="Phone">
+                        <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="_roleId" required>
+                              <option>Select Role</option>
+                            {{#each roles}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="gender" id="country" required>
+                            <option>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="country" id="country" required>
+                            <option>Select Country</option>
+                            <option value="Nigeria">Nigeria</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="state" id="country" required>
+                            <option>Select State</option>
+                            <option value="Lagos State">Lagos State</option>
+                            <option value="Kwara State">Kwara State</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="lga" id="country" required>
+                            <option>Select L.G.A</option>
+                            <option value="ikeja">Ikeja</option>
+                            <option value="ilorin">Ilorin</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                          <textarea class="form-control" name="address" id="inputSuccess5" rows="2" placeholder='Address' required></textarea>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Passport</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="height: 170px;width:100%;" data-trigger="fileinput">
+                                    <img src="/images/boxed-pattern-3.png" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
+                                <div class="text-center">
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileinput-new">Select logo</span>
+                                        <span class="fileinput-exists">Change logo</span>
+                                        <input type="file" name="passport" accept="image/*" required>
+                                    </span>
+                                    <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                      
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newCategory">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Category</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/branch/category">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Category Name" required>
+                    </div>
+                    </div>
+                    <input type="hidden" name="_branchId" value="{{branch._id}}"/>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="newProduct">
+<div class="modal-dialog modal-lg">
+{{!-- <div class="modal-dialog modal-lg" style="width: 400px;"> --}}
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Member</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <div class="col-md-12 col-xs-12">
+
+                    <form class="form-horizontal form-label-left input_mask" method="POST" action="/branch/member/{{branch._id}}" enctype="multipart/form-data">
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="inputSuccess2" name="firstname" placeholder="First Name" required>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control" id="inputSuccess3" name="middlename" placeholder="Middle Name">
+                        <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="lastname" id="inputSuccess2" placeholder="Last Name">
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" value="{{username}}" id="inputSuccess2" placeholder="Username" readonly>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="inputSuccess4" placeholder="Email">
+                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="password" id="inputSuccess2" placeholder="Password" required>
+                        <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="number" class="form-control" id="inputSuccess5" placeholder="Phone">
+                        <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="_roleId" required>
+                              <option>Select Role</option>
+                            {{#each roles}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="gender" id="country" required>
+                            <option>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="country" id="country" required>
+                            <option>Select Country</option>
+                            <option value="Nigeria">Nigeria</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="state" id="country" required>
+                            <option>Select State</option>
+                            <option value="Lagos State">Lagos State</option>
+                            <option value="Kwara State">Kwara State</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="lga" id="country" required>
+                            <option>Select L.G.A</option>
+                            <option value="ikeja">Ikeja</option>
+                            <option value="ilorin">Ilorin</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                          <textarea class="form-control" name="address" id="inputSuccess5" rows="2" placeholder='Address' required></textarea>
+                        {{!-- <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> --}}
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Passport</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="height: 170px;width:100%;" data-trigger="fileinput">
+                                    <img src="/images/boxed-pattern-3.png" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
+                                <div class="text-center">
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileinput-new">Select logo</span>
+                                        <span class="fileinput-exists">Change logo</span>
+                                        <input type="file" name="passport" accept="image/*" required>
+                                    </span>
+                                    <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                      
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="editProduct">
+<div class="modal-dialog modal-lg">
+{{!-- <div class="modal-dialog modal-lg" style="width: 400px;"> --}}
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add Member</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <div class="col-md-12 col-xs-12">
+
+                    <form class="form-horizontal form-label-left input_mask" method="POST" action="/branch/member/{{branch._id}}" enctype="multipart/form-data">
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="inputSuccess2" name="firstname" placeholder="First Name" required>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control" id="inputSuccess3" name="middlename" placeholder="Middle Name">
+                        <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="lastname" id="inputSuccess2" placeholder="Last Name">
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" value="{{username}}" id="inputSuccess2" placeholder="Username" readonly>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" id="inputSuccess4" placeholder="Email">
+                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="text" class="form-control has-feedback-left" name="password" id="inputSuccess2" placeholder="Password" required>
+                        <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                        <input type="number" class="form-control" id="inputSuccess5" placeholder="Phone">
+                        <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="_roleId" required>
+                              <option>Select Role</option>
+                            {{#each roles}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="gender" id="country" required>
+                            <option>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="country" id="country" required>
+                            <option>Select Country</option>
+                            <option value="Nigeria">Nigeria</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="state" id="country" required>
+                            <option>Select State</option>
+                            <option value="Lagos State">Lagos State</option>
+                            <option value="Kwara State">Kwara State</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                          <select class="form-control" name="lga" id="country" required>
+                            <option>Select L.G.A</option>
+                            <option value="ikeja">Ikeja</option>
+                            <option value="ilorin">Ilorin</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                          <textarea class="form-control" name="address" id="inputSuccess5" rows="2" placeholder='Address' required></textarea>
+                        {{!-- <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span> --}}
+                      </div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Passport</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class="fileinput-new thumbnail" style="height: 170px;width:100%;" data-trigger="fileinput">
+                                    <img src="/images/boxed-pattern-3.png" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
+                                <div class="text-center">
+                                    <span class="btn btn-default btn-file">
+                                        <span class="fileinput-new">Select logo</span>
+                                        <span class="fileinput-exists">Change logo</span>
+                                        <input type="file" name="passport" accept="image/*" required>
+                                    </span>
+                                    <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                      
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                      </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+{{#extend 'scripts'}}
+    <script src="/javascripts/fileinput.js"></script>
+    <!-- Datatables -->
+    <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+
+    <script>
+
+    function editmemberModal(id){
+
+        var name = $('#name'+id).html();
+        var username = $('#username'+id).html();
+        var email = $('#email'+id).html();
+        var phone = $('#phone'+id).html();
+
+        $('#ename').val(name);
+        $('#eusername').val(username);
+        $('#eemail').val(email);
+        $('#ephone').val(phone);
+        $("#editmemberModal").modal('show');
+    }
+
+
+    function banMember(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to Ban?',
+			buttons: {
+				confirm: function () {
+					delete_branch(id);
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+
+			}
+		});
+    }
+
+
+
+var delete_branch = function(id){
+
+         $.ajax({
+            type: "POST", // Post / Get method
+            url: "/branch/ban", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
+
+             if (response === "success") {
+                $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Banned Successfully',
+                    buttons: {
+                        ok: function () {
+                           location.reload(true)
+                        },
+                    }
+                });
+              }
+
+            },
+            error:function (xhr, ajaxOptions, thrownError){
+                    $.alert('Could not Banned');
+            }
+            });
+}
+
+</script>
+
+{{/extend}}

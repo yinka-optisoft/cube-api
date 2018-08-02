@@ -44,7 +44,7 @@ router.post('/login', passport.authenticate('local',
 
               // check if user is ban
               if (user.status === false) {
-                req.flash('success', 'You Are on Suspension');
+                req.flash('success', 'You Are Not Activated');
                 res.redirect('/');
               } else {
                 if (!store) res.redirect('/');
@@ -56,14 +56,15 @@ router.post('/login', passport.authenticate('local',
 
                   if (user.roleId === 'admin') {
                     res.redirect('/admin/dashboard');
-                  } else if (user._roleId === 'admin') {
+                  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
                     res.redirect('/admin/dashboard');
-                  } else if (user._roleId === 'staff') {
-                    res.redirect('/staff/dashboard');
+                  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {
+                    res.redirect(`/staff/dashboard/${user._storeId}/${user._branchId}`);
+                  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Branch') {
+                    res.redirect(`/branch/admin/dashboard/${user._storeId}/${user._branchId}`);
+                  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Branch') {
+                    res.redirect(`/staff/dashboard/${user._storeId}/${user._branchId}`);
                   }
-                  //  else if (user._supllyId === 'supplier') {
-                  //   res.redirect('/supplier/dashboard');
-                  // }
                 });
               }
             });

@@ -224,7 +224,7 @@
                         {{#each staff}}
                         <tr>
                             <td>{{inc @index}}</td>
-                            <td>{{_roleId.name}}</td>
+                            <td>{{_roleId.name}} ({{_roleId.roleType}})</td>
                             <td id="name{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
                             <td id="username{{_id}}">{{username}}</td>
                             <td id="email{{_id}}">{{email}}</td>
@@ -319,7 +319,7 @@
                           <select class="form-control" name="_roleId" required>
                               <option>Select Role</option>
                             {{#each roles}}
-                                <option value="{{_id}}">{{name}}</option>
+                                <option value="{{_id}}">{{name}} ({{roleType}})</option>
                             {{/each}}
                         </select>
                       </div>

@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const Role = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
+  _accountId: { type: Schema.Types.ObjectId, ref: 'accounts' },
   name: { type: String, lowercase: true, trim: true },
-  roleType: { type: String, lowercase: true, trim: true,
-    enum: ['store', 'branch'] }, // supplier
-  discription: String,
+  roleType: { type: String, enum: ['Store', 'Branch'] },
+  description: String,
   createdAt: { type: Date, default: Date.now }
 });
 

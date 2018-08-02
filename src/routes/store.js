@@ -143,7 +143,7 @@ router.post('/create-store', async (req, res, next) => {
 // create account roles
 router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId');
-  const roles = await Role.find({ _storeId: req.session._storeId });
+  const roles = await Role.find({ _storeId: req.session._storeId }).populate('_accountId');
   const category = await Category.find({ _storeId: req.session._storeId });
   const bussiness = await Bussiness.find({ _storeId: req.session._storeId });
   res.render('role/manage', { user, roles, category, bussiness, expressFlash: req.flash('success'), layout: 'layouts/user' });
@@ -153,10 +153,10 @@ router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
 // update branch
 router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const role = await Role();
-
+  const role = await Role(req.body);
   role._storeId = req.session._storeId;
-  role.name = req.body.name;
+  role._accountId = req.user._id;
+  
   await role.save(function(err) {
     if (err) {
       console.log(err);

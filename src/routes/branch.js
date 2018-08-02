@@ -25,6 +25,15 @@ const generateUniqueID = async storeShort => {
 
 
 // branch homepage
+router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const user = await Account.findById(req.user._id).populate('_roleId');
+
+  const branches = await Branch.find({ _storeId: req.session._storeId });
+  res.render('branch/adminDashboard', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
+});
+
+
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
     const user = await Account.findById(req.user._id).populate('_roleId');

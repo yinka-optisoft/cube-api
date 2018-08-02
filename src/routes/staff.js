@@ -24,7 +24,7 @@ const generateUniqueID = async storeShort => {
   };
 
 
-router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
+router.get('/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
     const user = await Account.findById(req.user._id).populate('_roleId');
     const suppliers = await Account.find({ _storeId: req.user._storeId, _supllyId: 'supplier' });
     const categories = await Category.find({ _storeId: req.session._storeId });

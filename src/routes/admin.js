@@ -33,7 +33,7 @@ router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
 
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const roles = await Role.find({ _storeId: req.session._storeId });
-  const staff = await Account.find({ _storeId: req.session._storeId })
+  const staff = await Account.find({ _storeId: req.user._storeId })
                                     .populate('_roleId').populate('_branchId');
   res.render('staff/staff', { user, staff, roles, branches, expressFlash: req.flash('success'), 
                               layout: 'layouts/user' });
@@ -55,7 +55,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
   form.parse(req, async (err, fields, files) => {
 
-    const store = await Store.findById(req.session._storeId);
+    const store = await Store.findById(req.user._storeId);
 
     // const branchId = req.params._branchId;
 
@@ -76,18 +76,15 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                    data, function(err) {
                      fs.unlink(passport.path, function(err) {
                        if (err) {
-                         res.status(500);
-                         res.json(err);
+                         console.log(err);
                        } else {
                          member.passport = name;
                          Account.register(
                            new Account(member), password, (err, account) => {
                              if (err) {
-                               res.status(500);
-                               res.send(err);
-
+                               console.log(err);
                              } else {
-                               req.flash('success', `Saved sucessfully! Your Username is ${member.username}`);
+                               req.flash('success', `Saved successfully! Your Username is ${member.username}`);
                                res.redirect('/admin/staff');
                              }
                            });

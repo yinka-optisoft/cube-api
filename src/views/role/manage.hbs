@@ -95,6 +95,8 @@
             <tr>
                 <th>#</th>
                 <th>Role</th>
+                <th>Type</th>
+                <th>Created By</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -103,6 +105,8 @@
                 <tr>
                     <td>{{inc @index}}</td>
                     <td id="name{{_id}}">{{name}}</td>
+                    <td id="name{{_id}}">{{roleType}}</td>
+                    <td id="name{{_id}}">{{_accountId.firstname}} {{_accountId.middlename}} {{_accountId.lastname}}</td>
                     <td>
                         <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
                         <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
@@ -303,6 +307,23 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <input type="text" name="name" id="name" class="form-control" placeholder="Role Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Assign Role To</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="roleType" id="roleType" required>
+                            <option>Select Role Type</option>
+                            <option value="Store">Store</option>
+                            <option value="Branch">Branch</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Description
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="description" id="description" rows="2" placeholder='Description'></textarea>
                     </div>
                     </div>
                     <div class="ln_solid"></div>

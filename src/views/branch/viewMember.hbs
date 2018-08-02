@@ -287,10 +287,10 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="_roleId" id="e_roleId" required>
-                                    {{#select user._roleId.name}}
                                     <option>Select Role</option>
+                                    {{#select user._roleId.name}}
                                     {{#each roles}}
-                                        <option value="{{_id}}">{{name}}</option>
+                                        <option value="{{_id}}">{{name}} ({{roleType}})</option>
                                     {{/each}}
                                     {{/select}}
                                 </select>
@@ -298,8 +298,8 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="gender" id="egender" required>
-                                    {{#select user.gender}}
                                     <option>Select Gender</option>
+                                    {{#select user.gender}}
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     {{/select}}
