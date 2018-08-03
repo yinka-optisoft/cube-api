@@ -26,6 +26,7 @@ import branch from './routes/branch';
 import product from './routes/product';
 import supply from './routes/supply';
 import staff from './routes/staff';
+import sales from './routes/sales';
 
 const app = express();
 
@@ -86,6 +87,7 @@ app.use('/branch', branch);
 app.use('/product', product);
 app.use('/supplier', supply);
 app.use('/staff', staff);
+app.use('/sales', sales);
 
 // passport account auth
 

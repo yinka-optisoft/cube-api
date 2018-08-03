@@ -1,6 +1,6 @@
 <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-        <a href="/admin/dashboard" class="site_title"><i class="fa fa-paw"></i> <span>Cube700</span></a>
+        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Cube700</span></a>
     </div>
 
     <div class="clearfix"></div>
@@ -41,6 +41,11 @@
                     <li><a href="/store/categories">Categories</a></li>
                     <li><a href="/product">Manage Product</a></li>
                     <li><a href="/product/move">Product Transfer Record</a></li>
+                </ul>
+                </li>
+                <li><a><i class="fa fa-user"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/product">Manage Sales</a></li>
                 </ul>
                 </li>
                 <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
@@ -85,10 +90,11 @@
                 </li>
             </ul>
         {{else if (eq user._roleId.name 'staff')}}
-            <ul class="nav side-menu">
-                <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav side-menu">
+                <li><a><i class="fa fa-home"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="/branch">Manage Branch</a></li>
+                    <li><a href="/sales/create/sales">Enter Sales</a></li>
+                    <li><a href="/sales/manage/sales">Manage Sales</a></li>
                 </ul>
                 </li>
             </ul>

@@ -1,0 +1,561 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+        .btn-file {
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    }      
+.btn-file > input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    transform: translate(-300px, 0) scale(4);
+    font-size: 23px;
+    direction: ltr;
+    cursor: pointer;
+    }
+    .fileinput {
+    margin-bottom: 9px;
+    display: inline-block;
+    }
+    .fileinput .uneditable-input {
+    display: inline-block;
+    margin-bottom: 0px;
+    vertical-align: middle;
+    cursor: text;
+    }
+    .fileinput i + .fileinput-filename,
+    .fileinput .btn + .fileinput-filename {
+    padding-left: 5px;
+    }
+    .fileinput.fileinput-exists .close {
+    opacity: 1;
+    color: #dee0e4;
+    position: relative;
+    top: 3px;
+    margin-left: 5px;
+    }
+    .fileinput .thumbnail {
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 5px;
+    vertical-align: middle;
+    text-align: center;
+    }
+    .fileinput .thumbnail[data-trigger="fileinput"] {
+    cursor: pointer;
+    }
+    .fileinput .thumbnail:before,
+    .fileinput .thumbnail:after {
+    content: " ";
+    display: table;
+    }
+    .fileinput .thumbnail:after {
+    clear: both;
+    }
+    .fileinput .thumbnail > img {
+    max-height: 100%;
+    display: block;
+    }
+    .fileinput .btn {
+    vertical-align: middle;
+    }
+    .fileinput-exists .fileinput-new,
+    .fileinput-new .fileinput-exists {
+    display: none;
+    }
+    .fileinput-inline .fileinput-controls {
+    display: inline;
+    }
+    .fileinput .uneditable-input {
+    white-space: normal;
+    }
+    .fileinput-new .input-group .btn-file {
+    border-radius: 0 3px 3px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-xs,
+    .fileinput-new .input-group .btn-file.btn-sm {
+    border-radius: 0 2px 2px 0;
+    }
+    .fileinput-new .input-group .btn-file.btn-lg {
+    border-radius: 0 3px 3px 0;
+    }
+    .form-group.has-warning .fileinput .uneditable-input {
+    color: #574802;
+    border-color: #ffd78a;
+    }
+    .form-group.has-warning .fileinput .fileinput-preview {
+    color: #574802;
+    }
+    .form-group.has-warning .fileinput .thumbnail {
+    border-color: #ffd78a;
+    }
+    .form-group.has-error .fileinput .uneditable-input {
+    color: #ac1818;
+    border-color: #ffafbd;
+    }
+    .form-group.has-error .fileinput .fileinput-preview {
+    color: #ac1818;
+    }
+    .form-group.has-error .fileinput .thumbnail {
+    border-color: #ffafbd;
+    }
+    .form-group.has-success .fileinput .uneditable-input {
+    color: #045702;
+    border-color: #b4e8a8;
+    }
+    .form-group.has-success .fileinput .fileinput-preview {
+    color: #045702;
+    }
+    .form-group.has-success .fileinput .thumbnail {
+    border-color: #b4e8a8;
+    }
+    .input-group-addon:not(:first-child) {
+    border-left: 0;
+    }
+    .fileinput .uneditable-input,
+    .fileinput-new .input-group .btn-file {
+    display: table-cell !important;
+    }
+
+    </style>
+
+{{/extend}}
+
+
+<div class="">
+    
+    <div class="text-center">
+        <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#customer">
+        <i class="fa fa-plus fa-2x"></i>
+        <span>New Customer</span>
+        </a>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>Form Wizards <small>Sessions</small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            <!-- Smart Wizard -->
+            <div id="wizard" class="form_wizard wizard_horizontal">
+                <ul class="wizard_steps">
+                <li>
+                    <a href="#step-1">
+                    <span class="step_no">1</span>
+                    <span class="step_descr">
+                        Step 1<br />
+                        <small>Invoice Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-2">
+                    <span class="step_no">2</span>
+                    <span class="step_descr">
+                        Step 2<br />
+                        <small>Customer Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-3">
+                    <span class="step_no">3</span>
+                    <span class="step_descr">
+                        Step 3<br />
+                        <small>Product Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-4">
+                    <span class="step_no">4</span>
+                    <span class="step_descr">
+                        Step 4<br />
+                        <small>Sales Details</small>
+                    </span>
+                    </a>
+                </li>
+                </ul>
+                <form class="form-horizontal form-label-left">
+                <div id="step-1">
+                <form class="form-horizontal form-label-left">
+                    <div class="row form-group">
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input type="date" required="required" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input type="text" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12" disabled>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
+                        </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                <div id="step-2">
+                <div class="col-md-6 col-md-offset-3 form-group has-feedback">
+                    <select class="form-control" name="_customerId" required>
+                        <option>Select Customer</option>
+                        {{#each customers}}
+                            <option value="{{_id}}">{{name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                </div>
+                <div id="step-3">
+                <form class="form-horizontal form-label-left">
+                    <div class="row form-group">
+                        <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                        <div class="col-md-6 col-sm-6">
+                            <select class="form-control" name="_customerId" onchange="getPieces(this.value)" required>
+                                <option>Select Product</option>
+                                {{#each products}}
+                                    <option value="{{_id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" disabled>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesSold" id="piecesSold">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3">Product Price:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3">Enter Price:
+                        </label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="productPrice" id="productPrice">
+                        </div>
+                        </div>
+                    </div>
+                </form>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                <h2>Sales </h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Settings 1</a>
+                                        </li>
+                                        <li><a href="#">Settings 2</a>
+                                        </li>
+                                    </ul>
+                                    </li>
+                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Role</th>
+                                        <th>Type</th>
+                                        <th>Created By</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each roles}}
+                                        <tr>
+                                            <td>{{inc @index}}</td>
+                                            <td id="name{{_id}}">{{name}}</td>
+                                            <td id="name{{_id}}">{{roleType}}</td>
+                                            <td id="name{{_id}}">{{_accountId.firstname}} {{_accountId.middlename}} {{_accountId.lastname}}</td>
+                                            <td>
+                                                <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
+                                                <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
+                                                <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="step-4">
+                    <form class="form-horizontal form-label-left">
+                        <div class="row form-group">
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="sum" id="sum" disabled>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="text" name="discount" class="form-control col-md-7 col-xs-12" id="discount">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="vat" id="vat">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="dueToCus" id="dueToCus">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="payByCus" id="payByCus">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Balance Transaction:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="totalPay" id="totalPay" disabled>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                </form>
+            <!-- End SmartWizard Content -->
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="customer">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Create Customer</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/sales/create/customer">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Customer Name">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" class="form-control" id="phone" name="phone" placeholder="Phone">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="address" id="address" rows="2" placeholder="Address"></textarea>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
+{{#extend 'scripts'}}
+
+    <!-- jQuery Smart Wizard -->
+    <script src="/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+
+    <script>
+
+        // get current date
+        var invoiceDate = new Date().toDateString();
+        $('#invoiceDate').val(invoiceDate);
+
+        // generate invoice number
+        function genInvoiceNumb() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        for (var i = 0; i < 3; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+        var invoiceNumber = new Date().format('m-d-Y/h:i:s');
+        $('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
+
+
+        // generate waybill number
+        function genWayBilNumb() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 11; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+        }
+        $('#waybillNumber').val(genWayBilNumb());
+
+
+        function getPieces(id){
+            var productId = id;
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/get/pieces',
+                dataType: 'json',
+                data: { _productId: productId },
+                success: function(data) {
+                    $('#piecesAvai').empty();
+                    $('#piecesAvai').val(data.pieces);
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        }
+</script>
+
+{{/extend}}

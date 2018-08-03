@@ -6,7 +6,22 @@ import Bussiness from '../models/bussiness';
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId');
+  if (user.roleId === 'admin') {
+    res.redirect('/admin/dashboard');
+  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
+    res.redirect('/admin/dashboard');
+  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {
+    res.redirect(`/staff/dashboard/${user._storeId}/${user._branchId}`);
+  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Branch') {
+    res.redirect(`/branch/admin/dashboard/${user._storeId}/${user._branchId}`);
+  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Branch') {
+    res.redirect(`/staff/dashboard/${user._storeId}/${user._branchId}`);
+  }
+});
+
+router.get('/cube700', (req, res) => {
   res.render('site/index', { msg: req.flash('info'), layout: 'layouts/site' });
 });
 

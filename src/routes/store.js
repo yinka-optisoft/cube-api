@@ -21,29 +21,6 @@ router.get('/register', async (req, res) => {
 });
 
 
-router.get('/login', (req, res) => {
-  res.render('site/index', { expressFlash: req.flash('info'), user: req.user,
-                             error: req.flash('error'),
-                             layout: false });
-});
-
-
-router.post('/login', passport.authenticate('local',
-                                            { failureRedirect: '/login',
-                                              failureFlash: true }),
-            async (req, res, next) => {
-              const store = await Store.findById(req.user._storeId);
-              if (!store) res.redirect('/');
-              req.session._storeId = store._id;
-              req.session.save((err) => {
-                if (err) {
-                  return next(err);
-                }
-                res.redirect('/admin/dashboard');
-            });
-        });
-
-
 const generateUniqueID = async storeShort => {
   const ADMIN_ID = storeShort + Math.round(Math.random() * 100000);
   const exists = await Account.count({ username: ADMIN_ID });
@@ -61,7 +38,7 @@ router.post('/create-store', async (req, res, next) => {
     // fields.checkBody('name', 'company name is required').isEmpty();
     // fields.checkBody('email', 'company email is required').isEmail();
 
-      try {
+    try {
       const newStore = new Store();
       const logo = files.logo;
       newStore.name = fields.name;
@@ -75,67 +52,67 @@ router.post('/create-store', async (req, res, next) => {
       newStore.state = fields.state;
       newStore.city = fields.city;
       if (logo && logo.name) {
-          const name = `${Math.round(Math.random() * 10000)}.${logo.name.split('.').pop()}`;
-          const dest = path.join(__dirname, '..', 'public', 'images', 'store', name);
-      fs.readFile(logo.path, function(err, data) {
-        fs.writeFile(dest,
-                      data, function(err) {
-                        fs.unlink(logo.path, async (err) => {
-                          if (err) {
-                            res.status(500);
-                            res.json(err);
-                          } else {
-                          newStore.logo = name;
-                            await newStore.save(function(err) {
-                              if (err) {
-                                console.log(err);
-                              } 
-                            });
-                            const newBranch = new Branch();
-                            newBranch._storeId = newStore._id;
-                            newBranch.name = fields.branch_name;
-                            newBranch.address = fields.branch_address;
-                            newBranch.phone = fields.branch_phone;
-                            newBranch.country = fields.branch_country;
-                            newBranch.state = fields.branch_state;
-                            newBranch.city = fields.branch_city;
-                            await newBranch.save(function(err) {
-                              if (err){
-                                  console.log(err);
-                                } 
-                                
-                            });
+        const name = `${Math.round(Math.random() * 10000)}.${logo.name.split('.').pop()}`;
+        const dest = path.join(__dirname, '..', 'public', 'images', 'store', name);
+        fs.readFile(logo.path, function(err, data) {
+          fs.writeFile(dest,
+                       data, function(err) {
+                         fs.unlink(logo.path, async (err) => {
+                           if (err) {
+                             res.status(500);
+                             res.json(err);
+                           } else {
+                             newStore.logo = name;
+                             await newStore.save(function(err) {
+                               if (err) {
+                                 console.log(err);
+                               }
+                             });
+                             const newBranch = new Branch();
+                             newBranch._storeId = newStore._id;
+                             newBranch.name = `(H.B)${fields.branch_name}`;
+                             newBranch.address = fields.branch_address;
+                             newBranch.phone = fields.branch_phone;
+                             newBranch.country = fields.branch_country;
+                             newBranch.state = fields.branch_state;
+                             newBranch.city = fields.branch_city;
+                             await newBranch.save(function(err) {
+                               if (err) {
+                                 console.log(err);
+                               }
 
-                            const newAdmin = fields;
-                            const password = newAdmin.password;
-                            delete newAdmin.password;
-                            newAdmin.role = fields.role;
-                            newAdmin._storeId = newStore._id;
-                            newAdmin._branchId = newBranch._id;
-                            newAdmin.username = await generateUniqueID(newStore.shortCode);
-                            newAdmin.firstname = fields.firstname;
-                            newAdmin.middlename = fields.middlename;
-                            newAdmin.lastname = fields.lastname;
-                            newAdmin.address = fields.admin_address;
-                            newAdmin.phone = fields.admin_phone;
-                            newAdmin.email = fields.admin_email;
-                            Account.register(new Account(newAdmin), password,
-                              (err, account) => {
-                                if (err) {
-                                  console.log(err);
-                                } else {
-                                  req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
-                                  res.redirect('/login');
-                                }
-                            });
-                          }
-                        });
-                      });
-      });
-    }
-  } catch (e) {
+                             });
+
+                             const newAdmin = fields;
+                             const password = newAdmin.password;
+                             delete newAdmin.password;
+                             newAdmin.role = fields.role;
+                             newAdmin._storeId = newStore._id;
+                             newAdmin._branchId = newBranch._id;
+                             newAdmin.username = await generateUniqueID(newStore.shortCode);
+                             newAdmin.firstname = fields.firstname;
+                             newAdmin.middlename = fields.middlename;
+                             newAdmin.lastname = fields.lastname;
+                             newAdmin.address = fields.admin_address;
+                             newAdmin.phone = fields.admin_phone;
+                             newAdmin.email = fields.admin_email;
+                             Account.register(new Account(newAdmin), password,
+                                              (err, account) => {
+                                                if (err) {
+                                                  console.log(err);
+                                                } else {
+                                                  req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
+                                                  res.redirect('/login');
+                                                }
+                                              });
+                           }
+                         });
+                       });
+        });
+      }
+    } catch (e) {
       console.log(e);
-  }
+    }
   });
 });
 
@@ -156,7 +133,7 @@ router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
   const role = await Role(req.body);
   role._storeId = req.session._storeId;
   role._accountId = req.user._id;
-  
+
   await role.save(function(err) {
     if (err) {
       console.log(err);
