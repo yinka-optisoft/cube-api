@@ -286,15 +286,15 @@
                 </div>
                 </div>
                 <div id="step-3">
-                <form class="form-horizontal form-label-left">
+                <form class="form-horizontal form-label-left" id="saleProduct">
                     <div class="row form-group">
                         <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
                         <div class="col-md-6 col-sm-6">
-                            <select class="form-control" name="_customerId" onchange="getPieces(this.value)" required>
+                            <select class="form-control" name="_productId" onchange="getPieces(this.value)" required>
                                 <option>Select Product</option>
                                 {{#each products}}
-                                    <option value="{{_id}}">{{name}}</option>
+                                    <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -302,28 +302,38 @@
                         <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" disabled>
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" placeholder="Pieces Available" disabled>
                         </div>
                         </div>
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3">Enter Pieces:
                         </label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesSold" id="piecesSold">
+                            <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="piecesSold" id="piecesSold" placeholder="Enter Pieces">
                         </div>
                         </div>
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3">Product Price:
                         </label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice">
+                            <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice" placeholder="Product Price" disabled>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="getMsg col-md-6 col-md-offset-3">
+
                         </div>
                         </div>
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3">Enter Price:
                         </label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="productPrice" id="productPrice">
+                            <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="productPrice" id="productPrice" placeholder="Enter Price">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3 text-center">
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                         </div>
                     </div>
@@ -357,26 +367,15 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Role</th>
-                                        <th>Type</th>
-                                        <th>Created By</th>
-                                        <th>Actions</th>
+                                        <th>Product Name</th>
+                                        <th>Pieces</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                        {{#each roles}}
-                                        <tr>
-                                            <td>{{inc @index}}</td>
-                                            <td id="name{{_id}}">{{name}}</td>
-                                            <td id="name{{_id}}">{{roleType}}</td>
-                                            <td id="name{{_id}}">{{_accountId.firstname}} {{_accountId.middlename}} {{_accountId.lastname}}</td>
-                                            <td>
-                                                <a href="" class="btn btn-primary btn-sm" onclick="editbranchModal(this.value)" value="{{_id}}" data-toggle="modal" data-target="#editbranchForm"><i class="fa fa-edit"></i></a>
-                                                <a href="/branch/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-                                                <a onclick="deleteBranch(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                                            </td>
-                                        </tr>
-                                        {{/each}}
+                                    <tbody id="saleTable">
+
                                     </tbody>
                                 </table>
 
@@ -392,39 +391,39 @@
                             <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" required="required" class="form-control col-md-7 col-xs-12" name="sum" id="sum" disabled>
+                                <input type="text" required="required" class="form-control col-md-7 col-xs-12" placeholder="Sum" name="sum" id="sum" disabled>
                             </div>
                             </div>
                             <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" name="discount" class="form-control col-md-7 col-xs-12" id="discount">
+                                <input type="text" name="discount" onchange="getDiscount(this.value)" class="form-control col-md-7 col-xs-12" placeholder="Discount Given To Customer" id="discount">
                             </div>
                             </div>
                             <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="vat" id="vat">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="vat" placeholder="VAT" id="vat">
                             </div>
                             </div>
                             <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="dueToCus" id="dueToCus">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="amtDueToCus" placeholder="Amount Due To Customer" id="amtDueToCus" disabled>
                             </div>
                             </div>
                             <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="payByCus" id="payByCus">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus">
                             </div>
                             </div>
                             <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3">Balance Transaction:
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="totalPay" id="totalPay" disabled>
+                                <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="totalPay" id="totalPay" disabled>
                             </div>
                             </div>
                         </div>
@@ -497,6 +496,84 @@
 <!-- /modals -->
 
 
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="updateSales">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Purchased Sales</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                    <form class="form-horizontal form-label-left" id="editSaleProduct">
+                        <div class="row form-group">
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <select class="form-control" name="_productId" onchange="getPieces(this.value)" required>
+                                    <option>Select Product</option>
+                                    {{#each products}}
+                                        <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="epiecesAvai" id="epiecesAvai" placeholder="Pieces Available" disabled>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="epiecesSold" id="epiecesSold" placeholder="Enter Pieces">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Product Price:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="egetPrice" id="egetPrice" placeholder="Product Price" disabled>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="getMsg col-md-6 col-md-offset-3">
+
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Enter Price:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="eproductPrice" id="eproductPrice" placeholder="Enter Price">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="col-md-6 col-md-offset-3 text-center">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
 
 {{#extend 'scripts'}}
 
@@ -549,13 +626,244 @@
                 data: { _productId: productId },
                 success: function(data) {
                     $('#piecesAvai').empty();
-                    $('#piecesAvai').val(data.pieces);
+                    $('#piecesAvai').val(data._productId.pieces);
+
+                    $('#getPrice').empty();
+                    $('#getPrice').val(data._productId.price);
+
+
+                    // for edit
+                    $('#epiecesAvai').empty();
+                    $('#epiecesAvai').val(data._productId.pieces);
+
+                    $('#egetPrice').empty();
+                    $('#egetPrice').val(data._productId.price);
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
                     $.alert(errorThrow);
                 }
             });
         }
+
+        function enterPieces(pieces){
+
+            var available = $('#piecesAvai').val();
+            var piecesSold = pieces;
+            var sub = (parseFloat(available) - parseFloat(piecesSold));
+
+            $('#piecesAvai').val(sub);
+
+
+            // for edit
+            var available = $('#epiecesAvai').val();
+            var piecesSold = pieces;
+            var sub = (parseFloat(available) - parseFloat(piecesSold));
+
+            $('#epiecesAvai').val(sub);
+        }
+
+        function pricePay(price){
+
+            var initPrice = price;
+            var presentPrice = $('#getPrice').val();
+
+            if(parseFloat(initPrice) < parseFloat(presentPrice)){
+                var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'You can\'t sell below ' + presentPrice+
+                            '</div>';
+
+                $('#productPrice').val(0);
+            }
+
+            $('.getMsg').append(msg);
+            $('.getMsg').show().fadeOut( 10000 );
+
+
+            // for edit
+            var initPrice = price;
+            var presentPrice = $('#egetPrice').val();
+
+            if(parseFloat(initPrice) < parseFloat(presentPrice)){
+                var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'You can\'t sell below ' + presentPrice+
+                            '</div>';
+
+                $('#eproductPrice').val(0);
+            }
+
+            $('.getMsg').append(msg);
+            $('.getMsg').show().fadeOut( 10000 );
+        }
+
+
+        
+        $('#saleProduct').submit(function(e){
+            e.preventDefault();
+
+            var salesArray = [];
+
+            var p = $(this).find(':selected').attr('data-productName');
+
+            //var form_data = $(this).serialize(); //Encode form elements
+            var form_data = $(this).serializeArray(); //Encode form elements
+            form_data.push({name: 'productName', value: p});
+
+            console.log(form_data);
+
+            salesArray.push(form_data);
+            $("#saleProduct")[0].reset();
+
+            console.log(salesArray);
+
+            salesArray.forEach(function(item, index, array){
+
+                var cal = (item[1].value * item[2].value);
+
+                var tr = '<tr>'+
+                        '<td>'+(index+1)+'</td>'+
+                        '<td>'+item[3].value+'</td>'+
+                        '<td>'+item[1].value+'</td>'+
+                        '<td>'+item[2].value+'</td>'+
+                        '<td>'+cal+'</td>'+
+                        '<td>'+
+                            '<button type="button" productId="'+ item[0].value +'" pieces="'+ item[1].value +'" price="'+ item[2].value +'" data-target="#updateSales"  data-toggle="modal" value="'+ item[0].value +'" class="btn btn-success btn-sm">Edit</button>'+
+                            '<button type="button" value="'+ item[0].value +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
+                            +'</td>'+
+                    '</tr>'
+
+                $('#saleTable').append(tr);
+                $("#saleProduct")[0].reset();
+                $('#sum').val(cal);
+            })
+        });
+
+/*
+        $('#saleProduct').submit(function(e){
+            e.preventDefault();
+
+            //var form_data = $(this).serialize(); //Encode form elements
+            var form_data = $(this).serializeArray(); //Encode form elements
+
+            salesArray.push(form_data);
+            $("#saleProduct")[0].reset();
+
+            console.log(salesArray);
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/create/sale',
+                dataType: 'json',
+                data: form_data,
+            }).done(function(data){
+
+                console.log(data);
+                console.log(data['_branchproductId.pieces']);
+
+                var cal = (data['productPrice'] * data['piecesSold']);
+
+                var tr = '<tr>'+
+                        '<td>'+1+'</td>'+
+                        '<td>'+data['_branchproductId._productId.name']+'</td>'+
+                        '<td>'+data['piecesSold']+'</td>'+
+                        '<td>'+data['productPrice']+'</td>'+
+                        '<td>'+cal+'</td>'+
+                        '<td>'+
+                            '<button type="button" data-target="#updateSales" piecesAvai="'+data['_branchproductId.pieces']+'" productId="'+data['_branchproductId._productId']+'"  data-toggle="modal" value="'+ data['_id'] +'" class="btn btn-success btn-sm">Edit</button>'+
+                            '<button type="button" value="'+ data['_id'] +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
+                            +'</td>'+
+                    '</tr>'
+
+                $('#saleTable').append(tr);
+                $("#saleProduct")[0].reset();
+                $('#sum').val(cal);
+
+            });
+        });
+*/
+
+
+        $('#updateSales').on('show.bs.modal', function (e) {
+
+            var opener = e.relatedTarget; // Button that triggered the modal
+
+            var productId = $(opener).attr('productId'); // Extract info from data-* attributes
+            var pieces = $(opener).attr('pieces');
+            var price = $(opener).attr('price'); 
+
+            $('#editSaleProduct').find('[name="_productId"]').val(productId);
+            $('#editSaleProduct').find('[name="pieces"]').val(pieces);
+            $('#editSaleProduct').find('[name="price"]').val(price);
+            
+        });
+
+        function deleteProduct(id){
+
+            console.log(id);
+
+            $.confirm({
+                title: '<div style="color:red">Confirm!</div>',
+                content: 'Are you sure you want to delete permanently?',
+                buttons: {
+                    confirm: function () {
+                        delete_product(id);
+                    },
+                    cancel: function () {
+                        $.alert('Canceled!');
+                    },
+
+                }
+            });
+        }
+
+        var delete_product = function(id){
+
+            $.ajax({
+                type: "POST", // Post / Get method
+                url: "/product/delete", //Where form data is sent on submission
+                dataType:"text", // Data type, HTML, json etc.
+                data:{ id:id}, //Form variables
+                success:function(response){
+
+                if (response === "success") {
+                    $.confirm({
+                        title: '<div style="color:green">Success</div>',
+                        content: 'Product deleted Successfully',
+                        /*buttons: {
+                            ok: function () {
+                            location.reload(true)
+                            },
+                        }*/
+                    });
+                }
+
+                },
+                error:function (xhr, ajaxOptions, thrownError){
+                        $.alert('Could not delete');
+                }
+                });
+        }
+
+
+        function getDiscount(e){
+            var sum = $('#sum').val();
+            var totalDiscount = (sum - e);
+            $('#amtDueToCus').val(totalDiscount);
+            $('#totalPay').val(totalDiscount);
+        }
+
+        function amountPaidByCus(e){
+            var amtDueToCus = $('#amtDueToCus').val();
+            var totalDiscount = (amtDueToCus - e);
+            $('#totalPay').val(totalDiscount);
+        }
+
+
+
+        
 </script>
 
 {{/extend}}

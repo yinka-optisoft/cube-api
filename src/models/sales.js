@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Sale = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
-  _productId: { type: Schema.Types.ObjectId, ref: 'products' },
+  _branchproductId: { type: Schema.Types.ObjectId, ref: 'branchproducts' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _salesBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _customerId: { type: Schema.Types.ObjectId, ref: 'accounts' },
