@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const Sale = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
-  _branchproductId: { type: Schema.Types.ObjectId, ref: 'branchproducts' },
+  //_branchproductId: { type: Schema.Types.ObjectId, ref: 'branchproducts' },
+  _productId: { type: Schema.Types.ObjectId, ref: 'products' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _salesBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _customerId: { type: Schema.Types.ObjectId, ref: 'accounts' },
@@ -11,8 +12,13 @@ const Sale = new Schema({
   invoiceDate: Date,
   invoiceNumber: Number,
   waybillNumber: Number,
-  piecesSold: Number,
-  productPrice: Number,
+  amountDue: Number,
+  amountPaid: Number,
+  balanceTransaction: Number,
+  discount: Number,
+  piecesSold: [Number],
+  unitPrice: [Number],
+  totalPrice: Number,
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -201,6 +201,7 @@
             </div>
             <div class="x_content">
 
+            <form class="form-horizontal form-label-left" id="allSales">
             <!-- Smart Wizard -->
             <div id="wizard" class="form_wizard wizard_horizontal">
                 <ul class="wizard_steps">
@@ -241,197 +242,203 @@
                     </a>
                 </li>
                 </ul>
-                <form class="form-horizontal form-label-left">
-                <div id="step-1">
-                <form class="form-horizontal form-label-left">
-                    <div class="row form-group">
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input type="date" required="required" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12">
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input type="text" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12" disabled>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
-                        </div>
-                        </div>
+                    <div id="step-1">
+                        <form class="form-horizontal form-label-left">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="date" required="required" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
+                                </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
-                </div>
-                <div id="step-2">
-                <div class="col-md-6 col-md-offset-3 form-group has-feedback">
-                    <select class="form-control" name="_customerId" required>
-                        <option>Select Customer</option>
-                        {{#each customers}}
-                            <option value="{{_id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-                </div>
-                <div id="step-3">
-                <form class="form-horizontal form-label-left" id="saleProduct">
-                    <div class="row form-group">
-                        <div class="form-group">
-                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
-                        <div class="col-md-6 col-sm-6">
-                            <select class="form-control" name="_productId" onchange="getPieces(this.value)" required>
-                                <option>Select Product</option>
-                                {{#each products}}
-                                    <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
-                                {{/each}}
-                            </select>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" placeholder="Pieces Available" disabled>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3">Enter Pieces:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="piecesSold" id="piecesSold" placeholder="Enter Pieces">
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3">Product Price:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice" placeholder="Product Price" disabled>
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <div class="getMsg col-md-6 col-md-offset-3">
-
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3">Enter Price:
-                        </label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="productPrice" id="productPrice" placeholder="Enter Price">
-                        </div>
-                        </div>
-                        <div class="form-group">
-                        <div class="col-md-6 col-md-offset-3 text-center">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                        </div>
+                    <div id="step-2">
+                        <form class="form-horizontal form-label-left">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <select class="form-control" name="_customerId" id="_customerId" required>
+                                            <option>Select Customer</option>
+                                            {{#each customers}}
+                                                <option value="{{_id}}">{{name}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                    <div id="step-3">
+                        <form class="form-horizontal form-label-left" id="saleProduct">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
+                                        <option>Select Product</option>
+                                        {{#each products}}
+                                            <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" placeholder="Pieces Available" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="piecesSold" id="piecesSold" placeholder="Enter Pieces">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Product Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice" placeholder="Product Price" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="getMsg col-md-6 col-md-offset-3">
 
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                <h2>Sales </h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Settings 1</a>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="productPrice" id="productPrice" placeholder="Enter Price">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                    <h2>Sales </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li><a href="#">Settings 2</a>
+                                        <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Settings 1</a>
+                                            </li>
+                                            <li><a href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
                                         </li>
                                     </ul>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
+                                    <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
 
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Product Name</th>
-                                        <th>Pieces</th>
-                                        <th>Unit Price</th>
-                                        <th>Total</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="saleTable">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Product Name</th>
+                                            <th>Pieces</th>
+                                            <th>Unit Price</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="saleTable">
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                </div>
-                <div id="step-4">
-                    <form class="form-horizontal form-label-left">
-                        <div class="row form-group">
-                            <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
-                            </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" required="required" class="form-control col-md-7 col-xs-12" placeholder="Sum" name="sum" id="sum" disabled>
+                    <div id="step-4">
+                        <form class="form-horizontal form-label-left">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12" placeholder="Sum" name="sumAmt" id="sumAmt" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="discount" onchange="getDiscount(this.value)" class="form-control col-md-7 col-xs-12" placeholder="Discount Given To Customer" id="discount">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="vat" placeholder="VAT" id="vat">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="amtDueToCus" placeholder="Amount Due To Customer" id="amtDueToCus" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Balance Transaction:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="totalPrice" id="totalPrice" disabled>
+                                </div>
+                                </div>
                             </div>
-                            </div>
-                            <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
-                            </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" name="discount" onchange="getDiscount(this.value)" class="form-control col-md-7 col-xs-12" placeholder="Discount Given To Customer" id="discount">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="vat" placeholder="VAT" id="vat">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" name="amtDueToCus" placeholder="Amount Due To Customer" id="amtDueToCus" disabled>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus">
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3">Balance Transaction:
-                            </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="totalPay" id="totalPay" disabled>
-                            </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                </form>
+                        </form>
+                    </div>
             <!-- End SmartWizard Content -->
             </div>
+            </form>
         </div>
         </div>
     </div>
@@ -498,7 +505,7 @@
 
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="updateSales">
-<div class="modal-dialog modal-sm" style="width: 400px;">
+<div class="modal-dialog modal-sm" style="width: 500px;">
     <div class="modal-content">
 
         <div class="modal-header">
@@ -512,12 +519,12 @@
                 
                 <div class="x_content">
                 <br />
-                    <form class="form-horizontal form-label-left" id="editSaleProduct">
-                        <div class="row form-group">
+                    <form class="form-horizontal form-label-left saleProduct">
+                        <div class="row form-group" id="editSaleProduct">
                             <div class="form-group">
                             <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
                             <div class="col-md-6 col-sm-6">
-                                <select class="form-control" name="_productId" onchange="getPieces(this.value)" required>
+                                <select class="form-control" name="_productId" onchange="egetPieces(this.value)" required>
                                     <option>Select Product</option>
                                     {{#each products}}
                                         <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
@@ -535,7 +542,7 @@
                             <label class="control-label col-md-3 col-sm-3">Enter Pieces:
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="epiecesSold" id="epiecesSold" placeholder="Enter Pieces">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="eenterPieces(this.value)" name="epiecesSold" id="epiecesSold" placeholder="Enter Pieces">
                             </div>
                             </div>
                             <div class="form-group">
@@ -545,8 +552,9 @@
                                 <input class="form-control col-md-7 col-xs-12" type="text" name="egetPrice" id="egetPrice" placeholder="Product Price" disabled>
                             </div>
                             </div>
+                            <input type="hidden" name="_uproductId" value="" />
                             <div class="form-group">
-                            <div class="getMsg col-md-6 col-md-offset-3">
+                            <div class="egetMsg col-md-6 col-md-offset-3">
 
                             </div>
                             </div>
@@ -554,7 +562,7 @@
                             <label class="control-label col-md-3 col-sm-3">Enter Price:
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="eproductPrice" id="eproductPrice" placeholder="Enter Price">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="epricePay(this.value)" name="eproductPrice" id="eproductPrice" placeholder="Enter Price">
                             </div>
                             </div>
                             <div class="form-group">
@@ -630,8 +638,26 @@
 
                     $('#getPrice').empty();
                     $('#getPrice').val(data._productId.price);
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        }
 
 
+        // for edit
+        function egetPieces(id){
+            var productId = id;
+
+            console.log(productId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/get/pieces',
+                dataType: 'json',
+                data: { _productId: productId },
+                success: function(data) {
                     // for edit
                     $('#epiecesAvai').empty();
                     $('#epiecesAvai').val(data._productId.pieces);
@@ -652,9 +678,10 @@
             var sub = (parseFloat(available) - parseFloat(piecesSold));
 
             $('#piecesAvai').val(sub);
+        }
 
-
-            // for edit
+        // for edit
+        function eenterPieces(pieces){
             var available = $('#epiecesAvai').val();
             var piecesSold = pieces;
             var sub = (parseFloat(available) - parseFloat(piecesSold));
@@ -662,8 +689,8 @@
             $('#epiecesAvai').val(sub);
         }
 
-        function pricePay(price){
 
+        function pricePay(price){
             var initPrice = price;
             var presentPrice = $('#getPrice').val();
 
@@ -679,9 +706,10 @@
 
             $('.getMsg').append(msg);
             $('.getMsg').show().fadeOut( 10000 );
+        }
 
-
-            // for edit
+        // for edit
+        function epricePay(price){
             var initPrice = price;
             var presentPrice = $('#egetPrice').val();
 
@@ -695,12 +723,11 @@
                 $('#eproductPrice').val(0);
             }
 
-            $('.getMsg').append(msg);
-            $('.getMsg').show().fadeOut( 10000 );
+            $('.egetMsg').append(msg);
+            $('.egetMsg').show().fadeOut( 10000 );
         }
 
-
-        
+/*
         $('#saleProduct').submit(function(e){
             e.preventDefault();
 
@@ -719,9 +746,17 @@
 
             console.log(salesArray);
 
+
+            var totalCal = [];
             salesArray.forEach(function(item, index, array){
 
                 var cal = (item[1].value * item[2].value);
+                
+                totalCal.push(cal);
+                console.log(cal);
+                console.log(totalCal);
+                //totalCal = (parseInt(totalCal) + parseInt(cal));
+
 
                 var tr = '<tr>'+
                         '<td>'+(index+1)+'</td>'+
@@ -737,9 +772,11 @@
 
                 $('#saleTable').append(tr);
                 $("#saleProduct")[0].reset();
-                $('#sum').val(cal);
+                //$('#sumAmt').val(cal);
             })
-        });
+            //console.log(totalCal);
+            $('#sumAmt').val(totalCal);
+        });*/
 
 /*
         $('#saleProduct').submit(function(e){
@@ -794,7 +831,7 @@
             var pieces = $(opener).attr('pieces');
             var price = $(opener).attr('price'); 
 
-            $('#editSaleProduct').find('[name="_productId"]').val(productId);
+            $('#editSaleProduct').find('[name="_uproductId"]').val(productId);
             $('#editSaleProduct').find('[name="pieces"]').val(pieces);
             $('#editSaleProduct').find('[name="price"]').val(price);
             
@@ -849,17 +886,216 @@
 
 
         function getDiscount(e){
-            var sum = $('#sum').val();
+
+            var sum = $('#sumAmt').val();
             var totalDiscount = (sum - e);
             $('#amtDueToCus').val(totalDiscount);
-            $('#totalPay').val(totalDiscount);
+            $('#totalPrice').val(totalDiscount);
         }
 
         function amountPaidByCus(e){
             var amtDueToCus = $('#amtDueToCus').val();
-            var totalDiscount = (amtDueToCus - e);
-            $('#totalPay').val(totalDiscount);
+            var totalDiscount = (e - amtDueToCus);
+            $('#totalPrice').val(totalDiscount);
         }
+
+    $(document).ready(function(){
+
+        var salesArray = [];
+        var salesObj = { };
+
+        console.log(salesObj);
+
+        //console.log(salesArray);
+
+        {{!-- salesObj['_productId'] = $('#_productId').val();
+        salesObj['piecesSold'] = $('#piecesSold').val();
+        salesObj['productPrice'] = $('#productPrice').val(); --}}
+
+        function checkexist(){
+             alert($('#_productId').val());
+            var inArray = -1;
+            //salesObj['_productId'] = $('#_productId').val();
+            for(var k = 0; k < salesArray.length; ++k ){
+                if($('#_productId').val() === salesArray[k]._productId)
+                    //alert($('#_productId').val())
+                     //alert(salesArray[k]._productId)
+                inArray = k;
+                //console.log(k);
+            }
+
+
+            if(inArray > -1) {
+
+                console.log('come when tru');
+
+                //salesArray[inArray]. = $('#_productId').val();
+               // salesArray[inArray].piecesSold = $('#piecesSold').val() + 
+                //salesObj['productPrice'] = $('#productPrice').val();
+
+                salesArray[inArray].piecesSold = parseFloat(salesArray[inArray].piecesSold) + parseFloat($('#piecesSold').val());
+                salesArray[inArray].productTotalPrice = parseFloat(salesArray[inArray].piecesSold) * parseFloat(salesArray[inArray].productTotalPrice);
+
+                console.log(salesArray, 'if inArray is tru');
+                
+                tableAppend();
+                //break;
+
+            } else {
+
+                var salesObj = { };
+
+                console.log(salesArray, 'when inArray is false');
+                console.log('create new one');
+
+                var p = $(this).find(':selected').attr('data-productName');
+
+                console.log(p);
+
+                salesObj['_productId'] = $('#_productId').val();
+                salesObj['productName'] = p;
+                salesObj['piecesSold'] = $('#piecesSold').val();
+                salesObj['productPrice'] = $('#productPrice').val();
+                salesObj['productTotalPrice'] = parseFloat($('#productPrice').val()) *  parseFloat(salesObj['piecesSold'])
+
+                salesArray.push(salesObj);
+                salesObj = { };
+
+                tableAppend();
+
+            }
+
+        }
+
+        $('#saleProduct').submit(function(e){
+
+          e.preventDefault();
+
+         
+
+            if(salesArray.length > 0 ){
+                console.log('enter');
+                checkexist();
+
+            }else{
+                alert($('#_productId').val());
+                console.log('create if zero');
+                
+                var p = $(this).find(':selected').attr('data-productName');
+
+                salesObj['_productId'] = $('#_productId').val();
+                salesObj['productName'] = p;
+                salesObj['piecesSold'] = $('#piecesSold').val();
+                salesObj['productPrice'] = $('#productPrice').val();
+                salesObj['productTotalPrice'] = $('#productPrice').val() *  salesObj['piecesSold']
+                salesArray.push(salesObj);
+                salesObj = { };
+
+                console.log(salesArray);
+
+                $("#saleProduct")[0].reset();
+
+                tableAppend();
+
+            }
+
+        });
+
+
+        var totalCal = [];
+        
+        function tableAppend(){
+             $('#saleTable').empty();
+            for (var i = 0, I = salesArray.length; i < I; i++) {
+
+                var cal = (salesArray[i].piecesSold * salesArray[i].productPrice);
+                console.log(cal);
+                totalCal.push(cal);
+
+
+                var tr = '<tr>'+
+                        '<td>'+ (1 + i) +'</td>'+
+                        '<td>'+salesArray[i].productName+'</td>'+
+                        '<td>'+salesArray[i].piecesSold+'</td>'+
+                        '<td>'+salesArray[i].productPrice+'</td>'+
+                        '<td>'+cal+'</td>'+
+                        '<td>'+
+                            '<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+
+                            '<button type="button" value="'+ salesArray[i]._productId +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
+                            +'</td>'+
+                    '</tr>'
+
+                $('#saleTable').append(tr);
+                $("#saleProduct")[0].reset();
+
+                sumTotalCal = 0;
+                $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
+                console.log(sumTotalCal);
+
+                $('#sumAmt').val(sumTotalCal);
+            }
+        }
+
+
+        $('#allSales').submit(function(e){
+           e.preventDefault();
+
+           var dis = $('#discount').val();
+           var vat = $('#vat').val();
+           var amtDueToCus = $('#amtDueToCus').val();
+           var payByCus = $('#payByCus').val();
+           var totalPrice = $('#totalPrice').val();
+
+           var saleDate = $('#saleDate').val();
+           var invoiceDate = $('#invoiceDate').val();
+           var invoiceNumber = $('#invoiceNumber').val();
+           var waybillNumber = $('#waybillNumber').val();
+
+           var customerId = $('#_customerId').val();
+
+           console.log(saleDate, invoiceDate, invoiceDate, invoiceNumber, waybillNumber, 'step1');
+           console.log(customerId, 'step2');
+           console.log(salesArray, 'step3');
+           console.log(dis, vat, amtDueToCus, payByCus, totalPrice, 'step4');
+
+           $.ajax({
+               type: 'POST',
+               url: '/sales/create/sale',
+               dataType: 'json',
+               data: {
+                   salesArray: salesArray,
+                   discount: dis,
+                   vat: vat,
+                   amtDueToCus: amtDueToCus,
+                   payByCus: payByCus,
+                   totalPrice: totalPrice,
+                   saleDate: saleDate,
+                   invoiceDate: invoiceDate,
+                   invoiceNumber: invoiceNumber,
+                   waybillNumber: waybillNumber,
+                   customerId: customerId
+               }
+           }).done(function(data){
+               console.log(data);
+               $('#msgSale').htm('Yes');
+           });
+        })
+
+
+    })
+
+
+
+        /*
+        $('#allSales').submit(function(e){
+           e.preventDefault();
+
+           console.log(e);
+
+           var form_data = $(this).serializeArray(); //Encode form elements
+
+           console.log(form_data);
+        })*/
 
 
 

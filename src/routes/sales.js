@@ -82,14 +82,35 @@ router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) =
 
 router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 
-    let productId = req.body._productId;
-    let piecesSold = req.body.piecesSold;
-    let productPrice = req.body.productPrice;
+    console.log(req.body);
+
+    // let discount = req.body.discount;
+    // let vat = req.body.vat;
+    let amtDueToCus = req.body.amtDueToCus;
+    let payByCus = req.body.payByCus;
+    let totalPrice = req.body.totalPrice;
+    let saleDate = req.body.saleDate;
+    let invoiceDate = req.body.invoiceDate;
+    let invoiceNumber = req.body.invoiceNumber;
+    let waybillNumber = req.body.waybillNumber;
+    let customerId = req.body.customerId;
+
+    // let productId = req.body._productId;
+    // let piecesSold = req.body.piecesSold;
+    // let productPrice = req.body.productPrice;
 
 
-    req.checkBody('_productId', 'Product is required').notEmpty();
-    req.checkBody('piecesSold', 'Pieces is required').notEmpty();
-    req.checkBody('productPrice', 'Price is required').notEmpty();
+    req.checkBody('amtDueToCus', 'Amount Due To Customer is required').notEmpty();
+    req.checkBody('payByCus', 'Pay By Customer is required').notEmpty();
+    req.checkBody('totalPrice', 'Total Price is required').notEmpty();
+    req.checkBody('saleDate', 'Select Sales Date is required').notEmpty();
+    req.checkBody('invoiceDate', 'Invoice Date is required').notEmpty();
+    req.checkBody('invoiceNumber', 'Invoice Number is required').notEmpty();
+    req.checkBody('waybillNumber', 'Way Bill Number is required').notEmpty();
+    req.checkBody('customerId', 'Select Customer name').notEmpty();
+    // req.checkBody('_productId', 'Product is required').notEmpty();
+    // req.checkBody('piecesSold', 'Pieces is required').notEmpty();
+    // req.checkBody('productPrice', 'Price is required').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -100,8 +121,15 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
         res.redirect('/sales/create/sales');
     } else {
 
-        const product = await BranchProduct.findOne({ _productId: req.body._productId, _branchId: req.user._branchId })
+        // const product = await BranchProduct.findOne({ _productId: req.body._productId, _branchId: req.user._branchId })
+        //                               .populate('_categoryId').populate('_productId');
+
+        const product = await Product.findOne({ _id: req.body._productId, _storeId: req.user._storeId })
                                       .populate('_categoryId').populate('_productId');
+
+        console.log(product);
+
+        return false;
         // product.pieces -= parseFloat(req.body.piecesSold);
         // product.save((err) => {
         //     if(err){
