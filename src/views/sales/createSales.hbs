@@ -45,123 +45,7 @@
     overflow: hidden;
     position: relative;
     vertical-align: middle;
-    }      
-.btn-file > input {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    transform: translate(-300px, 0) scale(4);
-    font-size: 23px;
-    direction: ltr;
-    cursor: pointer;
     }
-    .fileinput {
-    margin-bottom: 9px;
-    display: inline-block;
-    }
-    .fileinput .uneditable-input {
-    display: inline-block;
-    margin-bottom: 0px;
-    vertical-align: middle;
-    cursor: text;
-    }
-    .fileinput i + .fileinput-filename,
-    .fileinput .btn + .fileinput-filename {
-    padding-left: 5px;
-    }
-    .fileinput.fileinput-exists .close {
-    opacity: 1;
-    color: #dee0e4;
-    position: relative;
-    top: 3px;
-    margin-left: 5px;
-    }
-    .fileinput .thumbnail {
-    overflow: hidden;
-    display: inline-block;
-    margin-bottom: 5px;
-    vertical-align: middle;
-    text-align: center;
-    }
-    .fileinput .thumbnail[data-trigger="fileinput"] {
-    cursor: pointer;
-    }
-    .fileinput .thumbnail:before,
-    .fileinput .thumbnail:after {
-    content: " ";
-    display: table;
-    }
-    .fileinput .thumbnail:after {
-    clear: both;
-    }
-    .fileinput .thumbnail > img {
-    max-height: 100%;
-    display: block;
-    }
-    .fileinput .btn {
-    vertical-align: middle;
-    }
-    .fileinput-exists .fileinput-new,
-    .fileinput-new .fileinput-exists {
-    display: none;
-    }
-    .fileinput-inline .fileinput-controls {
-    display: inline;
-    }
-    .fileinput .uneditable-input {
-    white-space: normal;
-    }
-    .fileinput-new .input-group .btn-file {
-    border-radius: 0 3px 3px 0;
-    }
-    .fileinput-new .input-group .btn-file.btn-xs,
-    .fileinput-new .input-group .btn-file.btn-sm {
-    border-radius: 0 2px 2px 0;
-    }
-    .fileinput-new .input-group .btn-file.btn-lg {
-    border-radius: 0 3px 3px 0;
-    }
-    .form-group.has-warning .fileinput .uneditable-input {
-    color: #574802;
-    border-color: #ffd78a;
-    }
-    .form-group.has-warning .fileinput .fileinput-preview {
-    color: #574802;
-    }
-    .form-group.has-warning .fileinput .thumbnail {
-    border-color: #ffd78a;
-    }
-    .form-group.has-error .fileinput .uneditable-input {
-    color: #ac1818;
-    border-color: #ffafbd;
-    }
-    .form-group.has-error .fileinput .fileinput-preview {
-    color: #ac1818;
-    }
-    .form-group.has-error .fileinput .thumbnail {
-    border-color: #ffafbd;
-    }
-    .form-group.has-success .fileinput .uneditable-input {
-    color: #045702;
-    border-color: #b4e8a8;
-    }
-    .form-group.has-success .fileinput .fileinput-preview {
-    color: #045702;
-    }
-    .form-group.has-success .fileinput .thumbnail {
-    border-color: #b4e8a8;
-    }
-    .input-group-addon:not(:first-child) {
-    border-left: 0;
-    }
-    .fileinput .uneditable-input,
-    .fileinput-new .input-group .btn-file {
-    display: table-cell !important;
-    }
-
     </style>
 
 {{/extend}}
@@ -243,20 +127,20 @@
                 </li>
                 </ul>
                     <div id="step-1">
-                        <form class="form-horizontal form-label-left">
+                        <form class="form-horizontal form-label-left" id="saleStep1">
                             <div class="row form-group">
                                 <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
                                 </label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input type="date" required="required" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12">
+                                    <input type="date" required="required" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12">
                                 </div>
                                 </div>
                                 <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
                                 </label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input type="text" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12" disabled>
+                                    <input type="text" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12" disabled>
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -276,7 +160,7 @@
                         </form>
                     </div>
                     <div id="step-2">
-                        <form class="form-horizontal form-label-left">
+                        <form class="form-horizontal form-label-left" id="saleStep2">
                             <div class="row form-group">
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-3">
@@ -392,7 +276,7 @@
 
                     </div>
                     <div id="step-4">
-                        <form class="form-horizontal form-label-left">
+                        <form class="form-horizontal form-label-left" id="saleStep4">
                             <div class="row form-group">
                                 <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
@@ -430,7 +314,7 @@
                                 <label class="control-label col-md-3 col-sm-3">Balance Transaction:
                                 </label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="totalPrice" id="totalPrice" disabled>
+                                    <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="balanceTransaction" id="balanceTransaction" disabled>
                                 </div>
                                 </div>
                             </div>
@@ -594,8 +478,8 @@
     <script>
 
         // get current date
-        var invoiceDate = new Date().toDateString();
-        $('#invoiceDate').val(invoiceDate);
+        var saleDate = new Date().toDateString();
+        $('#saleDate').val(saleDate);
 
         // generate invoice number
         function genInvoiceNumb() {
@@ -727,101 +611,6 @@
             $('.egetMsg').show().fadeOut( 10000 );
         }
 
-/*
-        $('#saleProduct').submit(function(e){
-            e.preventDefault();
-
-            var salesArray = [];
-
-            var p = $(this).find(':selected').attr('data-productName');
-
-            //var form_data = $(this).serialize(); //Encode form elements
-            var form_data = $(this).serializeArray(); //Encode form elements
-            form_data.push({name: 'productName', value: p});
-
-            console.log(form_data);
-
-            salesArray.push(form_data);
-            $("#saleProduct")[0].reset();
-
-            console.log(salesArray);
-
-
-            var totalCal = [];
-            salesArray.forEach(function(item, index, array){
-
-                var cal = (item[1].value * item[2].value);
-                
-                totalCal.push(cal);
-                console.log(cal);
-                console.log(totalCal);
-                //totalCal = (parseInt(totalCal) + parseInt(cal));
-
-
-                var tr = '<tr>'+
-                        '<td>'+(index+1)+'</td>'+
-                        '<td>'+item[3].value+'</td>'+
-                        '<td>'+item[1].value+'</td>'+
-                        '<td>'+item[2].value+'</td>'+
-                        '<td>'+cal+'</td>'+
-                        '<td>'+
-                            '<button type="button" productId="'+ item[0].value +'" pieces="'+ item[1].value +'" price="'+ item[2].value +'" data-target="#updateSales"  data-toggle="modal" value="'+ item[0].value +'" class="btn btn-success btn-sm">Edit</button>'+
-                            '<button type="button" value="'+ item[0].value +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
-                            +'</td>'+
-                    '</tr>'
-
-                $('#saleTable').append(tr);
-                $("#saleProduct")[0].reset();
-                //$('#sumAmt').val(cal);
-            })
-            //console.log(totalCal);
-            $('#sumAmt').val(totalCal);
-        });*/
-
-/*
-        $('#saleProduct').submit(function(e){
-            e.preventDefault();
-
-            //var form_data = $(this).serialize(); //Encode form elements
-            var form_data = $(this).serializeArray(); //Encode form elements
-
-            salesArray.push(form_data);
-            $("#saleProduct")[0].reset();
-
-            console.log(salesArray);
-
-            $.ajax({
-                type: 'POST',
-                url: '/sales/create/sale',
-                dataType: 'json',
-                data: form_data,
-            }).done(function(data){
-
-                console.log(data);
-                console.log(data['_branchproductId.pieces']);
-
-                var cal = (data['productPrice'] * data['piecesSold']);
-
-                var tr = '<tr>'+
-                        '<td>'+1+'</td>'+
-                        '<td>'+data['_branchproductId._productId.name']+'</td>'+
-                        '<td>'+data['piecesSold']+'</td>'+
-                        '<td>'+data['productPrice']+'</td>'+
-                        '<td>'+cal+'</td>'+
-                        '<td>'+
-                            '<button type="button" data-target="#updateSales" piecesAvai="'+data['_branchproductId.pieces']+'" productId="'+data['_branchproductId._productId']+'"  data-toggle="modal" value="'+ data['_id'] +'" class="btn btn-success btn-sm">Edit</button>'+
-                            '<button type="button" value="'+ data['_id'] +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
-                            +'</td>'+
-                    '</tr>'
-
-                $('#saleTable').append(tr);
-                $("#saleProduct")[0].reset();
-                $('#sum').val(cal);
-
-            });
-        });
-*/
-
 
         $('#updateSales').on('show.bs.modal', function (e) {
 
@@ -890,13 +679,13 @@
             var sum = $('#sumAmt').val();
             var totalDiscount = (sum - e);
             $('#amtDueToCus').val(totalDiscount);
-            $('#totalPrice').val(totalDiscount);
+            $('#balanceTransaction').val(totalDiscount);
         }
 
         function amountPaidByCus(e){
             var amtDueToCus = $('#amtDueToCus').val();
             var totalDiscount = (e - amtDueToCus);
-            $('#totalPrice').val(totalDiscount);
+            $('#balanceTransaction').val(totalDiscount);
         }
 
     $(document).ready(function(){
@@ -904,24 +693,11 @@
         var salesArray = [];
         var salesObj = { };
 
-        console.log(salesObj);
-
-        //console.log(salesArray);
-
-        {{!-- salesObj['_productId'] = $('#_productId').val();
-        salesObj['piecesSold'] = $('#piecesSold').val();
-        salesObj['productPrice'] = $('#productPrice').val(); --}}
-
         function checkexist(){
-             alert($('#_productId').val());
             var inArray = -1;
-            //salesObj['_productId'] = $('#_productId').val();
             for(var k = 0; k < salesArray.length; ++k ){
                 if($('#_productId').val() === salesArray[k]._productId)
-                    //alert($('#_productId').val())
-                     //alert(salesArray[k]._productId)
                 inArray = k;
-                //console.log(k);
             }
 
 
@@ -929,17 +705,12 @@
 
                 console.log('come when tru');
 
-                //salesArray[inArray]. = $('#_productId').val();
-               // salesArray[inArray].piecesSold = $('#piecesSold').val() + 
-                //salesObj['productPrice'] = $('#productPrice').val();
-
                 salesArray[inArray].piecesSold = parseFloat(salesArray[inArray].piecesSold) + parseFloat($('#piecesSold').val());
                 salesArray[inArray].productTotalPrice = parseFloat(salesArray[inArray].piecesSold) * parseFloat(salesArray[inArray].productTotalPrice);
 
                 console.log(salesArray, 'if inArray is tru');
                 
                 tableAppend();
-                //break;
 
             } else {
 
@@ -948,9 +719,7 @@
                 console.log(salesArray, 'when inArray is false');
                 console.log('create new one');
 
-                var p = $(this).find(':selected').attr('data-productName');
-
-                console.log(p);
+                var p = $('#saleProduct').find(':selected').attr('data-productName');
 
                 salesObj['_productId'] = $('#_productId').val();
                 salesObj['productName'] = p;
@@ -971,14 +740,12 @@
 
           e.preventDefault();
 
-         
-
             if(salesArray.length > 0 ){
                 console.log('enter');
                 checkexist();
 
             }else{
-                alert($('#_productId').val());
+
                 console.log('create if zero');
                 
                 var p = $(this).find(':selected').attr('data-productName');
@@ -1009,7 +776,6 @@
             for (var i = 0, I = salesArray.length; i < I; i++) {
 
                 var cal = (salesArray[i].piecesSold * salesArray[i].productPrice);
-                console.log(cal);
                 totalCal.push(cal);
 
 
@@ -1044,19 +810,18 @@
            var vat = $('#vat').val();
            var amtDueToCus = $('#amtDueToCus').val();
            var payByCus = $('#payByCus').val();
-           var totalPrice = $('#totalPrice').val();
+           var balanceTransaction = $('#balanceTransaction').val();
 
-           var saleDate = $('#saleDate').val();
            var invoiceDate = $('#invoiceDate').val();
            var invoiceNumber = $('#invoiceNumber').val();
            var waybillNumber = $('#waybillNumber').val();
 
            var customerId = $('#_customerId').val();
 
-           console.log(saleDate, invoiceDate, invoiceDate, invoiceNumber, waybillNumber, 'step1');
+           console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
            console.log(customerId, 'step2');
            console.log(salesArray, 'step3');
-           console.log(dis, vat, amtDueToCus, payByCus, totalPrice, 'step4');
+           console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, 'step4');
 
            $.ajax({
                type: 'POST',
@@ -1068,8 +833,7 @@
                    vat: vat,
                    amtDueToCus: amtDueToCus,
                    payByCus: payByCus,
-                   totalPrice: totalPrice,
-                   saleDate: saleDate,
+                   balanceTransaction: balanceTransaction,
                    invoiceDate: invoiceDate,
                    invoiceNumber: invoiceNumber,
                    waybillNumber: waybillNumber,
@@ -1077,28 +841,15 @@
                }
            }).done(function(data){
                console.log(data);
-               $('#msgSale').htm('Yes');
+               /*$("#saleStep1")[0].reset();
+               $("#saleStep2")[0].reset();
+               $("#saleProduct")[0].reset();
+               $("#saleStep4")[0].reset();*/
            });
         })
 
 
     })
-
-
-
-        /*
-        $('#allSales').submit(function(e){
-           e.preventDefault();
-
-           console.log(e);
-
-           var form_data = $(this).serializeArray(); //Encode form elements
-
-           console.log(form_data);
-        })*/
-
-
-
         
 </script>
 

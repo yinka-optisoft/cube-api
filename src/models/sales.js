@@ -3,15 +3,13 @@ const Schema = mongoose.Schema;
 
 const Sale = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
-  //_branchproductId: { type: Schema.Types.ObjectId, ref: 'branchproducts' },
-  _productId: { type: Schema.Types.ObjectId, ref: 'products' },
+  _productId: [{ type: Schema.Types.ObjectId, ref: 'products' }],
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _salesBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _customerId: { type: Schema.Types.ObjectId, ref: 'accounts' },
-  salesDate: Date,
   invoiceDate: Date,
-  invoiceNumber: Number,
-  waybillNumber: Number,
+  invoiceNumber: String,
+  waybillNumber: String,
   amountDue: Number,
   amountPaid: Number,
   balanceTransaction: Number,
