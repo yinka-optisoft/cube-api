@@ -83,7 +83,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   }
 });
 
-
+// update product
 router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 
   const product = await Product.findById(req.body._productId);
@@ -132,6 +132,43 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
+// add pieces to existing product
+router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  var errors = req.validationErrors();
+
+  const productId = req.body.productId;
+  const pieces = req.body.pieces;
+  const price = req.body.price;
+
+  req.checkBody('productId', 'Product is required').notEmpty();
+  req.checkBody('pieces', 'Pieces is required').notEmpty();
+  req.checkBody('price', 'Price is required').notEmpty();
+
+  console.log(errors);
+
+  if (errors) {
+    req.session.errors = errors;
+    res.redirect('/product');
+  } else {
+
+    const product = await BranchProduct.findOne({ _storeId: req.session._storeId, _branchId: req.user._branchId, _productId: req.body.productId })
+                                          .populate('_categoryId').populate('_productId');
+
+    product._createdBy = req.user._id;
+    product.pieces += parseFloat(req.body.pieces);
+    product.price = req.body.price;
+    product.note = req.body.note;
+    product.save((err, product) => {
+      if (err) {
+        console.log(err);
+      }
+      return res.json(product);
+    });
+  }
+});
+
+
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
@@ -144,6 +181,23 @@ router.post('/get/product', guard.ensureLoggedIn(), async (req, res, next) => {
   const products = await BranchProduct.find({ _storeId: req.session._storeId, _branchId: req.body.branchId })
                                           .populate('_categoryId').populate('_productId');
   return res.json(products);
+});
+
+
+router.post('/get/category', guard.ensureLoggedIn(), async (req, res, next) => {
+  const category = await Category.findById(req.body.categoryId);
+  const products = await Product.find({ _branchId: req.body.branchId, _categoryId: category._id });
+
+  const productArray = [];
+  for (let i = 0; i < products.length; i++) {
+    const product = await BranchProduct.findOne({ _productId: products[i]._id, _storeId: req.user._storeId, _branchId: req.user._branchId })
+                                          .populate('_categoryId').populate('_productId');
+    if (product !== null) {
+      productArray.push(product);
+    }
+  }
+
+  return res.json(productArray);
 });
 
 

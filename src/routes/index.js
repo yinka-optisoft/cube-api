@@ -2,11 +2,11 @@ import express from 'express';
 import passport from 'passport';
 import Store from '../models/store';
 import Account from '../models/account';
-import Bussiness from '../models/bussiness';
+import Business from '../models/business';
 const router = express.Router();
 
 
-router.get('/', async (req, res) => {
+/* router.get('/', async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId');
   if (user.roleId === 'admin') {
     res.redirect('/admin/dashboard');
@@ -19,11 +19,17 @@ router.get('/', async (req, res) => {
   } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Branch') {
     res.redirect(`/staff/dashboard/${user._storeId}/${user._branchId}`);
   }
-});
+});*/
 
-router.get('/cube700', (req, res) => {
+
+router.get('/', (req, res) => {
   res.render('site/index', { msg: req.flash('info'), layout: 'layouts/site' });
 });
+
+
+/* router.get('/cube700', (req, res) => {
+  res.render('site/index', { msg: req.flash('info'), layout: 'layouts/site' });
+});*/
 
 
 router.get('/about', (req, res) => {
@@ -32,15 +38,15 @@ router.get('/about', (req, res) => {
 
 
 router.get('/register', async (req, res) => {
-  const bussiness = await Bussiness.find();
-  res.render('site/register', { bussiness, expressFlash: req.flash('info'), layout: 'layouts/site' });
+  const business = await Business.find();
+  res.render('site/register', { business, expressFlash: req.flash('info'), layout: 'layouts/site' });
 });
 
 
 router.get('/login', (req, res) => {
   res.render('store/login', { expressFlash: req.flash('success'), user: req.user,
-                            error: req.flash('error'),
-                            layout: false });
+                              error: req.flash('error'),
+                              layout: false });
 });
 
 // router.get('/login', (req, res) => {
@@ -83,7 +89,6 @@ router.post('/login', passport.authenticate('local',
                 });
               }
             });
-
 
 
 /*

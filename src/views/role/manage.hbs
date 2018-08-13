@@ -61,7 +61,7 @@
 
     <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newBussiness">
     <i class="fa fa-plus fa-2x"></i>
-    <span>Bussiness</span>
+    <span>Business</span>
     </a>
 </div>
 
@@ -181,7 +181,7 @@
     <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-        <h2>Bussiness Type </h2>
+        <h2>Business Type </h2>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -205,12 +205,12 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Bussines Type</th>
+                <th>Busines Type</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-                {{#each bussiness}}
+                {{#each business}}
                 <tr>
                     <td>{{inc @index}}</td>
                     <td id="name{{_id}}">{{name}}</td>
@@ -400,7 +400,7 @@
                 
                 <div class="x_content">
                 <br />
-                <form class="form-horizontal form-label-left" method="POST" action="/store/bussiness">
+                <form class="form-horizontal form-label-left" method="POST" action="/store/business">
 
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>

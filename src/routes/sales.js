@@ -14,6 +14,25 @@ import { check, validationResult } from 'express-validator/check';
 import Customer from '../models/customer';
 import BranchProduct from '../models/branchProduct';
 import Sales from '../models/sales';
+import Handlebars from 'handlebars';
+import htmlPdf from 'html-pdf';
+
+
+Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
+  lvalue = parseFloat(lvalue);
+  rvalue = parseFloat(rvalue);
+
+  return {
+    '+': lvalue + rvalue,
+    '-': lvalue - rvalue,
+    '*': lvalue * rvalue,
+    '/': lvalue / rvalue,
+    '%': lvalue % rvalue
+  }[operator];
+});
+
+// helper for date format
+Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 const router = express.Router();
 
@@ -33,15 +52,15 @@ router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.get('/manage/sales', guard.ensureLoggedIn(), async (req, res, next) => {
   const user = await Account.findById(req.user._id).populate('_roleId');
-  const suppliers = await Account.find({ _storeId: req.user._storeId, _supllyId: 'supplier' });
-  const categories = await Category.find({ _storeId: req.session._storeId });
-  const branches = await Branch.find({ _storeId: req.session._storeId });
-  res.render('sales/manageSales', { user, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
+  const allSales = await Sales.find({ _salesBy: req.user._id, _storeId: req.user._storeId, _branchId: req.user._branchId }).sort('-createdAt').populate('_productId');
+  res.render('sales/manageSales', { user, expressFlash: req.flash('info'), allSales, layout: 'layouts/user' });
 });
 
 
 router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) => {
 
+  var errors = req.validationErrors();
+  
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
@@ -52,8 +71,6 @@ router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) =
   req.checkBody('phone', 'Phone is required').notEmpty();
   req.checkBody('address', 'Address is required').notEmpty();
   req.checkBody('email', 'E-mail', 'E-mail is required').isEmail();
-
-  var errors = req.validationErrors();
 
   console.log(errors);
 
@@ -81,33 +98,25 @@ router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) =
 
 router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  console.log(req.body);
-
   const amtDueToCus = req.body.amtDueToCus;
   const payByCus = req.body.payByCus;
-  //   const totalPrice = req.body.totalPrice;
+  const totalPrice = req.body.totalPrice;
   const invoiceDate = req.body.invoiceDate;
   const invoiceNumber = req.body.invoiceNumber;
   const waybillNumber = req.body.waybillNumber;
   const customerId = req.body.customerId;
 
-  // let productId = req.body._productId;
-  // let piecesSold = req.body.piecesSold;
-  // let productPrice = req.body.productPrice;
+  var errors = req.validationErrors();
 
 
   req.checkBody('amtDueToCus', 'Amount Due To Customer is required').notEmpty();
   req.checkBody('payByCus', 'Pay By Customer is required').notEmpty();
-  //   req.checkBody('totalPrice', 'Total Price is required').notEmpty();
+  req.checkBody('totalPrice', 'Total Price is required').notEmpty();
   req.checkBody('invoiceDate', 'Invoice Date is required').notEmpty();
   req.checkBody('invoiceNumber', 'Invoice Number is required').notEmpty();
   req.checkBody('waybillNumber', 'Way Bill Number is required').notEmpty();
   req.checkBody('customerId', 'Select Customer name').notEmpty();
-  // req.checkBody('_productId', 'Product is required').notEmpty();
-  // req.checkBody('piecesSold', 'Pieces is required').notEmpty();
-  // req.checkBody('productPrice', 'Price is required').notEmpty();
 
-  var errors = req.validationErrors();
 
   console.log(errors);
 
@@ -120,13 +129,14 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale._storeId = req.user._storeId;
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
+    sale.totalPrice = req.body.totalPrice;
     sale._customerId = req.body.customerId;
     sale.invoiceDate = req.body.invoiceDate;
     sale.invoiceNumber = req.body.invoiceNumber;
     sale.waybillNumber = req.body.waybillNumber;
     sale.amountDue = req.body.amountDue;
     sale.amountPaid = req.body.amountPaid;
-    sale.balanceTransaction = req.body.balanceTransaction; // TODO: come back to this naming convention
+    sale.balanceTransaction = req.body.balanceTransaction;
     sale.discount = req.body.discount;
 
     for (let i = 0; i < req.body.salesArray.length; i++) {
@@ -134,14 +144,17 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
       sale.piecesSold.push(req.body.salesArray[i].piecesSold);
       sale.unitPrice.push(req.body.salesArray[i].productPrice);
 
-
+      // deduct the pieces from branch product
       const deductProduct = await BranchProduct.findOne({ _productId: req.body.salesArray[i]._productId, _branchId: req.user._branchId });
+      console.log(deductProduct, 'before deduct');
       deductProduct.pieces -= req.body.salesArray[i].piecesSold;
       deductProduct.save((err) => {
         if (err) {
           console.log(err);
         }
       });
+
+      console.log(deductProduct, 'after deduct');
     }
 
     await sale.save((err) => {
@@ -155,52 +168,58 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
-router.post('/get/sale', guard.ensureLoggedIn(), async (req, res, next) => {
+router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const productId = req.body._productId;
-  const piecesSold = req.body.piecesSold;
-  const productPrice = req.body.productPrice;
-
-
-  req.checkBody('_productId', 'Product is required').notEmpty();
-  req.checkBody('piecesSold', 'Pieces is required').notEmpty();
-  req.checkBody('productPrice', 'Price is required').notEmpty();
-
-  var errors = req.validationErrors();
-
-  console.log(errors);
-
-  if (errors) {
-    req.session.errors = errors;
-    res.redirect('/sales/create/sales');
-  } else {
-
-    const product = await Sales.find({ _productId: req.body._productId, _branchId: req.user._branchId })
-                                      .populate('_categoryId').populate('_productId');
-
-    const sale = new Sales(req.body);
-    sale._storeId = req.user._storeId;
-    sale._branchId = req.user._branchId;
-    sale._salesBy = req.user._id;
-    sale._branchproductId = product._id;
-    // sale.piecesSold = req.body.piecesSold;
-    // sale.productPrice = req.body.productPrice;
-    await sale.save((err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
-
-
-    const sales = await Sales.findOne({ _storeId: req.user._storeId, _branchId: req.user._branchId, _branchproductId: sale._branchproductId })
-                                                    .populate(
-                                                      { path: '_branchproductId',
-                                                        populate: { path: '_productId' } });
-
-    console.log(sales);
-
-    return res.json(sales);
+  const store = await Store.findById(req.user._storeId);
+  const sale = await Sales.findById(req.params.saleId)
+                            .populate('_customerId').populate('_productId');
+  const salesObj = [];
+  for (let i = 0; i < sale._productId.length; i++) {
+    salesObj.push(sale._productId[i].name);
   }
+
+  const html = fs.readFile(path.join(__dirname, '..', 'views', 'pdf', 'invoice.html'),
+                           { encoding: 'utf8' },
+                           (err, data) => {
+                             if (!err) {
+                               Sales.findById(
+                                 req.params.saleId
+                               ).populate('_customerId').populate('_productId')
+                            .exec((err, sales) => {
+                              if (!err) {
+                                let html = Handlebars.compile(data)({
+                                  sales,
+                                  sale,
+                                  store,
+                                  salesObj
+                                });
+
+                                html = html.replace('storelogo',
+                                                    path.join('file://',
+                                                              __dirname, '..',
+                                                              'public',
+                                                              'images',
+                                                              'store',
+                                                              store.logo
+                                                    ));
+
+                                htmlPdf.create(html, {
+                                  format: 'A4',
+                                  orientation: 'portrait',
+                                  border: '10mm'
+                                })
+                                        .toStream((err, stream) => {
+                                          if (!err) {
+                                            res.setHeader('Content-type', 'application/pdf');
+                                            stream.pipe(res);
+                                          }
+                                        });
+                              }
+                            });
+                             }
+                           });
+
 });
+
 
 export default router;

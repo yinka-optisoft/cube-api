@@ -12,6 +12,7 @@ const Product = new Schema({
   price: Number,
   expireDate: String,
   note: String,
+  barcodeNumber: Number,
   productImage: String,
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }

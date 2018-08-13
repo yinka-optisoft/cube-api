@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>Sales Invoice</title>
+    <style>
+      body{      
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .storeLogo{
+        width: 100px;
+        height:60px;
+        text-align: left;
+      }
+      .date{
+        text-align: right;
+        float: right!important;
+      }
+
+      .header {
+       font-size: 12px;
+       /* text-align: center; */
+       line-height: 2px;
+      }
+      table{
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      main table, main th, main td {
+        border: 1px solid black;
+      }
+      
+      main{
+        font-size: 10px;
+        font-weight: 600;
+      }
+    </style>
+    </head>
+  <body>
+
+    <div>
+        <img class="storeLogo" src="storelogo" />
+        <div class="date">
+            Date: {{dateFormat sale.createdAt "Do/mm/YYYY"}}
+            <br>
+            <p>Invoice: {{sale.invoiceNumber}}</p>
+        </div>
+    </div>
+    <table border="0"  >
+      <tr>
+        <td colspan="3">
+            <div class="header">
+                <p>From</p>
+                <p><b>{{store.name}}</b></p>
+                <p>{{store.address}}</p>
+                <p>{{store.country}} {{store.state}} {{store.city}}</p>
+                <p>Phone: {{store.phone}}</p>
+                <p>E-mail: {{store.email}}</p>
+            </div>
+        </td>
+        <td colspan="3">
+            <div class="header">
+                <p>To</p>
+                <p><b>{{sale._customerId.name}}</b></p>
+                <p>{{sale._customerId.address}}</p>
+                <p>Phone: {{sale._customerId.phone}}</p>
+                <p>E-mail: {{sale._customerId.email}}</p>
+            </div>
+        </td>
+        <td colspan="3">
+            <div class="header">
+                <p>Invoice </p>
+                <p>Order ID: </p>
+                <p>Payment Due: </p>
+                <p>Account: </p>
+            </div>
+        </td>
+        <td>
+            <img style="height:60px;" src="studentPassport" />
+
+        </td>
+      </tr>
+    </table>
+
+    <main>
+      <table border="1">
+        <thead>
+
+          <tr>
+            <th>Product Name</th>
+            <th>Pieces Sold</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            <th>Balance Transaction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              
+            <td>{{salesObj}}</td>
+            <td>{{sale.piecesSold}}</td>
+            <td>NGN {{sale.unitPrice}}</td>
+            <td>NGN {{sale.totalPrice }}</td>
+            <td>NGN {{sale.balanceTransaction }}</td>
+          </tr>
+         
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

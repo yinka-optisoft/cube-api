@@ -466,6 +466,44 @@
 
 
 
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="salesSuccess">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Create Customer</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+
+                    <h1>Sale Store Successfully</h1>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <a href="/sales/get/pdf/" id="salesId">
+                            {{!-- <button type="submit" class="btn btn-success">Submit</button> --}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
+
 
 {{#extend 'scripts'}}
 
@@ -518,7 +556,7 @@
                 data: { _productId: productId },
                 success: function(data) {
                     $('#piecesAvai').empty();
-                    $('#piecesAvai').val(data._productId.pieces);
+                    $('#piecesAvai').val(data.pieces);
 
                     $('#getPrice').empty();
                     $('#getPrice').val(data._productId.price);
@@ -769,9 +807,9 @@
         });
 
 
-        var totalCal = [];
         
         function tableAppend(){
+            var totalCal = [];
              $('#saleTable').empty();
             for (var i = 0, I = salesArray.length; i < I; i++) {
 
@@ -796,8 +834,6 @@
 
                 sumTotalCal = 0;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
-                console.log(sumTotalCal);
-
                 $('#sumAmt').val(sumTotalCal);
             }
         }
@@ -818,6 +854,9 @@
 
            var customerId = $('#_customerId').val();
 
+           var totalPrice = sumTotalCal;
+
+           console.log(totalPrice, 'total price');
            console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
            console.log(customerId, 'step2');
            console.log(salesArray, 'step3');
@@ -837,14 +876,17 @@
                    invoiceDate: invoiceDate,
                    invoiceNumber: invoiceNumber,
                    waybillNumber: waybillNumber,
-                   customerId: customerId
+                   customerId: customerId,
+                   totalPrice: totalPrice
                }
            }).done(function(data){
                console.log(data);
-               /*$("#saleStep1")[0].reset();
-               $("#saleStep2")[0].reset();
-               $("#saleProduct")[0].reset();
-               $("#saleStep4")[0].reset();*/
+               $('#salesSuccess').modal('show');
+
+               $('#salesId').val(data._id);
+
+               var temp=$('a').attr('href').split('=')[0];
+                $('a').attr('href',temp+'='+data._id);
            });
         })
 

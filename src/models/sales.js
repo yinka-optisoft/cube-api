@@ -6,7 +6,7 @@ const Sale = new Schema({
   _productId: [{ type: Schema.Types.ObjectId, ref: 'products' }],
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _salesBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
-  _customerId: { type: Schema.Types.ObjectId, ref: 'accounts' },
+  _customerId: { type: Schema.Types.ObjectId, ref: 'customers' },
   invoiceDate: Date,
   invoiceNumber: String,
   waybillNumber: String,

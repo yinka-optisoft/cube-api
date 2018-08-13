@@ -6,8 +6,6 @@
     <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-
 {{/extend}}
 
 
@@ -40,35 +38,31 @@
                     <thead>
                     <tr>
                         <th>S/N</th>
-                        <th>Role</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>E-mail</th>
-                        <th>Phone Number</th>
-                        <th>Branch</th>
+                        <th>Product Name</th>
+                        <th>Pieces Sold</th>
+                        <th>Product Price</th>
+                        <th>Total Price</th>
+                        <th>Sales Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
 
 
                     <tbody>
-                        {{#each staff}}
+                        {{#each allSales}}
                         <tr>
                             <td>{{inc @index}}</td>
-                            <td>{{_roleId.name}} ({{_roleId.roleType}})</td>
-                            <td id="name{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
-                            <td id="username{{_id}}">{{username}}</td>
-                            <td id="email{{_id}}">{{email}}</td>
-                            <td id="phone{{_id}}">{{phone}}</td>
-                            <td>{{_branchId.name}}</td>
                             <td>
-                                <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
-
-                                {{#if (eq status true)}}
-                                <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Di-activate</i></button>
-                                {{else}}
-                                <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">activate</button>
-                                {{/if}}
+                            {{#each _productId}}
+                            {{name}}
+                            {{/each}}
+                            </td>
+                            <td id="name{{_id}}">{{piecesSold}}</td>
+                            <td id="username{{_id}}">{{unitPrice}}</td>
+                            <td id="email{{_id}}">{{totalPrice}}</td>
+                            <td id="phone{{_id}}">{{dateFormat createdAt "dddd, MMMM Do YYYY, h:mm:ss a"}}</td>
+                            <td>
+                                <a href="/sales/get/pdf/{{_id}}" class="btn btn-primary btn-sm">View Invoice</a>
                             </td>
                         </tr>
                         {{/each}}
@@ -79,221 +73,6 @@
         </div>
     </div>
 </div>
-
-
-<!-- Small modal -->
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sales">
-<div class="modal-dialog modal-lg">
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel2">Add Member</h4>
-        </div>
-        <div class="modal-body">
-            
-            <div class="x_panel">
-                
-                <div class="x_content">
-                <br />
-                <div class="col-md-12 col-xs-12">
-
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_content">
-
-                                    <!-- Tabs -->
-                                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                                    <ul class="list-unstyled wizard_steps">
-                                        <li>
-                                        <a href="#step-11">
-                                            <span class="step_no">1</span>
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#step-22">
-                                            <span class="step_no">2</span>
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#step-33">
-                                            <span class="step_no">3</span>
-                                        </a>
-                                        </li>
-                                        <li>
-                                        <a href="#step-44">
-                                            <span class="step_no">4</span>
-                                        </a>
-                                        </li>
-                                    </ul>
-
-                                    <div id="step-11">
-                                        <h2 class="StepTitle">Step 1 Content</h2>
-                                        <form class="form-horizontal form-label-left">
-
-                                            <span class="section">Invoice</span>
-
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3" for="first-name">First Name <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <input type="text" id="first-name2" required="required" class="form-control col-md-7 col-xs-12">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3" for="last-name">Last Name <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Middle Name / Initial</label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <input id="middle-name2" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3">Gender</label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <div id="gender2" class="btn-group" data-toggle="buttons">
-                                                    <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                                    <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
-                                                    </label>
-                                                    <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                                    <input type="radio" name="gender" value="female" checked=""> Female
-                                                    </label>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3">Date Of Birth <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <input id="birthday2" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
-                                                </div>
-                                            </div>
-
-                                        </form>
-                                    </div>
-                                    <div id="step-22">
-                                        <h2 class="StepTitle">Step 2 Content</h2>
-                                        <form class="form-horizontal form-label-left">
-
-                                            <span class="section">Invoice</span>
-
-                                            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                                                <select class="form-control" name="_branchId" required>
-                                                    <option>Select Branch</option>
-                                                    {{#each branches}}
-                                                        <option value="{{_id}}">{{name}}</option>
-                                                    {{/each}}
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3" for="first-name">First Name <span class="required">*</span>
-                                                </label>
-                                                <div class="col-md-6 col-sm-6">
-                                                <input type="text" id="first-name2" required="required" class="form-control col-md-7 col-xs-12">
-                                                </div>
-                                            </div>
-
-                                        </form>
-                                    </div>
-                                    <div id="step-33">
-                                        <h2 class="StepTitle">Step 3 Content</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                        <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                    <div id="step-44">
-                                        <h2 class="StepTitle">Step 4 Content</h2>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                        <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                        <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                    </div>
-                                    <!-- End SmartWizard Content -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<!-- /modals -->
-
-
-<!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="customer">
-<div class="modal-dialog modal-sm" style="width: 400px;">
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel2">New Customer</h4>
-        </div>
-        <div class="modal-body">
-            
-            <div class="x_panel">
-                
-                <div class="x_content">
-                <br />
-                <form class="form-horizontal form-label-left" method="POST" action="/sales/create/customer">
-
-                    <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" class="form-control has-feedback-left" id="inputSuccess2" name="firstname" placeholder="First Name">
-                    </div>
-                    </div>
-                    <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch Name</label>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="_branchId" required>
-                            <option>Select Branch</option>
-                            {{#each branches}}
-                                <option value="{{_id}}">{{name}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    </div>
-                    <div class="ln_solid"></div>
-                    <div class="form-group">
-                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                        <button type="submit" class="btn btn-success">Submit</button>
-                    </div>
-                    </div>
-
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<!-- /modals -->
-
 
 
 {{#extend 'scripts'}}
@@ -312,8 +91,6 @@
     <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
-
 
     <script>
 
@@ -330,55 +107,6 @@
         $('#ephone').val(phone);
         $("#editmemberModal").modal('show');
     }
-
-
-    function banMember(id){
-
-    	$.confirm({
-			title: '<div style="color:red">Confirm!</div>',
-			content: 'Are you sure you want to Ban?',
-			buttons: {
-				confirm: function () {
-					delete_branch(id);
-				},
-				cancel: function () {
-					$.alert('Canceled!');
-				},
-
-			}
-		});
-    }
-
-
-
-var delete_branch = function(id){
-
-         $.ajax({
-            type: "POST", // Post / Get method
-            url: "/branch/ban", //Where form data is sent on submission
-            dataType:"text", // Data type, HTML, json etc.
-            data:{ id:id}, //Form variables
-            success:function(response){
-
-             if (response === "success") {
-                $.confirm({
-                    title: '<div style="color:green">Success</div>',
-                    content: 'Banned Successfully',
-                    buttons: {
-                        ok: function () {
-                           location.reload(true)
-                        },
-                    }
-                });
-              }
-
-            },
-            error:function (xhr, ajaxOptions, thrownError){
-                    $.alert('Could not Banned');
-            }
-            });
-}
-
 </script>
 
 {{/extend}}
