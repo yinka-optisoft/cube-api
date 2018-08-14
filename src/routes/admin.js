@@ -8,7 +8,6 @@ import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
-import { Date } from 'mongoose';
 import { check, validationResult } from 'express-validator/check';
 
 const router = express.Router();
@@ -30,7 +29,6 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
 // manage staff
 router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId');
-
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const roles = await Role.find({ _storeId: req.session._storeId });
   const staff = await Account.find({ _storeId: req.user._storeId })
@@ -132,10 +130,7 @@ router.post('/post', guard.ensureLoggedIn(), async (req, res) => {
 
   const post = await Account.findById(req.body.user);
   post._branchId = req.body._branchId;
-
-  // TODO: add date to move staff
-  post.moveDate = Date.now();
-
+  post.moveDate = new Date;
   post.save(function(err) {
     if (err) {
       console.log(err);

@@ -474,7 +474,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
             </button>
-            <h4 class="modal-title" id="myModalLabel2">Create Customer</h4>
+            {{!-- <h4 class="modal-title" id="myModalLabel2">Create Customer</h4> --}}
         </div>
         <div class="modal-body">
             
@@ -482,14 +482,16 @@
                 
                 <div class="x_content">
                 <br />
-
-                    <h1>Sale Store Successfully</h1>
+                    <div class="text-center">
+                        <img src="/images/checked1.png" alt="..." width="200" height="200">
+                        <h4>Product Purchased Successful</h4>
+                    </div>
 
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <a href="/sales/get/pdf/" id="salesId">
-                            {{!-- <button type="submit" class="btn btn-success">Submit</button> --}}
+                            <button type="submit" class="btn btn-success">Click To view Invoice</button>
                             </a>
                         </div>
                     </div>
@@ -879,15 +881,19 @@
                    customerId: customerId,
                    totalPrice: totalPrice
                }
-           }).done(function(data){
-               console.log(data);
-               $('#salesSuccess').modal('show');
+            }).done(function(data){
+                console.log(data);
+                $('#salesSuccess').modal('show');
 
-               $('#salesId').val(data._id);
+                $('#salesId').val(data._id);
 
-               var temp=$('a').attr('href').split('=')[0];
-                $('a').attr('href',temp+'='+data._id);
-           });
+                //TODO: come to this
+                //var temp=$('a').attr('href').split('=')[0];
+                //$('a').attr('href',temp+'='+data._id);
+                $('a#salesId').attr('href','/sales/get/pdf/'+data._id);
+
+                //location.reload();
+            });
         })
 
 

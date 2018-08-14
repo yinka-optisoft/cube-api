@@ -42,7 +42,7 @@
                 <th>Name</th>
                 <th>Category</th>
                 <th>Total Pieces</th>
-                <th>Actions</th>
+                {{!-- <th>Actions</th> --}}
             </tr>
             </thead>
 
@@ -54,7 +54,7 @@
                 <td>{{_productId.name}}</td>
                 <td>{{_productId._categoryId.name}}</td>
                 <td>{{pieces}}</td>
-                <td>
+                {{!-- <td>
                     <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
 
                     {{#if (eq status true)}}
@@ -62,7 +62,7 @@
                     {{else}}
                     <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">activate</button>
                     {{/if}}
-                </td>
+                </td> --}}
             </tr>
                 {{/each}}
             </tbody>

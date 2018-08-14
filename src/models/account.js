@@ -6,8 +6,8 @@ const Account = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _roleId: { type: Schema.Types.ObjectId, ref: 'roles' },
-  _supplierId: { type: String, lowercase: true, trim: true,
-    enum: ['supplier'] }, // supplier
+  // _supplierId: { type: String, lowercase: true, trim: true,
+  //   enum: ['supplier'] }, // supplier
   roleId: { type: String, lowercase: true, trim: true,
     enum: ['admin'] }, // supplier
   firstname: String,
@@ -23,7 +23,7 @@ const Account = new Schema({
   country: String,
   state: String,
   lga: String,
-  moveDate: Date,
+  moveDate: { type: Date },
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });

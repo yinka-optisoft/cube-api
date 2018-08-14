@@ -44,7 +44,7 @@ router.get('/register', async (req, res) => {
 
 
 router.get('/login', (req, res) => {
-  res.render('store/login', { expressFlash: req.flash('success'), user: req.user,
+  res.render('store/login', { expressFlash: req.flash('info'), user: req.user,
                               error: req.flash('error'),
                               layout: false });
 });

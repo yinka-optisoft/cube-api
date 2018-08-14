@@ -173,32 +173,36 @@
                                 <h4>Branch Information : <span>Step 2 - 4</span></h4>
                                 <div class="form-group">
                                     <label>Branch Name: <span>*</span></label>
-                                    <input type="text" name="branch_name" placeholder="Branch Name" class="form-control required">
+                                    <input type="text" name="branch_name" id="branchName" placeholder="Branch Name" class="form-control required">
                                 </div>
                                 <div class="form-group">
-                                    <label>Branch Address: <span>*</span></label>
-                                    <textarea rows="2" name="branch_address" class="form-control required"></textarea>    
+                                    <label>Branch E-mail: <span>*</span></label>
+                                    <input type="email" name="branch_email" id="branchEmail" placeholder="E-mail" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number: <span>*</span></label>
-                                    <input type="number" name="branch_phone" placeholder="Phone Number" class="form-control required">
+                                    <input type="number" name="branch_phone" id="branchPhone" placeholder="Phone Number" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Branch Address: <span>*</span></label>
+                                    <textarea rows="2" name="branch_address" id="branchAddress" class="form-control required"></textarea>    
                                 </div>
                                 <div class="form-group">
                                     <label>Select Country: <span>*</span></label>
-                                    <select name="branch_country" class="form-control required">
+                                    <select name="branch_country" id="branchCountry" class="form-control required">
                                         <option value="Nigeria">Nigeria</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Select State: <span>*</span></label>
-                                    <select name="branch_state" class="form-control required">
+                                    <select name="branch_state" id="branchState" class="form-control required">
                                         <option value="Lagos state">Lagos state</option>
                                         <option value="Kwara state">Kwara state</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>City: <span>*</span></label>
-                                    <input type="text" name="branch_city" placeholder="City" class="form-control required">
+                                    <input type="text" name="branch_city" id="branchCity" placeholder="City" class="form-control required">
                                 </div>
                                 <div class="form-wizard-buttons">
                                     <button type="button" class="btn btn-previous">Previous</button>
@@ -218,35 +222,35 @@
                                 <h4>Administrator Information : <span>Step 3 - 4</span></h4>
                                 <div class="form-group">
                                     <label>First Name: <span>*</span></label>
-                                    <input type="text" name="firstname" placeholder="First Name" class="form-control required">
+                                    <input type="text" name="firstname" id="firstname" placeholder="First Name" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Middle Name: </label>
-                                    <input type="text" name="middlename" placeholder="Middle Name" class="form-control">
+                                    <input type="text" name="middlename" id="middlename" placeholder="Middle Name" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Last Name: <span>*</span></label>
-                                    <input type="text" name="lastname" placeholder="Last Name" class="form-control required">
+                                    <input type="text" name="lastname" id="lastname" placeholder="Last Name" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Address: <span>*</span></label>
-                                    <textarea rows="2" name="admin_address" class="form-control required"></textarea>    
+                                    <textarea rows="2" name="admin_address" id="adminAddress" class="form-control required"></textarea>    
                                 </div>
                                 <div class="form-group">
                                     <label>Phone Number: <span>*</span></label>
-                                    <input type="number" name="admin_phone" placeholder="Phone Number" class="form-control required">
+                                    <input type="number" name="admin_phone" id="adminPhone" placeholder="Phone Number" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>E-mail: <span>*</span></label>
-                                    <input type="email" name="admin_email" placeholder="E-mail" class="form-control required">
+                                    <input type="email" name="admin_email" id="adminEmail" placeholder="E-mail" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Password: <span>*</span></label>
-                                    <input type="password" name="password" placeholder="Password" class="form-control required">
+                                    <input type="password" name="password" id="password" placeholder="Password" class="form-control required">
                                 </div>
                                 <div class="form-group">
                                     <label>Comfirm Password: <span>*</span></label>
-                                    <input type="password" name="password" placeholder="Comfirm Password" class="form-control required">
+                                    <input type="password" name="password" id="cpassword" placeholder="Comfirm Password" class="form-control required">
                                 </div>
                                 <div class="form-wizard-buttons">
                                     <button type="button" class="btn btn-previous">Previous</button>
@@ -295,4 +299,31 @@
     
     <!-- Plugin Custom JS -->
     <script src="/assets1/custom/js/form-wizard.js"></script>
+
+    <script>
+        /*$('#storeForm').submit(function(e){
+            e.preventDefault();
+            console.log(e);
+
+            //var formData = $(this).serialize();
+            var formData = new FormData($('#storeForm')[0]);
+            console.log(formData);
+
+            $.ajax({
+                type: 'POST',
+                url: '/store/create-store',
+                data: formData,
+                contentType: false,
+                cache: false,
+                processData:false,
+
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        });*/
+    </script>
 {{/extend}}

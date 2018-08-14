@@ -27,6 +27,7 @@ import product from './routes/product';
 import supply from './routes/supply';
 import staff from './routes/staff';
 import sales from './routes/sales';
+import report from './routes/report';
 
 const app = express();
 
@@ -88,6 +89,7 @@ app.use('/product', product);
 app.use('/supplier', supply);
 app.use('/staff', staff);
 app.use('/sales', sales);
+app.use('/report', report);
 
 // passport account auth
 

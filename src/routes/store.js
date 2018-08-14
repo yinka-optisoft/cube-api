@@ -29,7 +29,6 @@ const generateUniqueID = async storeShort => {
 };
 
 
-// router.post('/create-store', guard.ensureLoggedIn(), async (req, res, next) => {
 router.post('/create-store', async (req, res, next) => {
   const form = new formidable.IncomingForm();
 
@@ -37,34 +36,30 @@ router.post('/create-store', async (req, res, next) => {
 
     var errors = req.validationErrors();
 
-    /*const name = fields.body.name;
-    const email = fields.body.email;
-    const phone = fields.body.email;
-    const address = fields.body.email;*/
+    req.checkBody('name', 'Name is required').notEmpty();
+    req.checkBody('email', 'company email is required').isEmail();
+    req.checkBody('phone', 'Phone Number is required').notEmpty();
+    req.checkBody('address', 'Address is required').notEmpty();
+    req.checkBody('shortCode', 'shortCode is required').notEmpty();
+    req.checkBody('businessType', 'Business Type is required').notEmpty();
+    req.checkBody('country', 'Country is required').notEmpty();
+    req.checkBody('state', 'State is required').notEmpty();
+    req.checkBody('city', 'City is required').notEmpty();
 
-    fields.checkBody('name', 'Name is required').notEmpty();
-    fields.checkBody('email', 'company email is required').isEmail();
-    fields.checkBody('phone', 'Phone Number is required').notEmpty();
-    fields.checkBody('address', 'Address is required').notEmpty();
-    fields.checkBody('shortCode', 'shortCode is required').notEmpty();
-    fields.checkBody('businessType', 'Business Type is required').notEmpty();
-    fields.checkBody('country', 'Country is required').notEmpty();
-    fields.checkBody('state', 'State is required').notEmpty();
-    fields.checkBody('city', 'City is required').notEmpty();
-
-    fields.checkBody('branch_address', 'Branch Address is required').notEmpty();
-    fields.checkBody('branch_phone', 'Branch Phone is required').notEmpty();
-    fields.checkBody('branch_country', 'Country is required').notEmpty();
-    fields.checkBody('branch_state', 'State is required').notEmpty();
-    fields.checkBody('branch_city', 'City is required').notEmpty();
+    req.checkBody('branch_email', 'Branch E-mail is required').isEmpty();
+    req.checkBody('branch_address', 'Branch Address is required').notEmpty();
+    req.checkBody('branch_phone', 'Branch Phone is required').notEmpty();
+    req.checkBody('branch_country', 'Country is required').notEmpty();
+    req.checkBody('branch_state', 'State is required').notEmpty();
+    req.checkBody('branch_city', 'City is required').notEmpty();
 
 
-    fields.checkBody('role', 'Select Your Role').notEmpty();
-    fields.checkBody('firstname', 'firstname is required').notEmpty();
-    fields.checkBody('lastname', 'Lastname is required').notEmpty();
-    fields.checkBody('admin_address', 'Admin Home Address is required').notEmpty();
-    fields.checkBody('admin_phone', 'Admin Phone Number is required').notEmpty();
-    fields.checkBody('admin_email', 'Admin Email is required').isEmail();
+    req.checkBody('role', 'Select Your Role').notEmpty();
+    req.checkBody('firstname', 'firstname is required').notEmpty();
+    req.checkBody('lastname', 'Lastname is required').notEmpty();
+    req.checkBody('admin_address', 'Admin Home Address is required').notEmpty();
+    req.checkBody('admin_phone', 'Admin Phone Number is required').notEmpty();
+    req.checkBody('admin_email', 'Admin Email is required').isEmail();
 
     console.log(errors);
 
@@ -106,6 +101,7 @@ router.post('/create-store', async (req, res, next) => {
                                newBranch._storeId = newStore._id;
                                newBranch.name = `${fields.branch_name}(H.B)`;
                                newBranch.address = fields.branch_address;
+                               newBranch.email = fields.branch_email;
                                newBranch.phone = fields.branch_phone;
                                newBranch.country = fields.branch_country;
                                newBranch.state = fields.branch_state;
@@ -120,7 +116,7 @@ router.post('/create-store', async (req, res, next) => {
                                const newAdmin = fields;
                                const password = newAdmin.password;
                                delete newAdmin.password;
-                               newAdmin.role = fields.role;
+                               newAdmin.roleId = 'admin';
                                newAdmin._storeId = newStore._id;
                                newAdmin._branchId = newBranch._id;
                                newAdmin.username = await generateUniqueID(newStore.shortCode);

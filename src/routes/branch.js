@@ -28,9 +28,14 @@ const generateUniqueID = async storeShort => {
 router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
 
   const user = await Account.findById(req.user._id).populate('_roleId');
-
   const branches = await Branch.find({ _storeId: req.session._storeId });
-  res.render('branch/adminDashboard', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
+  const branch = await Branch.findById(req.params._branchId);
+  const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
+                                      .populate(
+                                        { path: '_productId',
+                                          populate: { path: '_categoryId' } });
+
+  res.render('branch/adminDashboard', { user, expressFlash: req.flash('info'), branch, branches, productCount, layout: 'layouts/user' });
 });
 
 
@@ -103,7 +108,11 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
     const branch = await Branch.findById(req.params._branchId);
     const roles = await Role.find({ _storeId: req.session._storeId });
     const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
-    res.render('branch/branchDashboard', { user, staff, roles, branch, expressFlash: req.flash('success'), layout: 'layouts/user' });
+    const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
+                                      .populate(
+                                        { path: '_productId',
+                                          populate: { path: '_categoryId' } });
+    res.render('branch/branchDashboard', { user, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
   });
 
     

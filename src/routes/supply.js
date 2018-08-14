@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
+import Supply from '../models/supply';
 
 
 const router = express.Router();
@@ -26,7 +27,7 @@ const generateUniqueID = async storeShort => {
 
 router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
     const user = await Account.findById(req.user._id).populate('_roleId');
-    const suppliers = await Account.find({ _storeId: req.user._storeId, _supllyId: 'supplier' });
+    const suppliers = await Supply.find({ _storeId: req.user._storeId });
     const categories = await Category.find({ _storeId: req.session._storeId });
     const branches = await Branch.find({ _storeId: req.session._storeId });
     res.render('supply/dashboard', { user, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
@@ -35,7 +36,7 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
     const user = await Account.findById(req.user._id).populate('_roleId');
-    const suppliers = await Account.find({ _storeId: req.user._storeId, _supplierId: 'supplier' });
+    const suppliers = await Supply.find({ _storeId: req.user._storeId });
     const categories = await Category.find({ _storeId: req.session._storeId });
     const branches = await Branch.find({ _storeId: req.session._storeId });
     res.render('supply/manage', { user, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
@@ -68,13 +69,10 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         req.session.errors = errors;
         res.redirect('/supplier');
     } else {
-        const supplier = await Account(req.body);
+        const supplier = await Supply(req.body);
         supplier._storeId = req.user._storeId;
-        supplier.username = await generateUniqueID(store.shortCode);
         supplier._supplierId = 'supplier';
-        
-        Account.register(
-            new Account(supplier), 'password', (err, account) => {
+        supplier.save((err) => {
             if (err) {
                 console.log(err);
             } else {
@@ -88,7 +86,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 
-    const supplier = await Account.findById(req.body._supplierId);
+    const supplier = await Supply.findById(req.body._supplierId);
 
     let firstname = req.body.firstname;
     let middlename = req.body.middlename;
@@ -138,8 +136,8 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   
 
 router.get('/view/:id', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId');
-    const users = await Account.findById(req.params.id).populate('_roleId');
+    const user = await Supply.findById(req.user._id).populate('_roleId');
+    const users = await Supply.findById(req.params.id).populate('_roleId');
     const products = await Product.find({ _storeId: req.user._storeId, _supplierId: req.params.id }).populate('_categoryId');
     res.render('supply/view', { user, users, expressFlash: req.flash('info'), products, layout: 'layouts/user' });
 });

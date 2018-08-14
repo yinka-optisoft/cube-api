@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
-import supply from '../models/supply';
+import Supply from '../models/supply';
 import BranchProduct from '../models/branchProduct';
 import ProductTransfer from '../models/productTransfer';
 
@@ -22,7 +22,7 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const user = await Account.findById(req.user._id).populate('_roleId');
   const products = await Product.find({ _storeId: req.session._storeId }).populate('_categoryId');
   const categories = await Category.find({ _storeId: req.session._storeId });
-  const suppliers = await Account.find({ _storeId: req.user._storeId, _supplierId: 'supplier' });
+  const suppliers = await Supply.find({ _storeId: req.user._storeId });
   const branches = await Branch.find({ _storeId: req.session._storeId });
   res.render('product/manage', { user, suppliers, expressFlash: req.flash('info'), products, branches, categories, layout: 'layouts/user' });
 });
@@ -92,7 +92,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   const _categoryId = req.body._categoryId;
   const _supplierId = req.body._supplierId;
   const _branchId = req.body._branchId;
-  const pieces = req.body.pieces;
+  // const pieces = req.body.pieces;
   const price = req.body.price;
   const note = req.body.note;
 
@@ -100,7 +100,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('_supplierId', 'Supplier is required').notEmpty();
   req.checkBody('_categoryId', 'Category is required').notEmpty();
   req.checkBody('_branchId', 'Branch is required').notEmpty();
-  req.checkBody('pieces', 'Pieces is required').notEmpty();
+  // req.checkBody('pieces', 'Pieces is required').notEmpty();
   req.checkBody('price', 'Price is required').notEmpty();
 
   var errors = req.validationErrors();
@@ -117,7 +117,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
     product._categoryId = req.body._categoryId;
     product._branchId = req.body._branchId;
     product.name = req.body.name;
-    product.pieces = req.body.pieces;
+    // product.pieces = req.body.pieces;
     product.price = req.body.price;
     product.note = req.body.note;
     product.save((err) => {
