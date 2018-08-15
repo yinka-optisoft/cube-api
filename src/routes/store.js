@@ -208,7 +208,7 @@ router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
 
   category._storeId = req.session._storeId;
   category.name = req.body.name;
-  category.discription = req.body.discription;
+  category.description = req.body.description;
   await category.save(function(err) {
     if (err) {
       console.log(err);

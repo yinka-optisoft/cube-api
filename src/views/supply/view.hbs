@@ -54,10 +54,10 @@
                 {{#each products}}
                 <tr>
                     <td>{{inc @index}}</td>
-                    <td id="name{{_id}}">{{name}}</td>
+                    <td id="productName{{_id}}">{{productName}}</td>
                     <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
                     <td id="pieces{{_id}}">{{pieces}}</td>
-                    <td id="price{{_id}}">{{price}}</td>
+                    <td id="sellingPrice{{_id}}">{{sellingPrice}}</td>
                     <td id="createdAt{{_id}}">{{dateFormat createdAt "dddd, MMMM Do YYYY, h:mm:ss a"}}</td>
                          
                     {{!-- <td>

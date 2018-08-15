@@ -175,7 +175,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                             .populate('_customerId').populate('_productId');
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
-    salesObj.push(sale._productId[i].name);
+    salesObj.push(sale._productId[i].productName);
   }
 
   const html = fs.readFile(path.join(__dirname, '..', 'views', 'pdf', 'invoice.html'),

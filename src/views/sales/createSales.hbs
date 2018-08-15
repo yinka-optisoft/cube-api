@@ -184,7 +184,7 @@
                                     <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
                                         <option>Select Product</option>
                                         {{#each products}}
-                                            <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
+                                            <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
                                         {{/each}}
                                     </select>
                                 </div>
@@ -411,7 +411,7 @@
                                 <select class="form-control" name="_productId" onchange="egetPieces(this.value)" required>
                                     <option>Select Product</option>
                                     {{#each products}}
-                                        <option value="{{_productId._id}}" data-productName="{{_productId.name}}">{{_productId.name}}</option>
+                                        <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
                                     {{/each}}
                                 </select>
                             </div>
@@ -561,7 +561,7 @@
                     $('#piecesAvai').val(data.pieces);
 
                     $('#getPrice').empty();
-                    $('#getPrice').val(data._productId.price);
+                    $('#getPrice').val(data._productId.sellingPrice);
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
                     $.alert(errorThrow);
@@ -587,7 +587,7 @@
                     $('#epiecesAvai').val(data._productId.pieces);
 
                     $('#egetPrice').empty();
-                    $('#egetPrice').val(data._productId.price);
+                    $('#egetPrice').val(data._productId.sellingPrice);
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
                     $.alert(errorThrow);

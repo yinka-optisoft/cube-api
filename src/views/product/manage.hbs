@@ -117,16 +117,16 @@
                 {{#each products}}
                 <tr>
                     <td>{{inc @index}}</td>
-                    <td id="name{{_id}}">{{name}}</td>
+                    <td id="productName{{_id}}">{{productName}}</td>
                     <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
                     <td id="pieces{{_id}}">{{pieces}}</td>
-                    <td id="price{{_id}}">{{price}}</td>
+                    <td id="sellingPrice{{_id}}">{{sellingPrice}}</td>
                          
                     <td>
-                        <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
+                        <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" sellingPrice="{{sellingPrice}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" name="{{name}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
+                        <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
                             <i class="fa fa-eye"></i>
                         </button>
                         <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -182,7 +182,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Product Name" required>
+                        <input type="text" name="productName" id="productName" class="form-control" placeholder="Product Name" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -205,7 +205,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" name="price" id="price" class="form-control" placeholder="Price" required>
+                        <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" placeholder="Price" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -363,7 +363,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="name" id="name" class="form-control name" placeholder="Product Name" required>
+                        <input type="text" name="productName" id="productName" class="form-control name" placeholder="Product Name" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -386,7 +386,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" name="price" id="price" class="form-control" placeholder="Price" required>
+                        <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" placeholder="Price" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -502,7 +502,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Product</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select onchange="getPieces(this.value)" class="form-control" name="productId" id="productId" required>
-                          
+      
                         </select>
                     </div>
                     </div>
@@ -566,16 +566,19 @@
         $("#fromId").change(function() {
             var branchId = $("#fromId option:selected").val();
 
+            console.log(branchId);
+
             $.ajax({
                 type: 'POST',
                 url: '/product/get/product',
                 dataType: 'json',
                 data: { branchId: branchId },
                 success: function(data) {
+                    console.log(data);
                     $('#productId').empty();
                     $('#productId').append('<option>Select Product</option>');
                     for(row in data) {
-                        $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.name));
+                        $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
@@ -600,7 +603,7 @@
                     $('#_exProductId').empty();
                     $('#_exProductId').append('<option>Select Product</option>');
                     for(row in data) {
-                        $('#_exProductId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.name));
+                        $('#_exProductId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
@@ -687,8 +690,8 @@
         var categoryId = $(opener).attr('categoryId');
         var supplierId = $(opener).attr('_supplierId');
         var branchId = $(opener).attr('_branchId');
-        var name = $(opener).attr('name');
-        var price = $(opener).attr('price'); 
+        var productName = $(opener).attr('productName');
+        var sellingPrice = $(opener).attr('sellingPrice'); 
         var pieces = $(opener).attr('pieces');
         var note = $(opener).attr('note');
 
@@ -696,8 +699,8 @@
         $('#productForm').find('[name="_categoryId"]').val(categoryId);
         $('#productForm').find('[name="_supplierId"]').val(supplierId);
         $('#productForm').find('[name="_branchId"]').val(branchId);
-        $('#productForm').find('[name="name"]').val(name);
-        $('#productForm').find('[name="price"]').val(price);
+        $('#productForm').find('[name="productName"]').val(productName);
+        $('#productForm').find('[name="sellingPrice"]').val(sellingPrice);
         $('#productForm').find('[name="pieces"]').val(pieces);
         $('#productForm').find('[name="note"]').val(note);
     });
@@ -711,14 +714,14 @@
         var productId = $(opener).attr('productId'); // Extract info from data-* attributes
         var categoryId = $(opener).attr('categoryId');
         var supplierId = $(opener).attr('_supplierId');
-        var name = $(opener).attr('name');
+        var productName = $(opener).attr('productName');
         var price = $(opener).attr('price'); 
         var pieces = $(opener).attr('pieces');
 
         $('#viewTable').find('[name="_productId"]').val(productId);
         $('#viewTable').find('[id="category"]').val(categoryId);
         $('#viewTable').find('[id="supplier"]').val(supplierId);
-        $('#viewTable').find('[id="name"]').val(name);
+        $('#viewTable').find('[id="productName"]').val(productName);
         $('#viewTable').find('[id="price"]').val(price);
         $('#viewTable').find('[id="pieces"]').val(pieces);
     });

@@ -30,20 +30,20 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const name = req.body.name;
+  const productName = req.body.productName;
   const _categoryId = req.body._categoryId;
   const _supplierId = req.body._supplierId;
   const _branchId = req.body._branchId;
   const pieces = req.body.pieces;
-  const price = req.body.price;
+  const sellingPrice = req.body.sellingPrice;
   const note = req.body.note;
 
-  req.checkBody('name', 'Name is required').notEmpty();
+  req.checkBody('productName', 'Product Name is required').notEmpty();
   req.checkBody('_categoryId', 'Category is required').notEmpty();
   req.checkBody('_supplierId', 'Supplier is required').notEmpty();
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
-  req.checkBody('price', 'Price is required').notEmpty();
+  req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
 
   var errors = req.validationErrors();
 
@@ -93,7 +93,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   const _supplierId = req.body._supplierId;
   const _branchId = req.body._branchId;
   // const pieces = req.body.pieces;
-  const price = req.body.price;
+  const sellingPrice = req.body.sellingPrice;
   const note = req.body.note;
 
   req.checkBody('name', 'Name is required').notEmpty();
@@ -101,7 +101,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('_categoryId', 'Category is required').notEmpty();
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   // req.checkBody('pieces', 'Pieces is required').notEmpty();
-  req.checkBody('price', 'Price is required').notEmpty();
+  req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
 
   var errors = req.validationErrors();
 
@@ -118,7 +118,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
     product._branchId = req.body._branchId;
     product.name = req.body.name;
     // product.pieces = req.body.pieces;
-    product.price = req.body.price;
+    product.sellingPrice = req.body.sellingPrice;
     product.note = req.body.note;
     product.save((err) => {
       if (err) {
@@ -139,11 +139,11 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 
   const productId = req.body.productId;
   const pieces = req.body.pieces;
-  const price = req.body.price;
+  const sellingPrice = req.body.sellingPrice;
 
   req.checkBody('productId', 'Product is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
-  req.checkBody('price', 'Price is required').notEmpty();
+  req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
 
   console.log(errors);
 
@@ -157,7 +157,7 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 
     product._createdBy = req.user._id;
     product.pieces += parseFloat(req.body.pieces);
-    product.price = req.body.price;
+    product.sellingPrice = req.body.sellingPrice;
     product.note = req.body.note;
     product.save((err, product) => {
       if (err) {

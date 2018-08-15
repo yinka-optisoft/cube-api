@@ -220,13 +220,13 @@
                     $('#datatable tbody').empty();
 
                     for(var i = 0; i < data.length; i++){
-                        console.log(data[i]._productId.name);
+                        console.log(data[i]._productId.productName);
 
                             var tr = '<tr>'+
                                 '<td>'+(i + 1)+'</td>'+
-                                '<td>'+data[i]._productId.name+'</td>'+
+                                '<td>'+data[i]._productId.productName+'</td>'+
                                 '<td>'+data[i].pieces+'</td>'+
-                                '<td>'+data[i]._productId.price+'</td>'+
+                                '<td>'+data[i]._productId.sellingPrice+'</td>'+
                                 '<td>'+data[i]._productId._categoryId.name+'</td>'+
                             '</tr>'
 

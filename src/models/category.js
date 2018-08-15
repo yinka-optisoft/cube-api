@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const Category = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
   name: String,
-  discription: String,
+  description: String,
   createdAt: { type: Date, default: Date.now }
 });
 

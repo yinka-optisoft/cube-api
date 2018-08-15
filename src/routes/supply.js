@@ -136,10 +136,9 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   
 
 router.get('/view/:id', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Supply.findById(req.user._id).populate('_roleId');
-    const users = await Supply.findById(req.params.id).populate('_roleId');
+    const user = await Account.findById(req.user._id).populate('_roleId');
     const products = await Product.find({ _storeId: req.user._storeId, _supplierId: req.params.id }).populate('_categoryId');
-    res.render('supply/view', { user, users, expressFlash: req.flash('info'), products, layout: 'layouts/user' });
+    res.render('supply/view', { user, expressFlash: req.flash('info'), products, layout: 'layouts/user' });
 });
 
 
