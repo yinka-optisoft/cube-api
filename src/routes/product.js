@@ -19,7 +19,7 @@ import ProductTransfer from '../models/productTransfer';
 const router = express.Router();
 
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const products = await Product.find({ _storeId: req.session._storeId }).populate('_categoryId');
   const categories = await Category.find({ _storeId: req.session._storeId });
   const suppliers = await Supply.find({ _storeId: req.user._storeId });
@@ -319,7 +319,7 @@ router.post('/move/product', guard.ensureLoggedIn(), async (req, res, next) => {
 
 // moved product
 router.get('/move', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const records = await ProductTransfer.find({ _storeId: req.user._storeId })
                                             .populate('_movedBy')
                                             .populate('_fromId')

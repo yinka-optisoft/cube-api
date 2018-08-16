@@ -27,7 +27,7 @@ const generateUniqueID = async storeShort => {
 // branch homepage
 router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(req.params._branchId);
   const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
@@ -41,8 +41,7 @@ router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), asyn
 
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-    const user = await Account.findById(req.user._id).populate('_roleId');
-
+    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
     const branches = await Branch.find({ _storeId: req.session._storeId });
     res.render('branch/manage', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
   });
@@ -104,7 +103,7 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   // branch homepage
   router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId');
+    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
     const branch = await Branch.findById(req.params._branchId);
     const roles = await Role.find({ _storeId: req.session._storeId });
     const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
@@ -205,19 +204,12 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
       };
     });
   }
-
-  // const response = {
-  //   status: 200,
-  //   message: 'Branch delete successfully',
-  // };
-
-  // res.send(response);
 });
 
 
 // branch homepage
 router.get('/user/view/:_userId', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const users = await Account.findById(req.params._userId).populate('_roleId');
   const roles = await Role.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(user._branchId);
@@ -288,7 +280,7 @@ router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
 
 
 router.get('/view/:_branchId/products', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branch = await Branch.findById(req.params._branchId);
   const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branch._id })
                                       .populate(

@@ -15,7 +15,7 @@ const router = express.Router();
 
 
 router.get('/', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
   res.render('report/sales', { user, branches, layout: 'layouts/user' });
 });
@@ -54,7 +54,7 @@ router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
 
 
 router.get('/product', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
   res.render('report/product', { user, branches, layout: 'layouts/user' });
 });

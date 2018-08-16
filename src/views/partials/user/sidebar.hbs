@@ -1,18 +1,31 @@
-<div class="left_col scroll-view">
-    <div class="navbar nav_title" style="border: 0;">
-        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Cube700</span></a>
-    </div>
+<div class="left_col scroll-view">    
+    <!-- menu profile quick info -->
+    <a href="/">
+        <div class="profile clearfix">
+            <div class="profile_pic" style="padding: 5px">
+            {{#if (ne user._storeId.logo '')}}
+                <img src="/images/store/{{user._storeId.logo}}" alt="..." height="80px" width="80px">
+            {{else}}
+                <img src="/images/store/store.jpeg" alt="..." height="80px" width="80px">
+            {{/if}}
+            </div>
+            <div class="profile_info">
+                <h2>{{user._storeId.name}}</h2>
+            </div>
+        </div>
+    </a>
+    <!-- /menu profile quick info -->
 
     <div class="clearfix"></div>
 
     <!-- menu profile quick info -->
     <div class="profile clearfix">
         <div class="profile_pic">
-        {{!-- <img src="/images/img.jpg" alt="..." class="img-circle profile_img"> --}}
+        <img src="/images/member/{{user.passport}}" alt="..." class="img-circle profile_img">
         </div>
         <div class="profile_info">
         <span>Welcome,</span>
-        <h2>John Doe</h2>
+        <h2>{{user.firstname}} {{user.middlename}} {{user.lastname}}</h2>
         </div>
     </div>
     <!-- /menu profile quick info -->
@@ -25,6 +38,7 @@
         <h3>General</h3>
         {{#if (eq user.roleId 'admin')}}
             <ul class="nav side-menu">
+                <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
                 <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="/branch">Manage Branch</a></li>
@@ -68,6 +82,7 @@
             </ul>
         {{else if (eq user._roleId.name 'admin')}}
             <ul class="nav side-menu">
+                <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
                 <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="/branch">Manage Branch</a></li>
@@ -111,6 +126,7 @@
             </ul>
         {{else if (eq user._roleId.name 'staff')}}
         <ul class="nav side-menu">
+                <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
                 <li><a><i class="fa fa-home"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="/sales/create/sales">Enter Sales</a></li>

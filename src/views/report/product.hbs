@@ -127,17 +127,35 @@
                 <br />
                 <form class="form-horizontal form-label-left" id="reportForm">
 
-                    <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Branch</label>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="branchId" id="branchId" required>
-                            <option>Select Branch</option>
-                            {{#each branches}}
-                            <option value="{{_id}}">{{name}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    </div>
+                    {{#if (eq user.roleId 'admin')}}
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Branch</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" name="branchId" id="branchId" required>
+                                    <option>Select Branch</option>
+                                    {{#each branches}}
+                                    <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                    {{else}}
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Branch</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" name="branchId" id="branchId" required>
+                                    <option>Select Branch</option>
+                                    <option value="{{user._branchId._id}}">{{user._branchId.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    {{/if}}
+
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Between</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">

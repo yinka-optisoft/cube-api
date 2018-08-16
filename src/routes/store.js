@@ -150,7 +150,7 @@ router.post('/create-store', async (req, res, next) => {
 
 // create account roles
 router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const roles = await Role.find({ _storeId: req.session._storeId }).populate('_accountId');
   const category = await Category.find({ _storeId: req.session._storeId });
   const business = await Business.find({ _storeId: req.session._storeId });
@@ -195,7 +195,7 @@ router.post('/business', guard.ensureLoggedIn(), async (req, res, next) => {
 
 // category page
 router.get('/categories', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const categories = await Category.find({ _storeId: req.session._storeId });
   const category = await Category.findOne({ _storeId: req.session._storeId });
   res.render('product/category', { user, categories, category, expressFlash: req.flash('success'), layout: 'layouts/user' });

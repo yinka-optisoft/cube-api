@@ -38,7 +38,7 @@ const router = express.Router();
 
 
 router.get('/create/sales', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const customers = await Customer.find({ _storeId: req.user._storeId, _branchId: req.user._branchId });
   const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_productId');
   res.render('sales/createSales', { user, expressFlash: req.flash('info'), customers, products, layout: 'layouts/user' });
@@ -51,7 +51,7 @@ router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
 
 
 router.get('/manage/sales', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const allSales = await Sales.find({ _salesBy: req.user._id, _storeId: req.user._storeId, _branchId: req.user._branchId }).sort('-createdAt').populate('_productId');
   res.render('sales/manageSales', { user, expressFlash: req.flash('info'), allSales, layout: 'layouts/user' });
 });

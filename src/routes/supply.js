@@ -26,7 +26,7 @@ const generateUniqueID = async storeShort => {
 
 
 router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId');
+    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
     const suppliers = await Supply.find({ _storeId: req.user._storeId });
     const categories = await Category.find({ _storeId: req.session._storeId });
     const branches = await Branch.find({ _storeId: req.session._storeId });
@@ -35,7 +35,7 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res, next) => {
 
 
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId');
+    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
     const suppliers = await Supply.find({ _storeId: req.user._storeId });
     const categories = await Category.find({ _storeId: req.session._storeId });
     const branches = await Branch.find({ _storeId: req.session._storeId });
@@ -136,7 +136,7 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   
 
 router.get('/view/:id', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId');
+    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
     const products = await Product.find({ _storeId: req.user._storeId, _supplierId: req.params.id }).populate('_categoryId');
     res.render('supply/view', { user, expressFlash: req.flash('info'), products, layout: 'layouts/user' });
 });

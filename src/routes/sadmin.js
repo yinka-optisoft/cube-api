@@ -11,7 +11,7 @@ import { check, validationResult } from 'express-validator/check';
 const router = express.Router();
 
 router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   res.render('superadmin/dashboard', { user, layout: 'layouts/user' });
 });
 

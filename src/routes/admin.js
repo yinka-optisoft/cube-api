@@ -4,6 +4,8 @@ import Store from '../models/store';
 import Role from '../models/role';
 import Account from '../models/account';
 import Branch from '../models/branch';
+import Product from '../models/product';
+import Supply from '../models/supply';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
@@ -21,14 +23,18 @@ const generateUniqueID = async storeShort => {
 
 
 router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
-  res.render('admin/dashboard', { user, layout: 'layouts/user' });
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branch = await Branch.count({ _storeId: req.user._storeId });
+  const product = await Product.count({ _storeId: req.user._storeId });
+  const account = await Account.count({ _storeId: req.user._storeId });
+  const suppliers = await Supply.count({ _storeId: req.user._storeId });
+  res.render('admin/dashboard', { user, branch, product, account, suppliers, layout: 'layouts/user' });
 });
 
 
 // manage staff
 router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const roles = await Role.find({ _storeId: req.session._storeId });
   const staff = await Account.find({ _storeId: req.user._storeId })
@@ -40,7 +46,7 @@ router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
 
 // staff trash
 router.get('/trash', guard.ensureLoggedIn(), async (req, res) => {
-  const user = await Account.findById(req.user._id).populate('_roleId');
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const staff = await Account.find({ _storeId: req.session._storeId, status: 0 })
                                     .populate('_roleId').populate('_branchId');
   res.render('staff/trash', { user, staff, layout: 'layouts/user' });
