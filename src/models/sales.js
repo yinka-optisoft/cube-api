@@ -16,8 +16,10 @@ const Sale = new Schema({
   discount: Number,
   piecesSold: [Number],
   unitPrice: [Number],
-  totalPrice: Number,
+  totalPrice: [Number],
   createdAt: { type: Date, default: Date.now }
 });
 
+
 export default mongoose.model('sales', Sale);
+

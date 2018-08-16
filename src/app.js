@@ -28,7 +28,11 @@ import supply from './routes/supply';
 import staff from './routes/staff';
 import sales from './routes/sales';
 import report from './routes/report';
-
+import mobileStore from './routes/mobile/mobileStore';
+import mobileSales from './routes/mobile/mobileSales';
+import adminDashboard from './routes/mobile/adminDashboard';
+import customerRoute from './routes/mobile/customer';
+import cors from 'cors';
 const app = express();
 
 const blocks = {};
@@ -54,6 +58,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(`${__dirname}/bower_components`));
@@ -91,6 +96,13 @@ app.use('/staff', staff);
 app.use('/sales', sales);
 app.use('/report', report);
 
+// app.use('/store', store);
+// app.use('/branch', branch);
+app.use('/mobilestore', mobileStore);
+// app.use('/product', product);
+app.use('/mobilesales', mobileSales);
+app.use('/adminDashboard', adminDashboard);
+app.use('/customer', customerRoute);
 // passport account auth
 
 import Account from './models/account';
@@ -123,10 +135,10 @@ app.use((err, req, res, next) => {
 hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 // helper for select tag option
-hbs.registerHelper('select', function(selected, options){
-  return options.fn(this).replace(new RegExp(' value=\"' + selected + '\"'), 
-  '$& selected="selected"').replace(new RegExp('>' + selected + '</option>'),
-  'selected="selected"$&');
+hbs.registerHelper('select', function(selected, options) {
+  return options.fn(this).replace(new RegExp(` value=\"${ selected }\"`),
+                                  '$& selected="selected"').replace(new RegExp(`>${ selected }</option>`),
+                                                                    'selected="selected"$&');
 });
 
 
@@ -196,6 +208,7 @@ hbs.registerHelper('block', function(name) {
   return val;
 });
 
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 // handlebars helper to extend scripts
 hbs.registerHelper('extend', function(name, context) {
   let block = blocks[name];

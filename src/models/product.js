@@ -10,12 +10,17 @@ const Product = new Schema({
   productName: String,
   pieces: Number,
   sellingPrice: Number,
-  expireDate: String,
+  expiryDate: String,
   note: String,
-  barcodeNumber: Number,
+  reorderLevel: String,
   productImage: String,
+  barcodeNumber: String,
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
 export default mongoose.model('products', Product);
+
+
+// import mongoose from 'mongoose';
+

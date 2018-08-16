@@ -248,4 +248,8 @@ router.post('/category/delete', guard.ensureLoggedIn(), async (req, res, next) =
 });
 
 
+router.post('/showus', async (req, res, next) => {
+console.log(req.body);
+});
+
 export default router;

@@ -11,7 +11,7 @@ import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import Product from '../models/product';
-import BranchProduct from '../models/branchProduct';
+import BranchProduct from '../models/branchProducts';
 
 const router = express.Router();
 
