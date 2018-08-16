@@ -11,13 +11,8 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
-<<<<<<< HEAD
 import Supply from '../models/supply';
 import BranchProduct from '../models/branchProduct';
-=======
-import supply from '../models/supply';
-import BranchProduct from '../models/branchProducts';
->>>>>>> mergin
 import ProductTransfer from '../models/productTransfer';
 
 

@@ -23,12 +23,8 @@ const Account = new Schema({
   country: String,
   state: String,
   lga: String,
-<<<<<<< HEAD
-  moveDate: { type: Date },
-=======
   token: String,
   moveDate: Date,
->>>>>>> mergin
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });

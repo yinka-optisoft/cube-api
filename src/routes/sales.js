@@ -12,7 +12,7 @@ import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import Customer from '../models/customer';
-import BranchProduct from '../models/branchProducts';
+import BranchProduct from '../models/branchProduct';
 import Sales from '../models/sales';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';

@@ -3,7 +3,7 @@ import Store from '../../models/store';
 import Account from '../../models/account';
 import Branch from '../../models/branch';
 import Product from '../../models/product';
-import BranchProduct from '../../models/branchProducts';
+import BranchProduct from '../../models/branchProduct';
 import ProductMoveProcess from '../../models/productTransfer';
 import Sales from '../../models/sales';
 import Role from '../../models/role';
