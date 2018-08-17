@@ -44,28 +44,24 @@
     <div>
         <img class="storeLogo" src="storelogo" />
         <div class="date">
-            Date: {{dateFormat sale.createdAt "Do/mm/YYYY"}}
+            Date: {{dateFormat sale.createdAt "Do/MM/YYYY"}}
             <br>
             <p>Invoice: {{sale.invoiceNumber}}</p>
         </div>
     </div>
     <table border="0"  >
       <tr>
-        <td colspan="3">
+        <td colspan="4">
             <div class="header">
                 <p>From</p>
-<<<<<<< HEAD
-                <p><b>{{store.productName}}</b></p>
-=======
                 <p><b>{{store.name}}</b></p>
->>>>>>> mergin
                 <p>{{store.address}}</p>
                 <p>{{store.country}} {{store.state}} {{store.city}}</p>
                 <p>Phone: {{store.phone}}</p>
                 <p>E-mail: {{store.email}}</p>
             </div>
         </td>
-        <td colspan="3">
+        <td colspan="4">
             <div class="header">
                 <p>To</p>
                 <p><b>{{sale._customerId.name}}</b></p>
@@ -74,17 +70,8 @@
                 <p>E-mail: {{sale._customerId.email}}</p>
             </div>
         </td>
-        <td colspan="3">
-            <div class="header">
-                <p>Invoice </p>
-                <p>Order ID: </p>
-                <p>Payment Due: </p>
-                <p>Account: </p>
-            </div>
-        </td>
         <td>
             <img style="height:60px;" src="studentPassport" />
-
         </td>
       </tr>
     </table>
@@ -114,5 +101,12 @@
         </tbody>
       </table>
     </main>
+
+    <div class="header">
+        <p>Invoice </p>
+        <p>Order ID: </p>
+        <p>Payment Due: </p>
+        <p>Account: </p>
+    </div>
   </body>
 </html>

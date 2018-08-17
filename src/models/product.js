@@ -20,7 +20,3 @@ const Product = new Schema({
 });
 
 export default mongoose.model('products', Product);
-
-
-// import mongoose from 'mongoose';
-
