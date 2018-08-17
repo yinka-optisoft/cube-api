@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./src/bin/www --exec babel-node",
-    "start:prod": "mv *.js lib/*.js && nodemon lib/index.js --exec babel-node",
-    "build": "babel lib -d dist",
-    "serve": "node dist/index.js",
+    "start": "nodemon src/bin/www --inspect --exec babel-node",
+    "build": "babel src --plugins transform-remove-console --out-dir dist --copy-files &&  babel src/bin/www  --out-file dist/bin/www",
+    "serve": "node dist/bin/www",
+    "clean": "rm -rf dist",
     "lint": "eslint ./",
     "test": "make test",
     "static": "webpack",
@@ -24,7 +24,6 @@
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "express-toastr": "^2.0.2",
-    "dynamic-html-pdf": "git+https://github.com/timotew/dynamic-html-pdf.git",
     "express-validator": "^5.2.0",
     "formidable": "^1.2.1",
     "handlebars-dateformat": "^1.1.1",
@@ -77,6 +76,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.1",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "babel-plugin-transform-remove-console": "^6.9.4"
   }
 }
