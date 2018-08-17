@@ -867,11 +867,6 @@
             var piecesSold = $('#epiecesSold').val();
             var productPrice = $('#eproductPrice').val();
 
-            console.log('Yh is enter');
-            console.log(productId);
-            console.log(piecesSold);
-            console.log(productPrice);
-
             for (var i = 0; i < salesArray.length; i++){
                 if(productId === salesArray[i]._productId){
                     salesArray[i].piecesSold = piecesSold;
