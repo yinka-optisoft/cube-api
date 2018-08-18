@@ -1,4 +1,7 @@
 {
     "presets": ["env", "stage-2", "react"],
-    "plugins": []
+    "plugins": [],
+    "ignore": [
+            "src/public"
+                ]
   }
