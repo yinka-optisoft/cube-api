@@ -59,7 +59,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
     req.checkBody('lastname', 'Last name is required').notEmpty();
     req.checkBody('phone', 'Phone is required').notEmpty();
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('email', 'E-mail', 'E-mail is required').isEmail();
+    req.checkBody('email', 'E-mail is required').notEmpty();
     
     var errors = req.validationErrors();
 

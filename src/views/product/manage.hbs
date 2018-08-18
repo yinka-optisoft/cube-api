@@ -106,7 +106,7 @@
                 <th>N/S</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Piece</th>
+                {{!-- <th>Piece</th> --}}
                 <th>Price</th>
                 <th>Actions</th>
             </tr>
@@ -119,16 +119,21 @@
                     <td>{{inc @index}}</td>
                     <td id="productName{{_id}}">{{productName}}</td>
                     <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
-                    <td id="pieces{{_id}}">{{pieces}}</td>
+                    {{!-- <td id="pieces{{_id}}">{{pieces}}</td> --}}
                     <td id="sellingPrice{{_id}}">{{sellingPrice}}</td>
                          
                     <td>
                         <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" sellingPrice="{{sellingPrice}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
-                        <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
+                        <a href="/product/view/{{_id}}">
+                            <button title="View" class="btn btn-success btn-sm">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </a>
+                        {{!-- <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
                             <i class="fa fa-eye"></i>
-                        </button>
+                        </button> --}}
                         <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>
@@ -415,61 +420,6 @@
 
 
 <!-- Small modal -->
-{{!-- <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="viewProduct">
-<div class="modal-dialog modal-lg">
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabel2">Product Details</h4>
-        </div>
-        <div class="modal-body">
-            
-            <div class="x_panel">
-                    
-                <div class="x_content">
-                <br />
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_content">
-                                    <table class="table" id="viewTable">
-                                        <thead>
-                                            <tr>
-                                            <th>#</th>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Pieces</th>
-                                            <th>Price</th>
-                                            <th>Supplier Name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <th scope="row">#</th>
-                                            <td id="name"></td>
-                                            <td id="category"></td>
-                                            <td id="pieces"></td>
-                                            <td id="price"></td>
-                                            <td id="supplier"></td>
-                                            </tr>
-                                            <tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-<!-- /modals -->
-
-
-<!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="moveProduct">
 <div class="modal-dialog modal-sm" style="width: 400px;">
     <div class="modal-content">
@@ -578,7 +528,9 @@
                     $('#productId').empty();
                     $('#productId').append('<option>Select Product</option>');
                     for(row in data) {
-                        $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
+                        if(data[row]._productId !== null){
+                            $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
+                        }
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {

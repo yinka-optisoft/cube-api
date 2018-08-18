@@ -2,8 +2,13 @@
  * To be qualified and granted access to a particular route base on
  * Their roles
  */
-/*import Store from '../models/store';
-const testRole = (user, role) => user.role === role;
+/*
+ import Store from '../models/store';
+
+const testAdmin = (user, role) => user.role === roleId;
+const testRole = (user, role) => user.role === _roleId;
+
+const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
 
 const adminOnly = (req, res, next) => {
   if (testRole(req.user, 'admin'))
@@ -24,7 +29,7 @@ const adminOnly = (req, res, next) => {
 
 
 const adminOrStaff = (req, res, next) => {
-  if (testRole(req.user, 'admin') || testRole(req.user, 'staff'))
+  if (testRole(req.user, "5b717d0e4edd1a2bb047309c") || testRole(req.user, "5b717cfb4edd1a2bb047309b"))
     next();
   else
   if (user.roleId === 'admin') {

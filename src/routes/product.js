@@ -28,7 +28,20 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
+router.get('/view/:productId', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branchproduct = await BranchProduct.findOne({ _storeId: req.user._storeId, _productId: req.params.productId }).populate('_productId');
+  const branchproducts = await BranchProduct.find({ _storeId: req.user._storeId, _productId: branchproduct._productId })
+                                            .populate('_productId').populate('_branchId');
+
+  console.log(branchproducts, 'holding by branch');
+  res.render('product/viewProduct', { user, branchproduct, branchproducts, expressFlash: req.flash('info'), layout: 'layouts/user' });
+});
+
+
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  var errors = req.validationErrors();
 
   const productName = req.body.productName;
   const _categoryId = req.body._categoryId;
@@ -44,8 +57,6 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
   req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
-
-  var errors = req.validationErrors();
 
   console.log(errors);
 
@@ -165,6 +176,8 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
       }
       return res.json(product);
     });
+
+    console.log(product);
   }
 });
 
