@@ -9,7 +9,7 @@ const Account = new Schema({
   _supplierId: { type: String, lowercase: true, trim: true,
                  enum: ['supplier'] }, // supplier
   roleId: { type: String, lowercase: true, trim: true,
-            enum: ['admin'] }, // supplier
+            enum: ['admin', 'sadmin'] },
   firstname: String,
   middlename: String,
   lastname: String,

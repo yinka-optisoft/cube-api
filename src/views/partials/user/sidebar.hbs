@@ -36,13 +36,6 @@
     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
         <h3>General</h3>
-        <ul class="nav side-menu">
-            <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li><a href="/store/roles">Manage Roles</a></li>
-            </ul>
-            </li>
-        </ul>
         {{#if (eq user.roleId 'admin')}}
             <ul class="nav side-menu">
                 <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
@@ -142,7 +135,7 @@
                 </li>
             </ul>
         {{else if (eq user._roleId.name 'staff')}}
-        <ul class="nav side-menu">
+            <ul class="nav side-menu">
                 <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
                 <li><a><i class="fa fa-home"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
@@ -152,7 +145,16 @@
                 </li>
                 <li><a><i class="fa fa-user"></i> Promotion Management <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="/promotion">Manage Product For Promotion</a></li>
+                    <li><a href="/promo">Manage Product For Promotion</a></li>
+                </ul>
+                </li>
+            </ul>
+        {{else if (eq user.roleId 'sadmin')}}
+            <ul class="nav side-menu">
+                <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
+                <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="/store/roles">Manage Roles</a></li>
                 </ul>
                 </li>
             </ul>

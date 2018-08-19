@@ -10,6 +10,8 @@ router.get('/dashboard', async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   if (user.roleId === 'admin') {
     res.redirect('/admin/dashboard');
+  } else if (user.roleId === 'sadmin') {
+    res.redirect('/sadmin/dashboard');
   } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
     res.redirect('/admin/dashboard');
   } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {
@@ -57,6 +59,8 @@ router.post('/login', passport.authenticate('local',
                 req.flash('success', 'You Are Not Activated');
                 res.redirect('/');
               } else {
+                if (!store && user.roleId === 'sadmin') res.redirect('/sadmin/dashboard');
+                
                 if (!store) res.redirect('/');
                 req.session._storeId = store._id;
                 req.session.save((err) => {
