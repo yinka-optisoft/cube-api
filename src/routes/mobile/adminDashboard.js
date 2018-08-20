@@ -28,17 +28,72 @@ router.get('/', verifyToken, async (req, res) => {
   // const todaysSupply = await Branch.find({ _storeId: req.user._storeId }).count();
   const branchSales = await Branch.find({ _branchId: req.user._branchId }).count();
 
-  const productsSold = await Sales.find({ _branchId: req.user._branchId }).count();
+  // const productsSold = await Sales.find({ _branchId: req.user._branchId }).count();
   //  const  = await Br
-  const countDetails = { productCount: productCount, salesCount: salesCount, branchCount: branchCount, branchSales: branchSales };
+  const todaysDate = new Date().toISOString().split('T')[0];
 
-  console.log(countDetails);
+  const todaySales = await Sales.find({
+    $and: [
+      { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
+      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+    ]
+  }).count();
+
+  const sumVal = await Sales.aggregate([
+    { $match: { createdAt: { $gt: new Date(todaysDate) } } },
+    {
+      $project: {
+        totalPrice: { $sum: '$totalPrice' },
+        pieces: { $sum: '$piecesSold' },
+        numberOfProduct: { $size: '$_productId' },
+        balance: { $sum: '$balanceTransaction' }
+        // examTotal: { $sum: [ "$final", "$midterm" ] }
+      }
+    }
+  ]);
+
+  let totalPrice = 0;
+  let totalProduct = 0;
+  let totalPieces = 0;
+  let totalBalance = 0;
+  for (let i = 0; i < sumVal.length; i++) {
+    totalPrice += sumVal[i].totalPrice;
+    totalProduct += sumVal[i].numberOfProduct;
+    totalPieces += sumVal[i].numberOfProduct;
+    totalBalance += sumVal[i].balance;
+  }
+  const totals = {
+    totalPrice: totalPrice,
+    totalProduct: totalProduct,
+    totalPieces: totalPieces,
+    totalBalance: totalBalance,
+  };
+
+  const countDetails = {
+    productCount: productCount,
+    salesCount: salesCount,
+    branchCount: branchCount,
+    branchSales: branchSales,
+    todaySales: todaySales,
+    salesDetails: totals
+  };
+
+  console.log(sumVal);
+
   return res.json({ countDetails: countDetails });
 });
 
-router.post('/makeSales', verifyToken, async (req, res) => {
+router.get('/todaysData', verifyToken, async (req, res) => {
+  const todaysDate = new Date().toISOString().split('T')[0];
+  const todaySales = await Sales.find({
+    $and: [
+      { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
+      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+    ]
+  }).populate('_productId').populate('_branchId').populate('_salesBy').populate('_customerId').sort({"createdAt":-1});
 
-  //  const  = await Br
+  console.log(todaySales);
+ return res.json({ saleDetails: todaySales });
 });
 module.exports = router;
 // export default router;

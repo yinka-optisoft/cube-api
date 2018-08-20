@@ -19,7 +19,7 @@ var path = require('path');
 var imageName;
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, 'public/uploads');
+    cb(null, 'src/public/images/member');
   },
   filename: function(req, file, cb) {
     imageName = Date.now() + path.extname(file.originalname);
@@ -58,11 +58,11 @@ router.post('/addSales', verifyToken, async (req, res) => {
         console.log(err);
         return res.json({ error: 'An error occured, pease try again later' });
       }
-      const findId = Sales.findOne({ _id: newSales._id }, (err, doc) => {
+      const findId = Sales.findOne({ _id: newSales._id }, async (err, doc) => {
         console.log(productBought.length);
 
-        for (var i = 0; i < productBought.length; i++) {
-
+        for (let i = 0; i < productBought.length; i++) {
+          
           // console.log(productBought[i]._productDetail._productId._id);
           doc._productId.push(productBought[i]._productDetail._productId._id);
           // console.log( productBought[i]._productDetail._productId._id);
@@ -72,6 +72,13 @@ router.post('/addSales', verifyToken, async (req, res) => {
           // console.log(productBought[i].piecesDetails.unitPrice)
           doc.totalPrice.push(productBought[i].piecesDetails.priceSold);
           // console.log(productBought[i].piecesDetails.priceSold);
+          const deductProduct = await BranchProduct.findOne({ _productId: productBought[i]._productDetail._productId._id, _branchId: req.user._branchId });
+          deductProduct.pieces -= productBought[i].piecesDetails.piecesSold;
+          deductProduct.save((err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
         }
         doc.save(function(err) {
           if (err) {
@@ -98,7 +105,8 @@ router.get('/fetchSales', verifyToken, async (req, res) => {
 router.get('/fetchRole', verifyToken, async (req, res) => {
 
   const allRoles = await Role.find({ _storeId: req.user._storeId });
-  return res.json({ roles: allRoles });
+  const Branches = await Branch.find({ _storeId: req.user._storeId });
+  return res.json({ roles: allRoles, branches: Branches });
 });
 
 router.post('/storeRole', verifyToken, async (req, res) => {
@@ -137,7 +145,7 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   newAdmin.middlename = req.body.middleName;
   newAdmin.lastname = req.body.lastName;
   newAdmin.address = req.body.address;
-  newAdmin.userImage = imageName;
+  newAdmin.passport = imageName;
   newAdmin.phone = req.body.phoneNumber;
   newAdmin.email = req.body.emailAddress;
   newAdmin._roleId = req.body.role;
@@ -251,7 +259,8 @@ router.post('/moveProductToBranch', verifyToken, async (req, res) => {
 
 });
 router.post('/findcode', verifyToken, async (req, res) => {
-  const findProduct = await Product.findOne({ barcodeNumber: '017391128442' });
+  const qrCode = req.body.qrcode;
+  const findProduct = await Product.findOne({ barcodeNumber: qrCode, _storeId: req.user._storeId });
 
   if (!findProduct) {
     return res.json({ title: 'Not found', success: 'Product not found in store' });
@@ -304,14 +313,14 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
                                     salesObj
                                   });
 
-                                //   html = html.replace('storelogo',
-                                //                       path.join('file://',
-                                //                                 __dirname, '..',
-                                //                                 'public',
-                                //                                 'images',
-                                //                                 'store',
-                                //                                 store.logo
-                                //                       ));
+                                  html = html.replace('storelogo',
+                                                      path.join('file://',
+                                                                __dirname, '..',
+                                                                'public',
+                                                                'images',
+                                                                'store',
+                                                                store.logo
+                                                      ));
 
                                   htmlPdf.create(html, {
                                     format: 'A4',

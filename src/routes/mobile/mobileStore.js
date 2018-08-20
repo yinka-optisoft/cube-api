@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
 
   destination: function(req, file, cb) {
     console.log(file);
-    cb(null, 'src/public/images/store/');
+    cb(null, 'src/public/images/product/');
   },
   filename: function(req, file, cb) {
 
@@ -194,7 +194,7 @@ router.post('/storeProduct', verifyToken, upload.single('avatar'), async (req, r
   addProduct._branchId = req.user._branchId;
   addProduct._createdBy = req.user._id;
   addProduct._categoryId = req.body.productcategory;
-  addProduct._storeId = req.body._storeId;
+  addProduct._storeId = req.user._storeId;
   addProduct.productName = req.body.productName;
   addProduct.sellingPrice = req.body.sellingPrice;
   addProduct.reorderLevel = req.body.reorderLevel;
@@ -272,8 +272,8 @@ router.get('/fetchBranch', verifyToken, async (req, res) => {
 router.post('/storeCategory', verifyToken, async (req, res) => {
   const addCategory = await new Category();
   addCategory._storeId = req.user._storeId;
-  addCategory.discription = req.body.description;
-  addCategory.category = req.body.name;
+  addCategory.description = req.body.description;
+  addCategory.name = req.body.category;
   addCategory._userId = req.user._id;
   await addCategory.save(function(err) {
     if (err) {
@@ -296,6 +296,8 @@ router.get('/fetchSalesBranch', verifyToken, async (req, res) => {
   const getBranch = await Branch.find({ _storeId: req.user._storeId });
   const getProducts = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_productId');
   const getCustomers = await Customers.find({ _branchId: req.user._branchId, _storeId: req.user._storeId });
+
+  console.log(getCustomers);
   return res.json({ branch: getBranch, products: getProducts, allCustomers: getCustomers });
 });
 
@@ -329,6 +331,8 @@ router.post('/login', function(req, res, next) {
 router.get('/get-product-details', verifyToken, async (req, res, next) => {
   const barcodeNumber = req.headers.barcodenumber;
   const findProduct = await Product.findOne({ barcodeNumber: barcodeNumber, _storeId: req.user._storeId }).populate('_categoryId');
+
+  console.log(findProduct + barcodeNumber);
   if (findProduct) {
     return res.json({ success: 'Product found', products: findProduct });
   }
@@ -343,6 +347,11 @@ router.post('/showus', verifyToken, function(req, res, next) {
 
 router.get('/fetchbusiness', async (req, res) => {
   const business = await Business.find();
+  console.log(business)
+  // const newBusiness = await new Business();
+  // newBusiness.name = 'Manufacture';
+  // await newBusiness.save(); 
+  // console.log(business);
   return res.json({ business: business });
 });
 export default router;
