@@ -47,7 +47,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   if (exPromo) {
 
-    const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
+    //const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
 
     exPromo._storeId = req.user._storeId;
     exPromo._branchId = req.user._branchId;
@@ -61,11 +61,14 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
     exPromo.save((err) => {
       if (err) {
         console.log(err);
+      } else {
+        req.flash('info', 'Promo Product Set');
+        res.redirect('/promo');
       }
     });
 
 
-    product.pieces -= parseFloat(req.body.pieces);
+    /*product.pieces -= parseFloat(req.body.pieces);
     await product.save((err) => {
       if (err) {
         console.log(err);
@@ -73,11 +76,11 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         req.flash('info', 'Promo Product Set');
         res.redirect('/promo');
       }
-    });
+    });*/
 
   } else {
 
-    const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
+    //const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
 
     const newPromo = new Promo();
     newPromo._storeId = req.user._storeId;
@@ -92,10 +95,13 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
     newPromo.save((err) => {
       if (err) {
         console.log(err);
+      } else {
+        req.flash('info', 'Promo Product Set');
+        res.redirect('/promo');
       }
     });
 
-    product.pieces -= parseFloat(req.body.pieces);
+    /*product.pieces -= parseFloat(req.body.pieces);
     await product.save((err) => {
       if (err) {
         console.log(err);
@@ -103,7 +109,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         req.flash('info', 'Promo Product Set');
         res.redirect('/promo');
       }
-    });
+    });*/
   }
 });
 

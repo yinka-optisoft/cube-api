@@ -115,9 +115,9 @@
                     <td id="pieces{{_id}}">{{pieces}}</td>
                     <td id="sellingPrice{{_id}}"><s>{{oldPrice}}</s></td>
                     <td id="sellingPrice{{_id}}">{{newPrice}}</td>
-                    <td id="_categoryId{{_id}}">{{_productId._categoryId.name}}</td>
                     <td id="startDate{{_id}}">{{dateFormat startDate "Do-MMMM-YYYY"}}</td>
                     <td id="endDate{{_id}}">{{dateFormat endDate "Do-MMMM-YYYY"}}</td>
+                    <td id="_categoryId{{_id}}">{{_productId._categoryId.name}}</td>
                     <td id="_categoryId{{_id}}">{{_createdBy.firstname}} {{_createdBy.middlename}} {{_createdBy.lastname}}</td>
                     <td id="_branchId{{_branchId._id}}">{{_branchId.name}}</td>
                 </tr>
@@ -245,8 +245,6 @@
         $("#fromId").change(function() {
             var branchId = $("#fromId option:selected").val();
 
-            console.log(branchId);
-
             $.ajax({
                 type: 'POST',
                 url: '/promo/get/product',
@@ -257,7 +255,9 @@
                     $('#productId').empty();
                     $('#productId').append('<option>Select Product</option>');
                     for(row in data) {
-                        $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
+                        if(data[row]._productId !== null){
+                            $('#productId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
+                        }
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
@@ -278,7 +278,6 @@
                 dataType: 'json',
                 data: { categoryId: id, branchId: branchId },
                 success: function(data) {
-                    console.log(data);
                     $('#_exProductId').empty();
                     $('#_exProductId').append('<option>Select Product</option>');
                     for(row in data) {
@@ -328,7 +327,7 @@
             }
         });
     });
-
+*/
 
 
     function getPieces(id){

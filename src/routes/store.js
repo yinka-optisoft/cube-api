@@ -153,7 +153,7 @@ router.get('/roles', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const roles = await Role.find({ _storeId: req.session._storeId }).populate('_accountId');
   const category = await Category.find({ _storeId: req.session._storeId });
-  const business = await Business.find({ _storeId: req.session._storeId });
+  const business = await Business.find();
   res.render('role/manage', { user, roles, category, business, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 

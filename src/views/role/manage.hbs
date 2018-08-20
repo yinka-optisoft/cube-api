@@ -59,10 +59,12 @@
     <span>Category</span>
     </a>
 
+{{#if (eq user.roleId 'sadmin')}}
     <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newBussiness">
     <i class="fa fa-plus fa-2x"></i>
     <span>Business</span>
     </a>
+{{/if}}
 
     <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#sa">
     <i class="fa fa-plus fa-2x"></i>
@@ -181,7 +183,7 @@
 
 </div>
 
-
+{{#if (eq user.roleId 'sadmin')}}
 <div class="row">
     <div class="col-md-6 col-sm-6 col-xs-12">
     <div class="x_panel">
@@ -234,6 +236,7 @@
     </div>
 
 </div>
+{{/if}}
 
 
 
