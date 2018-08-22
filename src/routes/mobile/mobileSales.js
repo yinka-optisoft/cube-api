@@ -62,7 +62,7 @@ router.post('/addSales', verifyToken, async (req, res) => {
         console.log(productBought.length);
 
         for (let i = 0; i < productBought.length; i++) {
-          
+
           // console.log(productBought[i]._productDetail._productId._id);
           doc._productId.push(productBought[i]._productDetail._productId._id);
           // console.log( productBought[i]._productDetail._productId._id);
@@ -213,7 +213,10 @@ router.post('/moveToBranch', verifyToken, async (req, res) => {
 });
 
 router.post('/moveProductToBranch', verifyToken, async (req, res) => {
-  console.log(req.user._storeId);
+
+  if (String(req.body.newBranchId) == String(req.body.fromBranch)) {
+    return res.json({ msg: 'Cant move product to the same branch', head: 'Error' });
+  }
   const productId = req.body.productId;
   const piecesAdded = parseFloat(req.body.pieces);
   const newBranch = req.body.newBranchId;
