@@ -34,6 +34,7 @@ import mobileSales from './routes/mobile/mobileSales';
 import adminDashboard from './routes/mobile/adminDashboard';
 import customerRoute from './routes/mobile/customer';
 import mobileRegister from './routes/mobile/mobileregister';
+import mobileProduct from './routes/mobile/mobileProduct';
 import cors from 'cors';
 const app = express();
 
@@ -107,6 +108,7 @@ app.use('/mobilesales', mobileSales);
 app.use('/adminDashboard', adminDashboard);
 app.use('/customer', customerRoute);
 app.use('/mobileregister', mobileRegister);
+app.use('/mobileproduct', mobileProduct);
 // passport account auth
 
 import Account from './models/account';

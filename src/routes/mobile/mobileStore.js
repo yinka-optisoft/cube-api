@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
 
   destination: function(req, file, cb) {
     console.log(file);
-    cb(null, 'src/public/images/product/');
+    cb(null, 'src/public/images/store/');
   },
   filename: function(req, file, cb) {
 
@@ -32,44 +32,10 @@ var storage = multer.diskStorage({
   }
 });
 
-// const storage = multer.diskStorage({
-//   destination: async function(req, file, cb) {
-//     try {
-//        cb(null, './uploads');
-//     } catch (E) {
-//       cb(E);
-//     }
-//   },
-//   filename: function(req, file, cb) {
-//     cb(null, file.originalname);
-//   }
-// });
 
 
 var upload = multer({ storage: storage });
-//
-/*
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        console.log(req.file);
-      cb(null, 'public/uploads/');
-    },
-    filename: function(req, file, cb) {
-        imageName = Date.now() + path.extname(file.originalname);
-      cb(null, imageName); // Appending extension
-    }
-  });
-  */
-//  import Branch from '../models/branch';
-// // import Role from '../models/role';
-// // import Category from '../models/category';
-// // import Bussiness from '../models/bussiness';
-//  import Account from '../models/account';
-// // import formidable from 'formidable';
-// import fs from 'fs';
-// import path from 'path';
-// import guard from 'connect-ensure-login';
-// import { check, validationResult } from 'express-validator/check';
+
 
 const router = express.Router();
 
@@ -96,9 +62,9 @@ const generateUniqueID = async storeShort => {
 
 router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
-  // if (imageName == undefined) {
-  //   imageName = 'defaultStore.jpg';
-  // }
+   if (imageName == undefined) {
+     imageName = 'defaultStore.jpg';
+   }
   var str=req.body.store_email;
   var nameMatch = str.match(/^([^@]*)@/);
   var shortCode = nameMatch ? nameMatch[1] : null;
@@ -174,58 +140,6 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-});
-
-
-router.post('/storeProduct', verifyToken, upload.single('avatar'), async (req, res) => {
-
-  if (imageName == undefined) {
-    imageName = 'defaultProduct.png';
-  }
-
-  console.log(imageName);
-  // const findExist = await Product.findOne({ productName: req.body.productName, _categoryId: req.body.productcategory });
-
-  // if (findExist) {
-
-  //   return res.json(
-  //     { success: 'A product with this name and category already exist in the store, you can move a product to a branch by clicking on move to branch option in products page' });
-  // }
-
-  const addProduct = await new Product();
-  addProduct._branchId = req.user._branchId;
-  addProduct._createdBy = req.user._id;
-  addProduct._categoryId = req.body.productcategory;
-  addProduct._storeId = req.user._storeId;
-  addProduct.productName = req.body.productName;
-  addProduct.sellingPrice = req.body.sellingPrice;
-  addProduct.reorderLevel = req.body.reorderLevel;
-  addProduct.expiryDate = new Date(req.body.expiryDate).toDateString();
-  addProduct.pieces = req.body.pieces;
-  addProduct.note = req.body.note;
-  addProduct.barcodeNumber = req.body.barcodeNumber;
-  addProduct.productImage = imageName;
-  await addProduct.save(function(err) {
-    if (err) {
-      console.log(err);
-      return res.json({ error: 'An error occured, please try again later' });
-    }
-    // console.log('saved oo');
-    // return res.json({ success: 'product has been added' });
-  });
-
-  const addBranchproduct = await new BranchProduct();
-  addBranchproduct._branchId = req.body.productBranch;
-  addBranchproduct.pieces = req.body.pieces;
-  addBranchproduct._productId = addProduct._id;
-  addBranchproduct._storeId = req.user._storeId;
-  await addBranchproduct.save(function(err) {
-    if (err) {
-      console.log(err);
-      return res.json({ error: 'An error occured, please try again later' });
-    }
-    return res.json({ success: 'Product has been added' });
-  });
 });
 
 router.get('/getCategories', verifyToken, async (req, res) => {
