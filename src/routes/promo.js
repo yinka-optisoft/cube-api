@@ -13,14 +13,11 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
-  const promos = await Promo.find({ _storeId: req.user._storeId })
-                            .populate('_branchId').populate('_createdBy')
-                            .populate({
-                              path: '_productId',
-                              populate: { path: '_categoryId' }
-                            });
-  console.log(promos);
-  res.render('promo/manage', { user, branches, promos, msg: req.flash('info'), layout: 'layouts/user' });
+
+  const exPromo = await Product.find({ _storeId: req.user._storeId, promo: true })
+                                .populate('_categoryId').populate('_createdBy')
+                                .populate('_promoCreatedBy').populate('_promoCloseBy');
+  res.render('promo/manage', { user, branches, exPromo, msg: req.flash('info'), layout: 'layouts/user' });
 });
 
 
@@ -41,23 +38,18 @@ router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  console.log(req.body);
-
-  const exPromo = await Promo.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
+  const exPromo = await Product.findOne({ _storeId: req.user._storeId, _id: req.body.productId });
 
   if (exPromo) {
 
-    //const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
-
     exPromo._storeId = req.user._storeId;
-    exPromo._branchId = req.user._branchId;
-    exPromo._productId = req.body.productId;
-    exPromo._createdBy = req.user._id;
-    exPromo.pieces += (parseFloat(req.body.pieces));
+    exPromo._promoCreatedBy = req.user._id;
+    exPromo.promoPieces = req.body.pieces;
     exPromo.oldPrice = req.body.price;
-    exPromo.newPrice = req.body.newPrice;
+    exPromo.sellingPrice = req.body.newPrice;
     exPromo.startDate = req.body.startDate;
     exPromo.endDate = req.body.endDate;
+    exPromo.promo = true;
     exPromo.save((err) => {
       if (err) {
         console.log(err);
@@ -66,50 +58,27 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         res.redirect('/promo');
       }
     });
+  }
+});
 
 
-    /*product.pieces -= parseFloat(req.body.pieces);
-    await product.save((err) => {
+router.post('/disable/promo', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const exPromo = await Product.findOne({ _storeId: req.user._storeId, _id: req.body.id });
+
+  if (exPromo) {
+
+    exPromo._storeId = req.user._storeId;
+    exPromo._promoCloseBy = req.user._id;
+    exPromo.promo = false;
+    exPromo.sellingPrice = exPromo.oldPrice;
+    exPromo.save((err) => {
       if (err) {
         console.log(err);
       } else {
-        req.flash('info', 'Promo Product Set');
-        res.redirect('/promo');
-      }
-    });*/
-
-  } else {
-
-    //const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.body.fromId, _productId: req.body.productId });
-
-    const newPromo = new Promo();
-    newPromo._storeId = req.user._storeId;
-    newPromo._branchId = req.user._branchId;
-    newPromo._productId = req.body.productId;
-    newPromo._createdBy = req.user._id;
-    newPromo.pieces = req.body.pieces;
-    newPromo.oldPrice = req.body.price;
-    newPromo.newPrice = req.body.newPrice;
-    newPromo.startDate = req.body.startDate;
-    newPromo.endDate = req.body.endDate;
-    newPromo.save((err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        req.flash('info', 'Promo Product Set');
-        res.redirect('/promo');
+        res.send('success');
       }
     });
-
-    /*product.pieces -= parseFloat(req.body.pieces);
-    await product.save((err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        req.flash('info', 'Promo Product Set');
-        res.redirect('/promo');
-      }
-    });*/
   }
 });
 

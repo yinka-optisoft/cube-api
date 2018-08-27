@@ -16,7 +16,15 @@ const Product = new Schema({
   productImage: String,
   barcodeNumber: String,
   status: { type: Boolean, default: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  _promoCreatedBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
+  _promoCloseBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
+  promo: { type: Boolean, default: false },
+  oldPrice: Number,
+  startDate: Date,
+  endDate: Date,
+  promoPieces: Number,
+  //promoCount: Number,
 });
 
 export default mongoose.model('products', Product);

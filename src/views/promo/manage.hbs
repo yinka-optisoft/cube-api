@@ -102,27 +102,37 @@
                 <th>End Date</th>
                 <th>Category</th>
                 <th>Created By</th>
-                <th>Branch</th>
+                <th>Status</th>
+                <th>Di-activate</th>
             </tr>
             </thead>
 
-
             <tbody>
-                {{#each promos}}
+                {{#each exPromo}}
                 <tr>
                     <td>{{inc @index}}</td>
-                    <td id="productName{{_productId._id}}">{{_productId.productName}}</td>
-                    <td id="pieces{{_id}}">{{pieces}}</td>
-                    <td id="sellingPrice{{_id}}"><s>{{oldPrice}}</s></td>
-                    <td id="sellingPrice{{_id}}">{{newPrice}}</td>
-                    <td id="startDate{{_id}}">{{dateFormat startDate "Do-MMMM-YYYY"}}</td>
-                    <td id="endDate{{_id}}">{{dateFormat endDate "Do-MMMM-YYYY"}}</td>
-                    <td id="_categoryId{{_id}}">{{_productId._categoryId.name}}</td>
-                    <td id="_categoryId{{_id}}">{{_createdBy.firstname}} {{_createdBy.middlename}} {{_createdBy.lastname}}</td>
-                    <td id="_branchId{{_branchId._id}}">{{_branchId.name}}</td>
+                    <td>{{productName}}</td>
+                    <td>{{pieces}}</td>
+                    <td><s>{{oldPrice}}</s></td>
+                    <td>{{sellingPrice}}</td>
+                    <td>{{dateFormat startDate "Do-MMMM-YYYY"}}</td>
+                    <td>{{dateFormat endDate "Do-MMMM-YYYY"}}</td>
+                    <td>{{_categoryId.name}}</td>
+                    <td>{{_promoCreatedBy.firstname}} {{_promoCreatedBy.middlename}} {{_promoCreatedBy.lastname}}</td>
+                    <td>
+                        {{#if (eq promo true) }}
+                        Promo Still Active
+                        {{else}}
+                        Promo Not Active
+                        {{/if}}
+                    </td>
+                    <td>
+                        <button onclick="disablePromo(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Di-activate</i></button>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
+
         </table>
         </div>
     </div>
@@ -174,7 +184,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Enter Pieces</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" onchange="countPieces(this.value)" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                        <input type="number" onchange="countPieces(this.value)" name="pieces" id="pieces" class="form-control" placeholder="Pieces">
                     </div>
                     </div>
                     <div class="form-group">
@@ -268,68 +278,6 @@
     });
 
 
-    function getCategory(id){
-            var branchId = $("#existingProductForm option:selected").val();
-            console.log(branchId);
-
-            $.ajax({
-                type: 'POST',
-                url: '/promo/get/category',
-                dataType: 'json',
-                data: { categoryId: id, branchId: branchId },
-                success: function(data) {
-                    $('#_exProductId').empty();
-                    $('#_exProductId').append('<option>Select Product</option>');
-                    for(row in data) {
-                        $('#_exProductId').append($('<option></option>').attr('value', data[row]._productId._id).text(data[row]._productId.productName));
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrow) {
-                    $.alert(errorThrow);
-                }
-            });
-    };
-
-
-    $("#existProduct").submit(function(e) {
-        e.preventDefault();
-
-        var productId = $("#_exProductId option:selected").val();
-
-        var pieces = $('#upieces').val();
-        var price = $('#uprice').val();
-        var note = $('#unote').val();
-
-        $.ajax({
-            type: 'POST',
-            url: '/promo/update/existing/product',
-            dataType: 'json',
-            data: { productId: productId, pieces:pieces, price: price, note: note },
-            success: function(data) {
-                //console.log(data);
-
-            var msg =   '<div class="col-sm-12 col-offset-2 ">'+
-                            '<div class="alert alert-success" id="success">'+
-                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                                    '<span aria-hidden="true">×</span>'+
-                                '</button>'+
-                                '<div class="text-center">'+
-                                    '<strong>Product Update Successfully </strong>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>'
-
-            $('#existProduct').modal('hide');
-            $('.alertMsg').html(msg);
-            },
-            error: function(jqXHR, textStatus, errorThrow) {
-                $.alert(errorThrow);
-            }
-        });
-    });
-*/
-
-
     function getPieces(id){
 
         var branchId = $("#fromId option:selected").val();
@@ -360,6 +308,52 @@
         var sub = (getPieces - pieces);
 
         $('#get_pieces').val(sub);
+    }
+
+
+    function disablePromo(id){
+
+    	$.confirm({
+			title: '<div style="color:red">Confirm!</div>',
+			content: 'Are you sure you want to Disable Promo?',
+			buttons: {
+				confirm: function () {
+					disable_promo(id);
+				},
+				cancel: function () {
+					$.alert('Canceled!');
+				},
+			}
+		});
+    }
+
+
+    var disable_promo = function(id){
+
+        $.ajax({
+        type: "POST", // Post / Get method
+        url: "/promo/disable/promo", //Where form data is sent on submission
+        dataType:"text", // Data type, HTML, json etc.
+        data:{ id:id}, //Form variables
+        success:function(response){
+
+            if (response === "success") {
+            $.confirm({
+                title: '<div style="color:green">Success</div>',
+                content: 'Promo Di-Activated',
+                buttons: {
+                    ok: function () {
+                        location.reload(true)
+                    },
+                }
+            });
+            }
+
+        },
+        error:function (xhr, ajaxOptions, thrownError){
+                $.alert('Could not Banned');
+        }
+        });
     }
 
 </script>
