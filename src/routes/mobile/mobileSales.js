@@ -153,7 +153,7 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   const newAdmin = req.body;
   const password = newAdmin.password;
   delete newAdmin.password;
-  newAdmin.roleId = 'admin';
+  // newAdmin.roleId = 'admin';
   newAdmin._storeId = req.user._storeId;
   newAdmin._branchId = branchId;
   newAdmin.username = req.body.username;
@@ -302,6 +302,29 @@ router.post('/findcode', verifyToken, async (req, res) => {
   }
 
   return res.json({ title: 'Not found', success: 'Product not found in branch' });
+});
+
+
+router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
+  const findUser = await Account.findOne({ _id: req.user._id });
+
+  if (findUser.passport !== 'defaultUser.png' && imageName !== undefined) {
+
+
+  }
+
+  findUser.firstname = req.body.firstname;
+  findUser.lastname = req.body.lastname;
+  findUser.address = req.body.address;
+  findUser.phone = req.body.phone;
+
+  await findUser.save(function(err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  return res.json({ success: 'User has been updated' });
 });
 
 

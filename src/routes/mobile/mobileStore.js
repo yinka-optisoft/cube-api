@@ -33,7 +33,6 @@ var storage = multer.diskStorage({
 });
 
 
-
 var upload = multer({ storage: storage });
 
 
@@ -52,6 +51,19 @@ router.get('/details', verifyToken, async (req, res) => {
   }
 });
 
+router.get('/details/staff', verifyToken, async (req, res) => {
+
+  const findStoreDetails = await Branch.findOne({ _id: req.user._branchId });
+  const branchCount = await Branch.find({ _storeId: req.user._storeId }).count();
+  const UsersCount = await Account.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).count();
+  if (findStoreDetails) {
+    console.log(findStoreDetails);
+    return res.json({ success: true, userCount: UsersCount, storeDetails:  findStoreDetails, branchCount: branchCount });
+  } else {
+    return res.json({ error:  'Error occured fetching store details' });
+  }
+});
+
 const generateUniqueID = async storeShort => {
   const ADMIN_ID = storeShort + Math.round(Math.random() * 100000);
   const exists = await Account.count({ username: ADMIN_ID });
@@ -62,10 +74,10 @@ const generateUniqueID = async storeShort => {
 
 router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
-   if (imageName == undefined) {
-     imageName = 'defaultStore.jpg';
-   }
-  var str=req.body.store_email;
+  if (imageName == undefined) {
+    imageName = 'defaultStore.jpg';
+  }
+  var str = req.body.store_email;
   var nameMatch = str.match(/^([^@]*)@/);
   var shortCode = nameMatch ? nameMatch[1] : null;
 
@@ -150,7 +162,7 @@ router.get('/getCategories', verifyToken, async (req, res) => {
 });
 
 router.get('/fetchProduct', verifyToken, async (req, res) => {
-  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate('_productId').sort({"createdAt":-1});
+  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate('_productId').sort({ 'createdAt': -1 });
 
   console.log(products);
 
@@ -158,6 +170,13 @@ router.get('/fetchProduct', verifyToken, async (req, res) => {
   return res.json({ products: products, branches: branches });
 });
 
+
+router.get('/fetchProductStaff', verifyToken, async (req, res) => {
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId').sort({ 'createdAt': -1 });
+
+  const branches = await Branch.find({ _storeId: req.user._storeId });
+  return res.json({ products: products, branches: branches });
+});
 router.post('/storeBranch', verifyToken, async (req, res) => {
 
   const addBranch = await new Branch();
@@ -263,10 +282,10 @@ router.post('/showus', verifyToken, function(req, res, next) {
 
 router.get('/fetchbusiness', async (req, res) => {
   const business = await Business.find();
-  console.log(business)
+  console.log(business);
   // const newBusiness = await new Business();
   // newBusiness.name = 'Manufacture';
-  // await newBusiness.save(); 
+  // await newBusiness.save();
   // console.log(business);
   return res.json({ business: business });
 });
