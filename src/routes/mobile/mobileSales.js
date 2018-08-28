@@ -23,6 +23,7 @@ var storage = multer.diskStorage({
   },
   filename: function(req, file, cb) {
     imageName = Date.now() + path.extname(file.originalname);
+    console.log(imageName);
     cb(null, imageName); // Appending extension
   }
 });
@@ -288,7 +289,7 @@ router.post('/findcode', verifyToken, async (req, res) => {
   if (!findProduct) {
     return res.json({ title: 'Not found', success: 'Product not found in store' });
   }
-  const findBarcode = await BranchProduct.findOne({ _productId: findProduct._id }).populate({
+  const findBarcode = await BranchProduct.findOne({ _productId: findProduct._id, _branchId: req.user._branchId }).populate({
     path: '_productId',
     populate: {
       path: '_categoryId',
@@ -308,23 +309,25 @@ router.post('/findcode', verifyToken, async (req, res) => {
 router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
   const findUser = await Account.findOne({ _id: req.user._id });
 
-  if (findUser.passport !== 'defaultUser.png' && imageName !== undefined) {
+  if (imageName !== undefined) {
 
-
+    imageName = 'defaultUser.png';
   }
 
   findUser.firstname = req.body.firstname;
   findUser.lastname = req.body.lastname;
   findUser.address = req.body.address;
   findUser.phone = req.body.phone;
+  findUser.passport = imageName;
+  console.log(imageName);
 
   await findUser.save(function(err) {
     if (err) {
       console.log(err);
     }
   });
-
-  return res.json({ success: 'User has been updated' });
+  console.log(findUser);
+  return res.json({ success: 'User has been updated', user: findUser });
 });
 
 

@@ -117,6 +117,7 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 // mongoose
+//mongoose.connect('mongodb://localhost/cube');
 mongoose.connect('mongodb://localhost/cube');
 
 // catch 404 and forward to error handler

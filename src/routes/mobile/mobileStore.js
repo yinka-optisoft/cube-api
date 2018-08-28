@@ -227,12 +227,10 @@ router.get('/fetchCategory', verifyToken, async (req, res) => {
 
 
 router.get('/fetchSalesBranch', verifyToken, async (req, res) => {
-  console.log(req.user._branchId);
   const getBranch = await Branch.find({ _storeId: req.user._storeId });
   const getProducts = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_productId');
   const getCustomers = await Customers.find({ _branchId: req.user._branchId, _storeId: req.user._storeId });
 
-  console.log(getCustomers);
   return res.json({ branch: getBranch, products: getProducts, allCustomers: getCustomers });
 });
 

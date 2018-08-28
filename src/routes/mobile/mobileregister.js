@@ -90,11 +90,11 @@ const generateUniqueID = async storeShort => {
 
 router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
-  if (imageName == undefined) {
-    imageName = 'defaultStore.jpg';
-  }
-
   console.log(imageName);
+  // if (imageName == undefined) {
+  //   imageName = 'defaultStore.jpg';
+  // }
+
   try {
     const newStore = new Store();
     newStore.name = req.body.store_name;
@@ -141,6 +141,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newAdmin.address = req.body.address;
     newAdmin.phone = req.body.phone;
     newAdmin.email = req.body.email;
+    newAdmin.passport = 'defaultUser.png';
 
     Account.register(new Account(newAdmin), password,
                      async (err, account) => {
