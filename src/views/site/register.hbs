@@ -48,9 +48,9 @@
                             <p>Fill all form field to go next step</p>
                             
                             <!-- Form progress -->
-                            <div class="form-wizard-steps form-wizard-tolal-steps-4">
+                            <div class="form-wizard-steps form-wizard-tolal-steps-3">
                                 <div class="form-wizard-progress">
-                                    <div class="form-wizard-progress-line" data-now-value="12.25" data-number-of-steps="4" style="width: 12.25%;"></div>
+                                    <div class="form-wizard-progress-line" data-now-value="50" data-number-of-steps="2" style="width: 50%;"></div>
                                 </div>
                                 <!-- Step 1 -->
                                 <div class="form-wizard-step active">
@@ -60,17 +60,17 @@
                                 <!-- Step 1 -->
                                 
                                 <!-- Step 2 -->
-                                <div class="form-wizard-step">
+                                {{!-- <div class="form-wizard-step">
                                     <div class="form-wizard-step-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
                                     <p>Branch Account</p>
-                                </div>
+                                </div> --}}
                                 <!-- Step 2 -->
 
                                 <!-- Step 3 -->
-                                <div class="form-wizard-step">
+                                {{!-- <div class="form-wizard-step">
                                     <div class="form-wizard-step-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
                                     <p>Administrator Account</p>
-                                </div>
+                                </div> --}}
                                 <!-- Step 3 -->
                                 
                                 <!-- Step 4 -->
@@ -88,35 +88,11 @@
                             <fieldset>
                                 <!-- Progress Bar -->
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
                                     </div>
                                 </div>
                                 <!-- Progress Bar -->
-                                <h4>Account Information: <span>Step 1 - 4</span></h4>
-                                <div class="form-group">
-                                    <label>Company Name / Bussines Name: <span>*</span></label>
-                                    <input type="text" name="name" id="businessName" placeholder="Company Name / Bussines Name" class="form-control required">
-                                </div>
-                                <div class="form-group">
-                                    <label>Email: <span>*</span></label>
-                                    <input type="email" name="email" id="businessEmail" placeholder="Email" class="form-control required">
-                                </div>
-                                <div class="form-group">
-                                    <label>Phone Number: <span>*</span></label>
-                                    <input type="number" name="phone" id="businessPhone" placeholder="Phone Number" class="form-control required">
-                                </div>
-                                <div class="form-group">
-                                    <label>Short Code: <span>*</span></label>
-                                    <input type="text" name="shortCode" id="shortCode" placeholder="Short Code" class="form-control required">
-                                </div>
-                                <div class="form-group">
-                                    <label>Store Address: <span>*</span></label>
-                                    <textarea rows="2" name="address" id="businessAddress" class="form-control required"></textarea>    
-                                </div>
-                                <div class="form-group">
-                                    <label>Website: <span>*</span></label>
-                                    <input type="text" name="website" id="website" placeholder="Company Website" class="form-control required">
-                                </div>
+                                <h4>Account Information: <span>Step 1 - 2</span></h4>
                                 <div class="form-group">
                                     <label>Business Type: <span>*</span></label>
                                     <select name="businessType" class="form-control required" id="businessType">
@@ -124,6 +100,22 @@
                                         <option value="{{_id}}">{{name}}</option>
                                         {{/each}}
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Name / Bussines Name: <span>*</span></label>
+                                    <input type="text" name="name" id="businessName" placeholder="Company Name / Bussines Name" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number: <span>*</span></label>
+                                    <input type="number" name="phone" id="businessPhone" placeholder="Phone Number" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email: <span>*</span></label>
+                                    <input type="email" name="email" id="businessEmail" placeholder="Email" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Store Address: <span>*</span></label>
+                                    <textarea rows="2" name="address" id="businessAddress" class="form-control required"></textarea>    
                                 </div>
                                 <div class="form-group">
                                     <label>Select Country: <span>*</span></label>
@@ -142,20 +134,32 @@
                                     <label>City: <span>*</span></label>
                                     <input type="text" name="city" id="businessCity" placeholder="City" class="form-control required">
                                 </div>
+                                <div class="form-group">
+                                    <label>Website: <span>*</span></label>
+                                    <input type="text" name="website" id="website" placeholder="Company Website" class="form-control required">
+                                </div>
                                 <h4>Company Logo:</h4>
                                 <div style="clear:both;"></div>
-                                    <div class="form-group image-upload">
-                                        <div class="setting image_picker">
-                                            <br/><h3 class="text-center">Upload Logo</h3>
-                                            <div class="settings_wrap">
-                                            <label class="drop_target">
-                                                <div class="image_preview"></div>
-                                                <input id="inputFile" class="businessLogo" type="file" name="logo"/>
-                                            </label>
-                                            <div class="settings_actions vertical"><a class="disabled" data-action="remove_current_image"><i class="fa fa-trash" aria-hidden="true"></i> Remove Image</a></div>
-                                            </div>
-                                        </div>							  
-                                    </div>
+                                <div class="form-group image-upload">
+                                    <div class="setting image_picker">
+                                        <br/><h3 class="text-center">Upload Logo</h3>
+                                        <div class="settings_wrap">
+                                        <label class="drop_target">
+                                            <div class="image_preview"></div>
+                                            <input id="inputFile" class="businessLogo" type="file" name="logo"/>
+                                        </label>
+                                        <div class="settings_actions vertical"><a class="disabled" data-action="remove_current_image"><i class="fa fa-trash" aria-hidden="true"></i> Remove Image</a></div>
+                                        </div>
+                                    </div>							  
+                                </div>
+                                <div class="form-group">
+                                    <label>Password: <span>*</span></label>
+                                    <input type="password" name="password" id="password" placeholder="Password" class="form-control required">
+                                </div>
+                                <div class="form-group">
+                                    <label>Comfirm Password: <span>*</span></label>
+                                    <input type="password" name="password" id="cpassword" placeholder="Comfirm Password" class="form-control required">
+                                </div>
                                 <div class="form-wizard-buttons">
                                     <button type="button" class="btn btn-next">Next</button>
                                 </div>
@@ -163,7 +167,7 @@
                             <!-- Form Step 1 -->
 
                             <!-- Form Step 2 -->
-                            <fieldset>
+                            {{!-- <fieldset>
                                 <!-- Progress Bar -->
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
@@ -208,11 +212,11 @@
                                     <button type="button" class="btn btn-previous">Previous</button>
                                     <button type="button" class="btn btn-next">Next</button>
                                 </div>
-                            </fieldset>
+                            </fieldset> --}}
                             <!-- Form Step 2 -->
 
                             <!-- Form Step 3 -->
-                            <fieldset>
+                            {{!-- <fieldset>
                                 <!-- Progress Bar -->
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
@@ -256,7 +260,7 @@
                                     <button type="button" class="btn btn-previous">Previous</button>
                                     <button type="button" class="btn btn-next">Next</button>
                                 </div>
-                            </fieldset>
+                            </fieldset> --}}
                             <!-- Form Step 3 -->
                             
                             <!-- Form Step 3 -->
@@ -267,7 +271,7 @@
                                     </div>
                                 </div>
                                 <!-- Progress Bar -->
-                                <h4>Success Account: <span>Step 4 - 4</span></h4>
+                                <h4>Success Account: <span>Step 2 - 2</span></h4>
                                 <div style="clear:both;"></div>
                                     <div class="success">
                                             <h3>Sing Up Success</h3>

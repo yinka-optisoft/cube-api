@@ -40,26 +40,26 @@ router.post('/create-store', async (req, res, next) => {
     req.checkBody('email', 'company email is required').isEmail();
     req.checkBody('phone', 'Phone Number is required').notEmpty();
     req.checkBody('address', 'Address is required').notEmpty();
-    req.checkBody('shortCode', 'shortCode is required').notEmpty();
+    // req.checkBody('shortCode', 'shortCode is required').notEmpty();
     req.checkBody('businessType', 'Business Type is required').notEmpty();
     req.checkBody('country', 'Country is required').notEmpty();
     req.checkBody('state', 'State is required').notEmpty();
     req.checkBody('city', 'City is required').notEmpty();
 
-    req.checkBody('branch_email', 'Branch E-mail is required').isEmpty();
+    /* req.checkBody('branch_email', 'Branch E-mail is required').isEmpty();
     req.checkBody('branch_address', 'Branch Address is required').notEmpty();
     req.checkBody('branch_phone', 'Branch Phone is required').notEmpty();
     req.checkBody('branch_country', 'Country is required').notEmpty();
     req.checkBody('branch_state', 'State is required').notEmpty();
-    req.checkBody('branch_city', 'City is required').notEmpty();
+    req.checkBody('branch_city', 'City is required').notEmpty();*/
 
 
-    req.checkBody('role', 'Select Your Role').notEmpty();
+    /* req.checkBody('role', 'Select Your Role').notEmpty();
     req.checkBody('firstname', 'firstname is required').notEmpty();
     req.checkBody('lastname', 'Lastname is required').notEmpty();
     req.checkBody('admin_address', 'Admin Home Address is required').notEmpty();
     req.checkBody('admin_phone', 'Admin Phone Number is required').notEmpty();
-    req.checkBody('admin_email', 'Admin Email is required').isEmail();
+    req.checkBody('admin_email', 'Admin Email is required').isEmail();*/
 
     console.log(errors);
 
@@ -68,13 +68,18 @@ router.post('/create-store', async (req, res, next) => {
       res.redirect('/store/register');
     } else {
       try {
+
+        const convertToUpper = fields.name;
+        const storeName = convertToUpper.toUpperCase();
+        storeName.substring(0, 2);
+
         const newStore = new Store();
         const logo = files.logo;
         newStore.name = fields.name;
         newStore.email = fields.email;
         newStore.phone = fields.phone;
         newStore.address = fields.address;
-        newStore.shortCode = fields.shortCode;
+        newStore.shortCode = storeName;
         newStore.website = fields.website;
         newStore._businessId = fields.businessType;
         newStore.country = fields.country;
@@ -97,35 +102,36 @@ router.post('/create-store', async (req, res, next) => {
                                    console.log(err);
                                  }
                                });
+
                                const newBranch = new Branch();
                                newBranch._storeId = newStore._id;
-                               newBranch.name = `${fields.branch_name}(H.B)`;
-                               newBranch.address = fields.branch_address;
-                               newBranch.email = fields.branch_email;
-                               newBranch.phone = fields.branch_phone;
-                               newBranch.country = fields.branch_country;
-                               newBranch.state = fields.branch_state;
-                               newBranch.city = fields.branch_city;
+                               newBranch.name = `${newStore.name}(H.B)`;
+                               newBranch.address = newStore.address;
+                               newBranch.email = newStore.email;
+                               newBranch.phone = newStore.phone;
+                               newBranch.country = newStore.country;
+                               newBranch.state = newStore.state;
+                               newBranch.city = newStore.city;
                                await newBranch.save(function(err) {
                                  if (err) {
                                    console.log(err);
                                  }
-  
                                });
-  
+
                                const newAdmin = fields;
                                const password = newAdmin.password;
                                delete newAdmin.password;
                                newAdmin.roleId = 'admin';
                                newAdmin._storeId = newStore._id;
-                               newAdmin._branchId = newBranch._id;
-                               newAdmin.username = await generateUniqueID(newStore.shortCode);
-                               newAdmin.firstname = fields.firstname;
+                               // newAdmin._branchId = newBranch._id;
+                               newAdmin.username = await generateUniqueID(storeName);
+                               newAdmin.name = newStore.name;
+                               /*newAdmin.firstname = fields.firstname;
                                newAdmin.middlename = fields.middlename;
                                newAdmin.lastname = fields.lastname;
                                newAdmin.address = fields.admin_address;
                                newAdmin.phone = fields.admin_phone;
-                               newAdmin.email = fields.admin_email;
+                               newAdmin.email = fields.admin_email;*/
                                Account.register(new Account(newAdmin), password,
                                                 (err, account) => {
                                                   if (err) {
@@ -173,6 +179,16 @@ router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
       res.redirect('/store/roles');
     }
   });
+});
+
+
+router.post('/delete/role', guard.ensureLoggedIn(), async (req, res) => {
+
+  console.log(req.body);
+
+  const id = req.body.id;
+  await Role.findByIdAndRemove(id);
+  res.send('success');
 });
 
 
@@ -228,7 +244,7 @@ router.post('/category/update', guard.ensureLoggedIn(), async (req, res, next) =
   console.log(category);
 
   category.name = req.body.name;
-  category.discription = req.body.discription;
+  category.description = req.body.description;
   await category.save(function(err) {
     if (err) {
       console.log(err);
@@ -247,9 +263,5 @@ router.post('/category/delete', guard.ensureLoggedIn(), async (req, res, next) =
   res.send('success');
 });
 
-
-router.post('/showus', async (req, res, next) => {
-console.log(req.body);
-});
 
 export default router;

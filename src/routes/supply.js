@@ -115,6 +115,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
         supplier.lastname = req.body.lastname;
         supplier.phone = req.body.phone;
         supplier.email = req.body.email;
+        supplier.address = req.body.address;
         supplier.save((err) => {
             if (err) {
               console.log(err);
@@ -130,7 +131,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
     const id = req.body.id;
-    await Account.findByIdAndRemove(id);
+    await Supply.findByIdAndRemove(id);
     res.send('success');
   });
   

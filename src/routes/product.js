@@ -150,11 +150,11 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 
   const productId = req.body.productId;
   const pieces = req.body.pieces;
-  const sellingPrice = req.body.sellingPrice;
+  // const sellingPrice = req.body.sellingPrice;
 
   req.checkBody('productId', 'Product is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
-  req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
+  // req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
 
   console.log(errors);
 
@@ -168,16 +168,14 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 
     product._createdBy = req.user._id;
     product.pieces += parseFloat(req.body.pieces);
-    product.sellingPrice = req.body.sellingPrice;
-    product.note = req.body.note;
+    // product.sellingPrice = req.body.sellingPrice;
+    // product.note = req.body.note;
     product.save((err, product) => {
       if (err) {
         console.log(err);
       }
       return res.json(product);
     });
-
-    console.log(product);
   }
 });
 
