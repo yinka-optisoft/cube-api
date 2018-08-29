@@ -389,4 +389,70 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
 
 });
 
+
+router.post('/editBranch', verifyToken, upload.single('avatar'), async (req, res) => {
+  const findBranch = await Branch.findOne({ _id: req.body._id });
+
+  findBranch.name = req.body.name;
+  findBranch.email = req.body.email;
+  findBranch.address = req.body.address;
+  findBranch.city = req.body.city;
+  findBranch.state = req.body.state;
+  findBranch.phone = req.body.phone;
+  findBranch.country = req.body.country;
+  await findBranch.save(function(err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+  console.log(findBranch);
+  return res.json({ success: 'Branch has been updated', title: 'success' });
+});
+
+router.get('/fetchBranchDetails', verifyToken, upload.single('avatar'), async (req, res) => {
+  const branchId = req.headers._branchid;
+  console.log(req.headers);
+  const findBranch = await Branch.findOne({ _id: branchId });
+  const todaysDate = new Date().toISOString().split('T')[0];
+  const todaySales = await Sales.find({
+    $and: [
+      { $and: [{ _storeId: req.user._storeId }, { _branchId: branchId }] },
+      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+    ]
+  }).count();
+  const sumVal = await Sales.aggregate([
+    { $match: { createdAt: { $gt: new Date(todaysDate) }, _branchId: branchId } },
+    {
+      $project: {
+        totalPrice: { $sum: '$totalPrice' },
+        pieces: { $sum: '$piecesSold' },
+        numberOfProduct: { $size: '$_productId' },
+        balance: { $sum: '$balanceTransaction' }
+        // examTotal: { $sum: [ "$final", "$midterm" ] }
+      }
+    }
+  ]);
+
+  let totalPrice = 0;
+  for (let i = 0; i < sumVal.length; i++) {
+    totalPrice += sumVal[i].totalPrice;
+  }
+
+  const findUsers = await Account.find({ _branchId: branchId }).count();
+  const branchInfo = { users: findUsers, totalPrice: totalPrice, sales: todaySales };
+  return res.json({ branchInfo });
+});
+
+router.post('/changeStatus', verifyToken, async (req, res) => {
+   const findBranch = await Branch.findOne({ _id: req.body.id });
+   findBranch.status = !findBranch.status;
+   await findBranch.save(function(err){
+     if(err){
+      return  res.json({ error: 'An error occured'});
+     }
+
+     return  res.json({ success: 'Status has been changed' });
+   })
+  
+});
 export default router;
