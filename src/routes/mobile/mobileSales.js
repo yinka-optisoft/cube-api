@@ -71,7 +71,7 @@ router.post('/addSales', verifyToken, async (req, res) => {
           // console.log(productBought[i].piecesDetails.piecesSold);
           doc.unitPrice.push(productBought[i].piecesDetails.unitPrice);
           // console.log(productBought[i].piecesDetails.unitPrice)
-          doc.totalPrice.push(productBought[i].piecesDetails.priceSold);
+          doc.totalPrice.push(productBought[i].piecesDetails.totalPrice);
           // console.log(productBought[i].piecesDetails.priceSold);
           const deductProduct = await BranchProduct.findOne({ _productId: productBought[i]._productDetail._productId._id, _branchId: req.user._branchId });
           deductProduct.pieces -= productBought[i].piecesDetails.piecesSold;
@@ -404,7 +404,7 @@ router.post('/editBranch', verifyToken, upload.single('avatar'), async (req, res
     if (err) {
       console.log(err);
     }
-  });
+  }); 
   console.log(findBranch);
   return res.json({ success: 'Branch has been updated', title: 'success' });
 });
