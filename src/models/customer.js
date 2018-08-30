@@ -9,6 +9,7 @@ const Customer = new Schema({
   email: String,
   phone: Number,
   address: String,
+  show: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 

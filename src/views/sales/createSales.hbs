@@ -179,7 +179,7 @@
                         <form class="form-horizontal form-label-left" id="saleProduct">
                             <div class="row form-group">
                                 <div class="form-group">
-                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
                                 <div class="col-md-6 col-sm-6">
                                     <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
                                         <option>Select Product</option>
@@ -187,6 +187,11 @@
                                             <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
                                         {{/each}}
                                     </select>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="piecesMsg col-md-6 col-sm-offset-3">
+
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -467,14 +472,10 @@
 
 
 <!-- Small modal -->
-<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="salesSuccess">
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="salesSuccess" data-backdrop="static" data-keyboard="false">
 <div class="modal-dialog modal-sm" style="width: 400px;">
     <div class="modal-content">
 
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-        </div>
         <div class="modal-body">
             
             <div class="x_panel">
@@ -489,11 +490,17 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                            <a href="/sales/get/pdf/" id="salesId">
-                            <button type="submit" class="btn btn-success">Click To view Invoice</button>
+                            <a href="/sales/get/pdf/" id="salesId" target="_blank">
+                                <button type="submit" class="btn btn-success">Click To view Invoice</button>
                             </a>
+                            <br>
+                            <br>
+
+                            <button type="button" onclick="closeSales()" class="btn btn-danger" data-dismiss="modal">Click To Close</button>
+
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -556,11 +563,36 @@
                 dataType: 'json',
                 data: { _productId: productId },
                 success: function(data) {
-                    $('#piecesAvai').empty();
-                    $('#piecesAvai').val(data.pieces);
+                    if(data.pieces < 0){
 
-                    $('#getPrice').empty();
-                    $('#getPrice').val(data._productId.sellingPrice);
+                        var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'Product Unavailable'
+                            '</div>';
+
+                        $('.piecesMsg').append(msg);
+                        $('.piecesMsg').show().fadeOut( 10000 );
+
+                        $('#piecesSold').attr('disabled', 'disabled');
+                        $('#productPrice').attr('disabled', 'disabled');
+
+                        $('#piecesAvai').empty();
+                        $('#piecesAvai').val(0);
+
+                        $('#getPrice').empty();
+                        $('#getPrice').val(0);
+                    } else {
+
+                        $('#piecesSold').removeAttr("disabled");
+                        $('#productPrice').removeAttr("disabled");
+
+                        $('#piecesAvai').empty();
+                        $('#piecesAvai').val(data.pieces);
+
+                        $('#getPrice').empty();
+                        $('#getPrice').val(data._productId.sellingPrice);
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {
                     $.alert(errorThrow);
@@ -632,7 +664,7 @@
         }
 
         // for edit
-        function epricePay(price){
+        function epricePay(price) {
             var initPrice = price;
             var presentPrice = $('#egetPrice').val();
 
@@ -668,6 +700,11 @@
 
         function getDiscount(e){
 
+            if(e < 0){
+                $('#discount').val(0);
+                return false
+            }
+
             var sum = $('#sumAmt').val();
             var totalDiscount = (sum - e);
             $('#amtDueToCus').val(totalDiscount);
@@ -680,7 +717,6 @@
             $('#balanceTransaction').val(totalDiscount);
         }
 
-    //$(document).ready(function(){
 
         var salesArray = [];
         var salesObj = { };
@@ -778,7 +814,7 @@
                         '<td>'+salesArray[i].productPrice+'</td>'+
                         '<td>'+cal+'</td>'+
                         '<td>'+
-                            '<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+
+                            /*'<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+*/
                             '<button type="button" value="'+ salesArray[i]._productId +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
                             +'</td>'+
                     '</tr>'
@@ -786,77 +822,95 @@
                 $('#saleTable').append(tr);
                 $("#saleProduct")[0].reset();
 
+
+                // get sum of all the project on the table
                 sumTotalCal = 0;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
+
+                // assign sumTotalCal to Sum Amount By Sales and 
+                // amount due to customer and balance transaction
+
                 $('#sumAmt').val(sumTotalCal);
+                $('#amtDueToCus').val(sumTotalCal);
+                $('#balanceTransaction').val(sumTotalCal);
             }
         }
 
 
-        $('#allSales').submit(function(e){
-           e.preventDefault();
+            $('#allSales').submit(function(e){
+            e.preventDefault();
 
-           var dis = $('#discount').val();
-           var vat = $('#vat').val();
-           var amtDueToCus = $('#amtDueToCus').val();
-           var payByCus = $('#payByCus').val();
-           var balanceTransaction = $('#balanceTransaction').val();
+            var dis = $('#discount').val();
+            var vat = $('#vat').val();
+            var amtDueToCus = $('#amtDueToCus').val();
+            var payByCus = $('#payByCus').val();
+            var balanceTransaction = $('#balanceTransaction').val();
 
-           var invoiceDate = $('#invoiceDate').val();
-           var invoiceNumber = $('#invoiceNumber').val();
-           var waybillNumber = $('#waybillNumber').val();
+            var invoiceDate = $('#invoiceDate').val();
+            var invoiceNumber = $('#invoiceNumber').val();
+            var waybillNumber = $('#waybillNumber').val();
 
-           var customerId = $('#_customerId').val();
+            var customerId = $('#_customerId').val();
 
-           var totalPrice = sumTotalCal;
+            var totalPrice = sumTotalCal;
 
-           console.log(totalPrice, 'total price');
-           console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
-           console.log(customerId, 'step2');
-           console.log(salesArray, 'step3');
-           console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, 'step4');
+            if(invoiceDate === ''){
+                alert('Invoice Date is empty');
+                return false;
+            }
 
-           $.ajax({
-               type: 'POST',
-               url: '/sales/create/sale',
-               dataType: 'json',
-               data: {
-                   salesArray: salesArray,
-                   discount: dis,
-                   vat: vat,
-                   amtDueToCus: amtDueToCus,
-                   payByCus: payByCus,
-                   balanceTransaction: balanceTransaction,
-                   invoiceDate: invoiceDate,
-                   invoiceNumber: invoiceNumber,
-                   waybillNumber: waybillNumber,
-                   customerId: customerId,
-                   totalPrice: totalPrice
-               }
-            }).done(function(data){
-                console.log(data);
-                $('#salesSuccess').modal('show');
+            console.log(totalPrice, 'total price');
+            console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
+            console.log(customerId, 'step2');
+            console.log(salesArray, 'step3');
+            console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, 'step4');
 
-                $('#salesId').val(data._id);
+            $.ajax({
+                type: 'POST',
+                url: '/sales/create/sale',
+                dataType: 'json',
+                data: {
+                    salesArray: salesArray,
+                    discount: dis,
+                    vat: vat,
+                    amtDueToCus: amtDueToCus,
+                    payByCus: payByCus,
+                    balanceTransaction: balanceTransaction,
+                    invoiceDate: invoiceDate,
+                    invoiceNumber: invoiceNumber,
+                    waybillNumber: waybillNumber,
+                    customerId: customerId,
+                    totalPrice: totalPrice
+                }
+                }).done(function(data){
+                    console.log(data);
+                    $('#salesSuccess').modal('show');
 
-                //var temp=$('a').attr('href').split('=')[0];
-                //$('a').attr('href',temp+'='+data._id);
-                $('a#salesId').attr('href','/sales/get/pdf/'+data._id);
+                    console.log(data._id, 'for data');
 
-                //location.reload();
+                    //var temp=$('a').attr('href').split('=')[0];
+                    //$('a').attr('href',temp+'='+data._id);
+                    $('a#salesId').attr('href','/sales/get/pdf/'+data._id);
+                });
             });
-        })
-    //});
+
+            function closeSales(){
+                location.reload();
+            }
 
         // remove product from array
         function deleteProduct(id){
 
+            var sum = $('#sumAmt').val();
+
             for (var i = 0; i < salesArray.length; i++){
                 if(id === salesArray[i]._productId){
-                    salesArray.pop();
+                    var deductSum = parseFloat(sum - salesArray[i].productPrice);
+                    salesArray.splice(i, 1);
                 }
             }
 
+            $('#sumAmt').val(deductSum);
             tableAppend();
         }
 

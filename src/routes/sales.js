@@ -16,6 +16,7 @@ import BranchProduct from '../models/branchProduct';
 import Sales from '../models/sales';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';
+import { Types } from 'mongoose';
 
 
 Handlebars.registerHelper('math', function(lvalue, operator, rvalue, options) {
@@ -39,7 +40,7 @@ const router = express.Router();
 
 router.get('/create/sales', guard.ensureLoggedIn(), async (req, res, next) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-  const customers = await Customer.find({ _storeId: req.user._storeId, _branchId: req.user._branchId });
+  const customers = await Customer.find({ _storeId: req.user._storeId, _branchId: req.user._branchId, show: true });
   const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_productId');
   res.render('sales/createSales', { user, expressFlash: req.flash('info'), customers, products, layout: 'layouts/user' });
 });
@@ -83,6 +84,7 @@ router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) =
     customer._storeId = req.user._storeId;
     customer._branchId = req.user._branchId;
     customer._createdBy = req.user._id;
+    customer.show = true;
     customer.save((err) => {
       if (err) {
         console.log(err);
@@ -104,7 +106,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   const invoiceDate = req.body.invoiceDate;
   const invoiceNumber = req.body.invoiceNumber;
   const waybillNumber = req.body.waybillNumber;
-  const customerId = req.body.customerId;
+  // const customerId = req.body.customerId;
 
   var errors = req.validationErrors();
 
@@ -115,7 +117,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('invoiceDate', 'Invoice Date is required').notEmpty();
   req.checkBody('invoiceNumber', 'Invoice Number is required').notEmpty();
   req.checkBody('waybillNumber', 'Way Bill Number is required').notEmpty();
-  req.checkBody('customerId', 'Select Customer name').notEmpty();
+  // req.checkBody('customerId', 'Select Customer name').notEmpty();
 
 
   console.log(errors);
@@ -130,7 +132,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
     sale.totalPrice = req.body.totalPrice;
-    sale._customerId = req.body.customerId;
+    sale._customerId = (req.body.customerId === '') ? req.body.customerId : Types.ObjectId('5b87a5f019e03f50077a671b');
     sale.invoiceDate = req.body.invoiceDate;
     sale.invoiceNumber = req.body.invoiceNumber;
     sale.waybillNumber = req.body.waybillNumber;
@@ -146,7 +148,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 
       // deduct the pieces from branch product
       const deductProduct = await BranchProduct.findOne({ _productId: req.body.salesArray[i]._productId, _branchId: req.user._branchId });
-      console.log(deductProduct, 'before deduct');
+      // console.log(deductProduct, 'before deduct');
       deductProduct.pieces -= req.body.salesArray[i].piecesSold;
       deductProduct.save((err) => {
         if (err) {
@@ -154,7 +156,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
         }
       });
 
-      console.log(deductProduct, 'after deduct');
+      // console.log(deductProduct, 'after deduct');
     }
 
     await sale.save((err) => {
@@ -173,6 +175,8 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
   const store = await Store.findById(req.user._storeId);
   const sale = await Sales.findById(req.params.saleId)
                             .populate('_customerId').populate('_productId');
+                            
+  // iterate tru product and send it to salesObject
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
     salesObj.push(sale._productId[i].productName);
