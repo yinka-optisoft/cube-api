@@ -24,7 +24,6 @@ const Product = new Schema({
   startDate: Date,
   endDate: Date,
   promoPieces: Number,
-  //promoCount: Number,
 });
 
 export default mongoose.model('products', Product);
