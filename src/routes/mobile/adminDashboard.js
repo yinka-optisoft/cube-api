@@ -47,7 +47,7 @@ router.get('/', verifyToken, async (req, res) => {
   }).count();
 
   const sumVal = await Sales.aggregate([
-    { $match: { createdAt: { $gt: new Date(todaysDate) }, { _branchId: req.user._branchId } } },
+    { $match: { createdAt: { $gt: new Date(todaysDate) }, _branchId: req.user._branchId } },
     {
       $project: {
         totalPrice: { $sum: '$totalPrice' },
@@ -261,13 +261,12 @@ router.post('/fetchreport', verifyToken, async (req, res) => {
 });
 
 
-
 router.get('/viewReportSales', verifyToken, async (req, res) => {
   let startDate = req.headers.startdate;
   let endDate = req.headers.enddate;
   const _branchId = req.headers.branchid;
   const salesArray = [];
-    startDate = new Date(req.headers.startdate).toISOString().split('T')[0];
+  startDate = new Date(req.headers.startdate).toISOString().split('T')[0];
 
   const result = new Date(req.headers.startdate);
   result.setDate(result.getDate() + 1);
@@ -360,9 +359,9 @@ router.get('/viewReportSales', verifyToken, async (req, res) => {
     if (err) {
       console.log(`Some error occured - file either not saved or corrupted file saved. ${ err}`);
     } else {
-     return res.sendFile(path.join(__dirname, '..', '..', 'public', 'csv', 'report.csv'));
+      return res.sendFile(path.join(__dirname, '..', '..', 'public', 'csv', 'report.csv'));
     }
-  })
+  });
 });
 
 router.get('/viewReportSalesPdf', verifyToken, async (req, res) => {
@@ -376,7 +375,7 @@ router.get('/viewReportSalesPdf', verifyToken, async (req, res) => {
   let endDate = req.headers.enddate;
 
 
-    startDate = new Date(req.headers.startdate).toISOString().split('T')[0];
+  startDate = new Date(req.headers.startdate).toISOString().split('T')[0];
 
   const result = new Date(req.headers.startdate);
   result.setDate(result.getDate() + 1);
