@@ -47,7 +47,7 @@ router.get('/', verifyToken, async (req, res) => {
   }).count();
 
   const sumVal = await Sales.aggregate([
-    { $match: { createdAt: { $gt: new Date(todaysDate) } } },
+    { $match: { createdAt: { $gt: new Date(todaysDate) }, { _branchId: req.user._branchId } } },
     {
       $project: {
         totalPrice: { $sum: '$totalPrice' },
