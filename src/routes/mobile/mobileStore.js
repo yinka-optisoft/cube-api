@@ -77,9 +77,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
   if (imageName == undefined) {
     imageName = 'defaultStore.jpg';
   }
-  var str = req.body.store_email;
-  var nameMatch = str.match(/^([^@]*)@/);
-  var shortCode = nameMatch ? nameMatch[1] : null;
+
 
   try {
     const newStore = new Store();
@@ -87,7 +85,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newStore.email = req.body.store_email;
     newStore.phone = req.body.store_phone;
     newStore.address = req.body.store_address;
-    newStore.shortCode = shortCode;
+    newStore.shortCode = req.body.username;
     newStore.website = req.body.website;
     newStore.businessType = req.body.businessType;
     newStore.country = req.body.storeCountry;
@@ -120,7 +118,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newAdmin.roleId = 'admin';
     newAdmin._storeId = newStore._id;
     newAdmin._branchId = newBranch._id;
-    newAdmin.username = await generateUniqueID(newStore.shortCode);
+    newAdmin.username = req.body.username;
     newAdmin.firstname = req.body.firstname;
     newAdmin.middlename = req.body.middlename;
     newAdmin.lastname = req.body.lastname;

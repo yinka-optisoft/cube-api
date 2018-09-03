@@ -80,20 +80,27 @@ router.get('/details', verifyToken, async (req, res) => {
   }
 });
 
-const generateUniqueID = async storeShort => {
-  const ADMIN_ID = storeShort + Math.round(Math.random() * 100000);
-  const exists = await Account.count({ username: ADMIN_ID });
-  while (exists > 0) generateUniqueID(storeShort);
-  return ADMIN_ID;
-};
+// const generateUniqueID = async storeShort => {
+//   const ADMIN_ID = storeShort + Math.round(Math.random() * 100000);
+//   const exists = await Account.count({ username: ADMIN_ID });
+//   while (exists > 0) generateUniqueID(storeShort);
+//   return ADMIN_ID;
+// };
 
 
 router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
   console.log(imageName);
-  // if (imageName == undefined) {
-  //   imageName = 'defaultStore.jpg';
-  // }
+  if (imageName == undefined) {
+    imageName = 'defaultStore.jpg';
+  }
+
+
+  const findUser = await Account.findOne({ username: req.body.username});
+
+  if(findUser){
+    return res.json({ exist: 'Username already exist' });
+  }
 
   try {
     const newStore = new Store();
@@ -134,7 +141,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newAdmin.roleId = 'admin';
     newAdmin._storeId = newStore._id;
     newAdmin._branchId = newBranch._id;
-    newAdmin.username = await generateUniqueID(newStore.shortCode);
+    newAdmin.username = req.body.username;
     newAdmin.firstname = req.body.firstname;
     newAdmin.middlename = req.body.middlename;
     newAdmin.lastname = req.body.lastname;
