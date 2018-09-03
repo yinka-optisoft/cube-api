@@ -23,7 +23,6 @@ const generateUniqueID = async storeShort => {
 };
 
 
-
 // branch homepage
 router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
 
@@ -41,81 +40,81 @@ router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), asyn
 
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-    const branches = await Branch.find({ _storeId: req.session._storeId });
-    res.render('branch/manage', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
-  });
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branches = await Branch.find({ _storeId: req.session._storeId });
+  res.render('branch/manage', { user, expressFlash: req.flash('info'), branches, layout: 'layouts/user' });
+});
 
 // create new branch
-  router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
+router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-      const newBranch = await Branch();
-      newBranch._storeId = req.session._storeId;
-      newBranch.name = req.body.name;
-      newBranch.email = req.body.email;
-      newBranch.phone = req.body.phone;
-      newBranch.address = req.body.address;
-      newBranch.country = req.body.country;
-      newBranch.state = req.body.state;
-      newBranch.city = req.body.city;
-      newBranch.status = true;
-      newBranch.save(function(err) {
-        if (err) {
-          console.log(err);
-        } else {
-          req.flash('info', 'Branch Saved Successfully');
-          res.redirect('/branch');
-        }
-      });
-
-      // const response = {
-      //   status: 200,
-      //   message: 'Branch save successfully',
-      // };
-
-      // res.send(response);
-    });
-
-
-    // update branch
-  router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
-
-    const branch = await Branch.findById(req.body._branchId);
-
-    branch._storeId = req.session._storeId;
-    branch.name = req.body.name;
-    branch.email = req.body.email;
-    branch.phone = req.body.phone;
-    branch.address = req.body.address;
-    branch.country = req.body.country;
-    branch.state = req.body.state;
-    branch.city = req.body.city;
-    await branch.save(function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        req.flash('info', 'Branch Update Saved Successfully');
-        res.redirect('/branch');
-      }
-    });
+  const newBranch = await Branch();
+  newBranch._storeId = req.session._storeId;
+  newBranch.name = req.body.name;
+  newBranch.email = req.body.email;
+  newBranch.phone = req.body.phone;
+  newBranch.address = req.body.address;
+  newBranch.country = req.body.country;
+  newBranch.state = req.body.state;
+  newBranch.city = req.body.city;
+  newBranch.status = true;
+  newBranch.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('info', 'Branch Saved Successfully');
+      res.redirect('/branch');
+    }
   });
 
+  // const response = {
+  //   status: 200,
+  //   message: 'Branch save successfully',
+  // };
 
-  // branch homepage
-  router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
-    const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-    const branch = await Branch.findById(req.params._branchId);
-    const roles = await Role.find({ _storeId: req.session._storeId });
-    const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
-    const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
+  // res.send(response);
+});
+
+
+// update branch
+router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const branch = await Branch.findById(req.body._branchId);
+
+  branch._storeId = req.session._storeId;
+  branch.name = req.body.name;
+  branch.email = req.body.email;
+  branch.phone = req.body.phone;
+  branch.address = req.body.address;
+  branch.country = req.body.country;
+  branch.state = req.body.state;
+  branch.city = req.body.city;
+  await branch.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('info', 'Branch Update Saved Successfully');
+      res.redirect('/branch');
+    }
+  });
+});
+
+
+// branch homepage
+router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branch = await Branch.findById(req.params._branchId);
+  const roles = await Role.find({ _storeId: req.session._storeId });
+  const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
+  const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
                                       .populate(
                                         { path: '_productId',
                                           populate: { path: '_categoryId' } });
-    res.render('branch/branchDashboard', { user, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
-  });
+  res.render('branch/branchDashboard', { user, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
+});
 
-    
-    // delete branch
+
+// delete branch
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
@@ -164,11 +163,11 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
                              } else {
                                req.flash('success', `Saved sucessfully! Your Username is ${member.username}`);
                                if (req.user._roleId === 'admin') {
-                                res.redirect('/admin/staff/');
+                                 res.redirect('/admin/staff/');
                                } else if (req.user._roleId === 'staff') {
-                                res.redirect(`/branch/view/${ branchId}`);
+                                 res.redirect(`/branch/view/${ branchId}`);
                                }
-                              //  res.redirect(`/branch/view/${ branchId}`);
+                               //  res.redirect(`/branch/view/${ branchId}`);
                              }
                            });
                        }
@@ -185,10 +184,10 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
   const id = req.body.id;
   const user = await Account.findById(id);
 
-  if (user.status === false){
+  if (user.status === false) {
     user.status = 1;
     user.save(function(err) {
-      if (err){
+      if (err) {
         console.log(err);
       } else {
         res.send('success');
@@ -197,7 +196,7 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
   } else {
     user.status = 0;
     user.save(function(err) {
-      if (err){
+      if (err) {
         console.log(err);
       } else {
         res.send('success');
@@ -242,15 +241,15 @@ router.post('/user/update/:_branchId', guard.ensureLoggedIn(), async (req, res, 
                          res.json(err);
                        } else {
                          member.passport = name;
-                         console.log(member);
+                         console.log(member, 'member');
                          getmember.update(member, function(err) {
-                          if (err) {
-                            console.log(err);
-                          } else {
-                            req.flash('success', `${getmember.firstname} update successfully`);
-                            res.redirect(`/branch/user/view/${getmember._id}`);
-                          }
-                        });
+                           if (err) {
+                             console.log(err);
+                           } else {
+                             req.flash('success', `${getmember.firstname} update successfully`);
+                             res.redirect(`/branch/user/view/${getmember._id}`);
+                           }
+                         });
                        }
                      });
                    });

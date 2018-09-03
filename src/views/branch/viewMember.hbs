@@ -285,6 +285,19 @@
                                 <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
                             </div>
 
+                            {{#if (eq user.roleId 'admin')}}
+
+                            {{!-- <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                <select class="form-control" name="roleId" id="e_roleId" required>
+                                    <option>Select Role</option>
+                                    <option value="admin" selected>admin</option>
+                                </select>
+                            </div> --}}
+
+                            <input type="hidden" name="roleId" value="admin"/>
+
+                            {{else}}
+
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="_roleId" id="e_roleId" required>
                                     <option>Select Role</option>
@@ -295,6 +308,7 @@
                                     {{/select}}
                                 </select>
                             </div>
+                            {{/if}}
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="gender" id="egender" required>
@@ -351,7 +365,11 @@
                                             <span class="btn btn-default btn-file">
                                                 <span class="fileinput-new">Select logo</span>
                                                 <span class="fileinput-exists">Change logo</span>
+                                                {{!-- {{#if (eq user.passport 'null')}}
                                                 <input type="file" name="passport" value="/images/member/{{user.passport}}" accept="image/*" required>
+                                                {{else}} --}}
+                                                <input type="file" name="passport" value="/images/member/{{user.passport}}" accept="image/*" required>
+                                                {{!-- {{/if}} --}}
                                             </span>
                                             <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
                                         </div>

@@ -1164,7 +1164,7 @@ header {}
 .search-modal .modal-content input[type="text"] {
   background: rgba(0, 0, 0, 0.4) none repeat scroll 0 0;
   border: 1px solid #ccc;
-  color: #fff;
+  /* color: #fff; */
   font-size: 16px;
   height: 60px;
   letter-spacing: 0;
