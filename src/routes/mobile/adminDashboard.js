@@ -264,7 +264,8 @@ router.post('/fetchreport', verifyToken, async (req, res) => {
 router.get('/viewReportSales', verifyToken, async (req, res) => {
   let startDate = req.headers.startdate;
   let endDate = req.headers.enddate;
-  const _branchId = req.headers.branchid;
+  const _branchId = req.headers._branchid;
+  console.log(req.headers);
   const salesArray = [];
   startDate = new Date(req.headers.startdate).toISOString().split('T')[0];
 
@@ -291,6 +292,8 @@ router.get('/viewReportSales', verifyToken, async (req, res) => {
   }
 
 
+  console.log(finalResult);
+  console.log(_branchId);
   const reportSales = await Sales.find({
     $and: [
       { createdAt:  { '$gte': finalResult, '$lt': finalResult2 }, _branchId: _branchId },
@@ -303,14 +306,22 @@ router.get('/viewReportSales', verifyToken, async (req, res) => {
     }
   }).populate('_salesBy');
 
-  // console.log(reportSales);
+   console.log(reportSales);
 
   const fields = ['productName', 'category', 'productPrice',
                   'piecesSold', 'unitPrice', 'totalPrice', 'salesTotal',
                   'waybillNo', 'invoiceDate', 'discount', 'balance',
-                  'amountPaid', 'salesBy', 'overall Total' ];
+                  'amountPaid', 'salesBy', 'amountDue', 'overall Total' ];
   for (let i = 0; i < reportSales.length; i++) {
 
+    salesArray.push({
+      'waybillNo': reportSales[i].waybillNumber,
+      'invoiceDate': reportSales[i].invoicdDate,
+      'discount': reportSales[i].discount,
+      'balance': reportSales[i].balance,
+      'amountPaid': reportSales[i].amountPaid,
+      'amountDue': reportSales[i].amountDue,
+    });
     for (let u = 0; u < reportSales[i]._productId.length; u++) {
       salesArray.push({
         'productName': reportSales[i]._productId[u].productName,
@@ -369,7 +380,7 @@ router.get('/viewReportSalesPdf', verifyToken, async (req, res) => {
 
   const salesArray = [];
   const salesHeading = [];
-  const _branchId = req.headers.branchid;
+  const _branchId = req.headers._branchid;
   const branchInfo = await Branch.findOne({ _id: _branchId });
   let startDate = req.headers.startdate;
   let endDate = req.headers.enddate;

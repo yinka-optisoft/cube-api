@@ -1,6 +1,4 @@
-var express = require('express');
-var passport = require('passport');
-var Store = require('../models/store');
+
 var jwt = require('jsonwebtoken');
 // var Account = require('../models/account');
 import Account from '../models/account';
