@@ -1,0 +1,115 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>Broadsheet</title>
+    <style>
+      body{
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .header {
+       font-size: 14px;
+       text-align: center;
+       line-height: 1px;
+      }
+      .schoolLogo{
+        max-width: 100px;
+        height:60px;
+      }
+      table{
+        width: 100%;
+        margin-bottom: 10px;
+
+    border-collapse: collapse;
+
+      }
+
+main table, main th, main td {
+    border: 1px solid black;
+}
+      .studentInfo{
+        font-size: 14px;
+      }
+      main{
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .tt{
+        font-size: 9px;
+        font-weight: 600;
+
+      }
+
+.vertical-text span {
+  font-size: 9px;
+        font-weight: 200;
+  margin: 0.15em 0.75em 0 0;
+  -webkit-writing-mode: vertical-lr;
+  -ms-writing-mode: tb-lr;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  -webkit-font-feature-settings: "vkrn", "vpal";
+  font-feature-settings: "vkrn", "vpal";
+}
+    </style>
+</head>
+<body>
+
+      <table border="0"  >
+      <tr>
+        <td><img class="schoolLogo" src="storelogo" /></td>
+        <td colspan="5">
+            <div class="header">
+                <h2>{{sales.name}} </h2>
+                <h3>{{ branchInfo.name }} </h3>
+                <h5>{{branchInfo.address}} {{branchInfo.city}} {{branchInfo.state}} {{branchInfo.country}} </h5>
+                <!-- <p>{{schoolDetails.address}}</p>
+                <p>{{schoolDetails.email}}, {{schoolDetails.phone}}</p> -->
+                <b> {{finalResult }}   -    {{finalResult2}} </b> 
+              </div>
+        </td>
+
+      </tr>
+    </table>
+    <main>
+        <div style="font-size: 18px"> Total Amount : {{totalAmount}} </div>
+      <table style="width:100%">
+        <tr>
+          <!-- <th>No</th> -->
+          <th>Product Name</th> 
+          <th>Category</th>
+          <th>Product price</th>
+          <th>Pieces Sold</th>
+          <th>Unit Price</th>
+          <th>Total Price</th>
+          <th>Sales Total</th>
+          <!-- <th>Waybill No</th>
+          <th>Invoice date</th>
+          <th>Discount</th>
+          <th>Balance</th>
+          <th>Amount paid</th>
+          <th>Salles by</th> -->
+        </tr>
+        {{#each salesArray}}
+        <tr>
+          <td>{{productName}}</td>
+          <td> {{category}}</td> 
+          <td>{{productPrice}}</td>
+          <td>{{piecesSold}}</td>
+          <td>{{unitPrice}}</td>
+          <td>{{totalPrice}}</td>
+          <td>{{salesTotal}}</td>
+          <!-- <td>{{waybillNo}}</td>
+          <td>{{invoiceDate}}</td>
+          <td>{{discount}}</td>
+          <td>{{balance}}</td>
+          <td>{{amountPaid}}</td>
+          <td>{{_salesBy}}</td> -->
+        </tr>
+  {{/each}}
+      </table>
+  </main>
+
+ </body>
+</div>

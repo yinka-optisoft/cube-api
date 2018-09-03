@@ -10,6 +10,7 @@ const productTransfer = new Schema({
   _branchProduct: { type: Schema.Types.ObjectId, ref: 'branchproducts' },
   _movedBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   pieces: Number,
+  totalPieces: Number,
   createdAt: { type: Date, default: Date.now },
 });
 

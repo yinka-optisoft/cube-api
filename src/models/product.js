@@ -7,6 +7,7 @@ const Product = new Schema({
   _branchId: { type: Schema.Types.ObjectId, ref: 'branches' },
   _categoryId: { type: Schema.Types.ObjectId, ref: 'categories' },
   _createdBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
+  _updatedBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   productName: String,
   pieces: Number,
   sellingPrice: Number,
@@ -23,6 +24,7 @@ const Product = new Schema({
   oldPrice: Number,
   startDate: Date,
   endDate: Date,
+  lastUpdatedDate: Date,
   promoPieces: Number,
 });
 

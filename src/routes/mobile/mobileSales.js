@@ -95,9 +95,9 @@ router.post('/addSales', verifyToken, async (req, res) => {
   }
 });
 router.get('/fetchSales', verifyToken, async (req, res) => {
-  console.log(req.user._branchId);
+
   const allSales = await Sales.find({ _storeId: req.user._storeId, _branchId: req.user._branchId })
-    .populate('_branchId').populate('_productId').populate('_userId');
+    .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 });;
   console.log(allSales);
   return res.json({ sales: allSales });
 });
@@ -154,7 +154,11 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   const newAdmin = req.body;
   const password = newAdmin.password;
   delete newAdmin.password;
-  // newAdmin.roleId = 'admin';
+
+  if(req.body.privilege == 'true'){
+
+   newAdmin.roleId = 'admin';
+  }
   newAdmin._storeId = req.user._storeId;
   newAdmin._branchId = branchId;
   newAdmin.username = req.body.username;
@@ -390,7 +394,7 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
 });
 
 
-router.post('/editBranch', verifyToken, upload.single('avatar'), async (req, res) => {
+router.post('/editBranch', verifyToken, async (req, res) => {
   const findBranch = await Branch.findOne({ _id: req.body._id });
 
   findBranch.name = req.body.name;
@@ -454,5 +458,19 @@ router.post('/changeStatus', verifyToken, async (req, res) => {
      return  res.json({ success: 'Status has been changed' });
    })
   
+});
+router.post('/blockUser', verifyToken, async (req, res) => {
+  const findUser = await Account.findOne({ _id: req.body.userId });
+  
+ findUser.status = !findUser.status;
+  await findUser.save(function(err){
+    if(err){
+     return  res.json({ error: 'An error occured'});
+    }
+
+    console.log(findUser.status);
+    return  res.json({ success: 'Status has been changed', status: findUser.status });
+  })
+ 
 });
 export default router;
