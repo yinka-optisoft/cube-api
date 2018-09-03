@@ -474,7 +474,7 @@ router.get('/viewReportSalesPdf', verifyToken, async (req, res) => {
                            { encoding: 'utf8' },
                            (err, data) => {
                              if (!err) {
-                               Store.findOne({ _id: req.user._id })
+                               Store.findOne({ _id: req.user._storeId })
      .exec((err, sales) => {
        if (!err) {
          let html = Handlebars.compile(data)({
