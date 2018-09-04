@@ -580,7 +580,7 @@ background: #bbb;
   visibility: hidden;
 }
 .drop_target::before {
-	content: 'Drop Hear';
+	content: 'Drop Here';
 	font-family: FontAwesome;
 	position: absolute;
 	display: block;

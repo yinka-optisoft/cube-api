@@ -29,6 +29,7 @@ import staff from './routes/staff';
 import sales from './routes/sales';
 import report from './routes/report';
 import promo from './routes/promo';
+import subscription from './routes/subscription';
 import mobileStore from './routes/mobile/mobileStore';
 import mobileSales from './routes/mobile/mobileSales';
 import adminDashboard from './routes/mobile/adminDashboard';
@@ -99,6 +100,7 @@ app.use('/staff', staff);
 app.use('/sales', sales);
 app.use('/report', report);
 app.use('/promo', promo);
+app.use('/subscription', subscription);
 
 // app.use('/store', store);
 // app.use('/branch', branch);

@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -64,7 +65,7 @@ router.post('/create-store', async (req, res, next) => {
     console.log(errors);
 
     if (errors) {
-      req.session.errors = errors;
+      // req.session.errors = errors;
       res.redirect('/store/register');
     } else {
       try {
@@ -123,17 +124,27 @@ router.post('/create-store', async (req, res, next) => {
                                delete newAdmin.password;
                                newAdmin.roleId = 'admin';
                                newAdmin._storeId = newStore._id;
-                               // newAdmin._branchId = newBranch._id;
+                               newAdmin._branchId = newBranch._id;
                                newAdmin.username = await generateUniqueID(storeName);
                                newAdmin.name = newStore.name;
-                               /*newAdmin.firstname = fields.firstname;
+                               /* newAdmin.firstname = fields.firstname;
                                newAdmin.middlename = fields.middlename;
                                newAdmin.lastname = fields.lastname;
                                newAdmin.address = fields.admin_address;
                                newAdmin.phone = fields.admin_phone;
                                newAdmin.email = fields.admin_email;*/
                                Account.register(new Account(newAdmin), password,
-                                                (err, account) => {
+                                                async (err, account) => {
+                                                  const tokenG = await Account.findById(account._id);
+                                                  console.log(tokenG);
+                                                  tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                                                  await tokenG.save(function(err) {
+                                                    if (err) {
+                                                      console.log(err);
+                                                    }
+                                                    console.log(tokenG);
+                                                  });
+
                                                   if (err) {
                                                     console.log(err);
                                                   } else {

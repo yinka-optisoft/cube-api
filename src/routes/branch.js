@@ -12,6 +12,7 @@ import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import Product from '../models/product';
 import BranchProduct from '../models/branchProduct';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -122,6 +123,20 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   res.send('success');
 });
 
+// check for email validation
+router.post('/check/email', guard.ensureLoggedIn(), async (req, res) => {
+
+  const email = req.body.email;
+
+  const user = await Account.findOne({ email: email });
+
+  if (user) {
+    res.send('success');
+  } else {
+    res.send('failure');
+  }
+});
+
 
 // add new member
 router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
@@ -129,53 +144,70 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
 
   form.parse(req, async (err, fields, files) => {
 
-    const store = await Store.findById(req.session._storeId);
+    const user = await Account.findOne({ email: fields.email });
 
-    const branchId = req.params._branchId;
+    if (user) {
 
-    if (!store)
-      return res.status(400).json({ message: 'Store doesn\'t exist!' });
-    const passport = files.passport;
-    const member = fields;
-    const password = member.password;
-    delete member.password;
-    const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-    const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
-    member._storeId = store._id;
-    member._branchId = branchId;
-    member.status = 1;
-    member.username = await generateUniqueID(store.shortCode);
-    fs.readFile(passport.path, function(err, data) {
-      fs.writeFile(dest,
-                   data, function(err) {
-                     fs.unlink(passport.path, function(err) {
-                       if (err) {
-                         res.status(500);
-                         res.json(err);
-                       } else {
-                         member.passport = name;
-                         Account.register(
-                           new Account(member), password, (err, account) => {
-                             if (err) {
-                               res.status(500);
-                               res.send(err);
+      req.flash('success', 'E-mail Already Exist');
+      res.redirect('/admin/staff/');
 
-                             } else {
-                               req.flash('success', `Saved sucessfully! Your Username is ${member.username}`);
-                               if (req.user._roleId === 'admin') {
-                                 res.redirect('/admin/staff/');
-                               } else if (req.user._roleId === 'staff') {
-                                 res.redirect(`/branch/view/${ branchId}`);
+    } else {
+
+      const store = await Store.findById(req.session._storeId);
+
+      const branchId = req.params._branchId;
+
+      if (!store)
+        return res.status(400).json({ message: 'Store doesn\'t exist!' });
+      const passport = files.passport;
+      const member = fields;
+      const password = member.password;
+      delete member.password;
+      const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+      const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+      member._storeId = store._id;
+      member._branchId = branchId;
+      member.status = 1;
+      member.username = await generateUniqueID(store.shortCode);
+      fs.readFile(passport.path, function(err, data) {
+        fs.writeFile(dest,
+                     data, function(err) {
+                       fs.unlink(passport.path, function(err) {
+                         if (err) {
+                           res.status(500);
+                           res.json(err);
+                         } else {
+                           member.passport = name;
+                           Account.register(
+                             new Account(member), password, async (err, account) => {
+                              const tokenG = await Account.findById(account._id);
+                                console.log(tokenG);
+                                tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                                await tokenG.save(function(err) {
+                                  if (err) {
+                                    console.log(err);
+                                  }
+                                  console.log(tokenG);
+                                });
+
+                               if (err) {
+                                 res.status(500);
+                                 res.send(err);
+                               } else {
+                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                                 if (req.user._roleId === 'admin') {
+                                   res.redirect('/admin/staff/');
+                                 } else if (req.user._roleId === 'staff') {
+                                   res.redirect(`/branch/view/${ branchId}`);
+                                 }
                                }
-                               //  res.redirect(`/branch/view/${ branchId}`);
-                             }
-                           });
-                       }
+                             });
+                         }
+                       });
                      });
-                   });
-    });
+      });
+    };
   });
-
 });
 
 
@@ -241,12 +273,12 @@ router.post('/user/update/:_branchId', guard.ensureLoggedIn(), async (req, res, 
                          res.json(err);
                        } else {
                          member.passport = name;
-                         console.log(member, 'member');
                          getmember.update(member, function(err) {
                            if (err) {
                              console.log(err);
                            } else {
-                             req.flash('success', `${getmember.firstname} update successfully`);
+                             req.flash('success', 'Profile Update Successfully');
+                             // req.flash('success', `${getmember.firstname} update successfully`);
                              res.redirect(`/branch/user/view/${getmember._id}`);
                            }
                          });

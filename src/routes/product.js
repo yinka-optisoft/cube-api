@@ -14,6 +14,7 @@ import { check, validationResult } from 'express-validator/check';
 import Supply from '../models/supply';
 import BranchProduct from '../models/branchProduct';
 import ProductTransfer from '../models/productTransfer';
+import Sales from '../models/sales';
 
 
 const router = express.Router();
@@ -34,7 +35,6 @@ router.get('/view/:productId', guard.ensureLoggedIn(), async (req, res, next) =>
   const branchproducts = await BranchProduct.find({ _storeId: req.user._storeId, _productId: branchproduct._productId })
                                             .populate('_productId').populate('_branchId');
 
-  console.log(branchproducts, 'holding by branch');
   res.render('product/viewProduct', { user, branchproduct, branchproducts, expressFlash: req.flash('info'), layout: 'layouts/user' });
 });
 
@@ -183,8 +183,16 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
-  await Product.findByIdAndRemove(id);
-  res.send('success');
+
+  const findSales = await Sales.findOne({ _productId: id });
+
+  if(findSales === null){
+    await Product.findByIdAndRemove(id);
+    res.send('success');
+  } else {
+    req.flash('info', 'There Is Sales Record For This Product You Can\'t Delete This Product');
+    res.redirect('/product');
+  }
 });
 
 
