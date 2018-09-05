@@ -155,16 +155,16 @@ router.get('/staff', verifyToken, async (req, res) => {
 
 
 router.get('/todaysData', verifyToken, async (req, res) => {
-  // const todaysDate = new Date().toISOString().split('T')[0];
-  // const todaySales = await Sales.find({
-  //   $and: [
-  //     { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
-  //     { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
-  //   ]
-  // }).populate('_productId').populate('_branchId').populate('_salesBy').populate('_customerId').sort({ 'createdAt': -1 });
+  const todaysDate = new Date().toISOString().split('T')[0];
+  const todaySales = await Sales.find({
+    $and: [
+      { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
+      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+    ]
+  }).populate('_productId').populate('_branchId').populate('_salesBy').populate('_customerId').sort({ 'createdAt': -1 });
 
-  // console.log(todaySales);
-  // return res.json({ saleDetails: todaySales });
+  console.log(todaySales);
+  return res.json({ saleDetails: todaySales });
 });
 
 
@@ -228,8 +228,6 @@ router.post('/fetchreport', verifyToken, async (req, res) => {
   //   { $project: { _id: 0 } }
   // ]);
 
-
-  console.log(branchId);
   const sumVal = await Sales.aggregate([
     // { $match: { $or: [ { score: { $gt: 70, $lt: 90 } }, { views: { $gte: 1000 } } ] } },
 
