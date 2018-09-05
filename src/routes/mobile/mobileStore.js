@@ -78,6 +78,15 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     imageName = 'defaultStore.jpg';
   }
 
+  const findShortCode = await Account.findOne({ username: req.body.username });
+  const emailCheck = await Account.findOne({ email: req.body.store_email });
+  if (findShortCode) {
+    return res.json({ success: 'Username already exist', head: 'exist' });
+  }
+
+  if (emailCheck) {
+    return res.json({ success: 'Email already exist', head: 'exist' });
+  }
 
   try {
     const newStore = new Store();
@@ -128,7 +137,6 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
     Account.register(new Account(newAdmin), password,
                      async (err, account) => {
-                       console.log(account._id);
                        const tokenG = await Account.findById(account._id);
                        console.log(tokenG);
                        tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
@@ -290,6 +298,31 @@ router.get('/fetchbusiness', async (req, res) => {
   // await newBusiness.save();
   // console.log(business);
   return res.json({ business: business });
+});
+
+
+router.post('/showus', verifyToken, function(req, res, next) {
+  console.log('why me', req.body);
+  // return res.json({ products:  data });
+});
+
+router.post('/editStore', async (req, res) => {
+  const findStore = await Store.findOne({ _id: req.body._id });
+  findStore.name = req.body.username;
+  findStore.address = req.body.address;
+  findStore.email = req.body.email;
+  findStore.phone = req.body.phone;
+  findStore.state = req.body.state;
+  findStore.city = req.body.city;
+
+  await findStore.save((err) => {
+    if (err) {
+      return res.json({ success: 'An error occured' });
+    }
+
+    return res.json({ title: 'success', msg: 'Store has been updated' });
+  });
+
 });
 export default router;
 // export default router;

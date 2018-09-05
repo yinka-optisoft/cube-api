@@ -5,6 +5,7 @@ import Branch from '../../models/branch';
 import Product from '../../models/product';
 import BranchProduct from '../../models/branchProduct';
 import Category from '../../models/category';
+import Sales from '../../models/sales';
 import ProductTransfer from '../../models/productTransfer';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -134,6 +135,52 @@ router.post('/restockProduct', verifyToken, async (req, res) => {
     return res.json({ head: 'Success', title: 'Products has been restocked' });
   });
 
+});
+
+router.post('/deleteProduct', verifyToken, async (req, res) => {
+  const productId = req.body._productId;
+  const _branchId = req.body._branchId;
+  const findSale = await Sales.findOne({ _productId: req.body._productId, _storeId: req.user._storeId });
+
+  if (findSale) {
+    return res.json({ title: 'notdelete', msg: 'A sale has been made on this product, product cannot be deleted' });
+  } else {
+
+    const findProduct = await BranchProduct.findOne({ _productId: productId, _branchId: _branchId }).remove();
+    return res.json({ title: 'success', msg: 'Product has been deleted from branch'  });
+  }
+});
+
+router.post('/deleteBranch', verifyToken, async (req, res) => {
+  //const productId = req.body._productId;
+  const _branchId = req.body._branchId;
+  const findSale = await Sales.findOne({ _branchId: _branchId, _storeId: req.user._storeId  });
+  if (findSale) {
+
+    return res.json({ title: 'notdelete', msg: 'A sale has been made on this branch, branch cannot be deleted' });
+
+  } else {
+
+    const findProduct = await Branch.findOne({ _branchId: _branchId, _storeId: req.user._storeId }).remove();
+    const DelBranchProduct = await BranchProduct.find({ _branchId: _branchId }).remove();
+    return res.json({ title: 'success', msg: 'Branch has been deleted' });
+  }
+});
+
+router.post('/deleteCategory', verifyToken, async (req, res) => {
+  //const productId = req.body._productId;
+  console.log(req.body);
+  const categoryId = req.body._categoryId;
+  const findSale = await Product.findOne({ _categoryId: categoryId._id  });
+  if (findSale) {
+
+    return res.json({ title: 'notdelete', msg: 'A product is under this category' });
+
+  } else {
+
+    const category = await Category.findOne({ _id: categoryId._id  }); 
+    return res.json({ title: 'success', msg: 'Category has been deleted' });
+  }
 });
 export default router;
 // export default router;

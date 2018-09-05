@@ -8,6 +8,7 @@ import json2csv from 'json2csv';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';
+import mongoose from 'mongoose';
 const Json2csvParser = require('json2csv').Parser;
 var verifyToken = require('../../helpers/verifyToken');
 var multer = require('multer');
@@ -33,7 +34,7 @@ router.get('/', verifyToken, async (req, res) => {
   const salesCount = await Sales.find({ _storeId: req.user._storeId }).count();
   const branchCount = await Branch.find({ _storeId: req.user._storeId }).count();
   // const todaysSupply = await Branch.find({ _storeId: req.user._storeId }).count();
-  const branchSales = await Branch.find({ _branchId: req.user._branchId }).count();
+  const branchSales = await Sales.find({ _branchId: req.user._branchId }).count();
 
   // const productsSold = await Sales.find({ _branchId: req.user._branchId }).count();
   //  const  = await Br
@@ -84,8 +85,6 @@ router.get('/', verifyToken, async (req, res) => {
     todaySales: todaySales,
     salesDetails: totals
   };
-
-  console.log(sumVal);
 
   return res.json({ countDetails: countDetails });
 });
@@ -156,16 +155,16 @@ router.get('/staff', verifyToken, async (req, res) => {
 
 
 router.get('/todaysData', verifyToken, async (req, res) => {
-  const todaysDate = new Date().toISOString().split('T')[0];
-  const todaySales = await Sales.find({
-    $and: [
-      { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
-      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
-    ]
-  }).populate('_productId').populate('_branchId').populate('_salesBy').populate('_customerId').sort({ 'createdAt': -1 });
+  // const todaysDate = new Date().toISOString().split('T')[0];
+  // const todaySales = await Sales.find({
+  //   $and: [
+  //     { $and: [{ _storeId: req.user._storeId }, { _branchId: req.user._branchId }] },
+  //     { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+  //   ]
+  // }).populate('_productId').populate('_branchId').populate('_salesBy').populate('_customerId').sort({ 'createdAt': -1 });
 
-  console.log(todaySales);
-  return res.json({ saleDetails: todaySales });
+  // console.log(todaySales);
+  // return res.json({ saleDetails: todaySales });
 });
 
 
@@ -188,6 +187,7 @@ router.get('/fetchBranch', verifyToken, async (req, res) => {
 
 router.post('/fetchreport', verifyToken, async (req, res) => {
 
+  const branchId = mongoose.Types.ObjectId(req.body._branchId);
   const startDate = new Date(req.body.startDate).toISOString().split('T')[0];
 
   const result = new Date(startDate);
@@ -212,20 +212,28 @@ router.post('/fetchreport', verifyToken, async (req, res) => {
 
   }
 
-  // console.log(finalResult2);
+  console.log(finalResult2);
   const totalSales = await Sales.find({
     $and: [ // return
-      { createdAt:  { '$gte': finalResult, '$lt': finalResult2 } },
-      //   { time: { '$gte': new Date('2018-05-17'), '$lt': new Date('2018-05-18') } },
+      { createdAt:  { $gte: new Date(finalResult), $lt: new Date(finalResult2) }, _branchId: branchId },
       /*  { $or:
             [
               { walletCreditted: findAgentWallet._id }, { walletDebitted: findAgentWallet._id }
             ] }, */
     ]
   }).count();
+  // const totalSales = await Sales.aggregate([
+  //   { $match: { createdAt: { $gte: new Date('2018-08-23'), $lt: new Date(finalResult2) }, _branchId: branchId } },
+  //   { $group: { _id: null, myCount: { $sum: 1 } } },
+  //   { $project: { _id: 0 } }
+  // ]);
 
+
+  console.log(branchId);
   const sumVal = await Sales.aggregate([
-    { $match: { createdAt: { $gte: new Date(finalResult), $lt: new Date(finalResult2) } } },
+    // { $match: { $or: [ { score: { $gt: 70, $lt: 90 } }, { views: { $gte: 1000 } } ] } },
+
+    { $match: { $and: [ { _branchId: branchId }, { createdAt: { $gte: new Date(finalResult), $lt: new Date(finalResult2) } } ] } },
     {
       $project: {
         totalPrice: { $sum: '$totalPrice' },
@@ -237,6 +245,7 @@ router.post('/fetchreport', verifyToken, async (req, res) => {
     }
   ]);
   console.log(sumVal);
+  console.log(totalSales);
 
   let totalPrice = 0;
   let totalProduct = 0;
@@ -306,7 +315,7 @@ router.get('/viewReportSales', verifyToken, async (req, res) => {
     }
   }).populate('_salesBy');
 
-   console.log(reportSales);
+  console.log(reportSales);
 
   const fields = ['productName', 'category', 'productPrice',
                   'piecesSold', 'unitPrice', 'totalPrice', 'salesTotal',

@@ -134,6 +134,7 @@ const generateUniqueID = async storeShort => {
 };
 
 router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) => {
+
   var branchId;
   if (req.body._branchId) {
 
@@ -147,9 +148,13 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
     imageName = 'defaultUser.png';
   }
   const findShortCode = await Account.findOne({ username: req.body.username });
-
+  const emailCheck = await Account.findOne({ email: req.body.emailAddress });
   if (findShortCode) {
-    return res.send({ success: 'User name already exist', head: 'exist' });
+    return res.json({ success: 'Username already exist', head: 'exist' });
+  }
+
+  if (emailCheck) {
+    return res.json({ success: 'Email already exist', head: 'exist' });
   }
   const newAdmin = req.body;
   const password = newAdmin.password;
@@ -158,6 +163,8 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   if(req.body.privilege == 'true'){
 
    newAdmin.roleId = 'admin';
+  } else {
+    newAdmin._roleId = req.body.role;
   }
   newAdmin._storeId = req.user._storeId;
   newAdmin._branchId = branchId;
@@ -168,29 +175,26 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   newAdmin.passport = imageName;
   newAdmin.phone = req.body.phoneNumber;
   newAdmin.email = req.body.emailAddress;
-  newAdmin._roleId = req.body.role;
+
   Account.register(new Account(newAdmin), password,
                    async (err, account) => {
                      const accountId = String(account._id);
                      console.log(accountId);
                      // Account.findByIdAndUpdate(account._id, { token: jwt.sign(accountId, 'cube7000Activated')});
                      Account.findById(accountId, async function(err, doc) {
-                       console.log(account._id);
                        const tokenG = await Account.findById(account._id);
-                       console.log(tokenG);
                        tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
                        await tokenG.save(function(err) {
                          if (err) {
                            console.log(err);
                          }
-                         console.log(tokenG);
                        });
                        // });
                        if (err) {
                          console.log(err);
                        } else {
                          console.log('success');
-                         return res.send({ success: 'User has been created', head: 'success' });
+                         return res.json({ success: 'User has been created', head: 'success' });
                        }
                      });
                    });
