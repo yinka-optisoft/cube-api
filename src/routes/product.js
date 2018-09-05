@@ -186,6 +186,10 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
   const findSales = await Sales.findOne({ _productId: id });
 
+  //console.log(findSales);
+
+  //return false;
+
   if(findSales === null){
     await Product.findByIdAndRemove(id);
     res.send('success');
