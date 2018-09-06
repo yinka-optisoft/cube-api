@@ -134,6 +134,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newAdmin.address = req.body.store_addres;
     newAdmin.phone = req.body.store_phone;
     newAdmin.email = req.body.store_email;
+    newAdmin.passport = 'defaultUser.png';
 
     Account.register(new Account(newAdmin), password,
                      async (err, account) => {
