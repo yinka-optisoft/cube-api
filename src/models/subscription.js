@@ -4,18 +4,13 @@ const Schema = mongoose.Schema;
 const Subscription = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
   _packageId: { type: Schema.Types.ObjectId, ref: 'packages' },
-  invoiceDate: Date,
-  invoiceNumber: String,
-  waybillNumber: String,
-  amountDue: Number,
-  amountPaid: Number,
-  balanceTransaction: Number,
-  discount: Number,
-  piecesSold: [Number],
-  unitPrice: [Number],
-  totalPrice: [Number],
+  _licenseId: { type: Schema.Types.ObjectId, ref: 'licenses' },
+  _entryBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
+  activateDate: Date,
+  expiredDate: Date,
+  expired: Boolean,
   createdAt: { type: Date, default: Date.now }
 });
 
 
-export default mongoose.model('Subscriptions', Subscription);
+export default mongoose.model('subscriptions', Subscription);

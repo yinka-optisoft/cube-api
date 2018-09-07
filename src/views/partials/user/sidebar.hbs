@@ -87,6 +87,7 @@
                 <li><a><i class="fa fa-windows"></i> Subscription <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="/subscription">Manage subscription</a></li>
+                    <li><a href="/subscription/license">Enter License Key</a></li>
                 </ul>
                 </li>
             </ul>
@@ -157,15 +158,19 @@
         {{else if (eq user.roleId 'sadmin')}}
             <ul class="nav side-menu">
                 <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
+
                 <li><a><i class="fa fa-home"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    <li><a href="/store/roles">Manage Roles</a></li>
-                </ul>
+                    <ul class="nav child_menu">
+                        <li><a href="/store/roles">Manage Roles</a></li>
+                    </ul>
                 </li>
-                <li><a><i class="fa fa-home"></i> Package <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    <li><a href="/subscription/packages">Manage Packages</a></li>
-                </ul>
+
+                <li><a><i class="fa fa-home"></i> Subscription <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="/subscription/packages">Manage Packages</a></li>
+                        <li><a href="/subscription/generate/license">Generate Licenses</a></li>
+                        <li><a href="/subscription/manage/license">Manage Licenses</a></li>
+                    </ul>
                 </li>
             </ul>
         {{/if}}

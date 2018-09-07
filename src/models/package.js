@@ -13,4 +13,4 @@ const Package = new Schema({
 });
 
 
-export default mongoose.model('Packages', Package);
+export default mongoose.model('packages', Package);

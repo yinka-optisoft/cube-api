@@ -1,10 +1,10 @@
 import express from 'express';
-import Store from '../models/store';
-import Branch from '../models/branch';
 import Account from '../models/account';
 import Package from '../models/package';
 import License from '../models/license';
 import guard from 'connect-ensure-login';
+import uuid from 'uuid/v1';
+import Subscription from '../models/subscription';
 
 
 const router = express.Router();
@@ -68,12 +68,31 @@ router.get('/license', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
+router.get('/generate/license', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const packages = await Package.find();
+  res.render('subscription/generate', { user, packages, expressFlash: req.flash('info'), layout: 'layouts/user' });
+});
+
+
+router.get('/manage/license', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const licenses = await License.find().populate('_packageId').populate('_createdBy').populate('_storeId');
+  res.render('subscription/manageLicense', { user, licenses, expressFlash: req.flash('info'), layout: 'layouts/user' });
+});
+
+
 router.post('/license', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  console.log(req.body.id);
 
   const license = new License();
   license._packageId = req.body.id;
+  license._storeId = req.user._storeId;
   license._createdBy = req.user._id;
-  license.used = 'UNUSED';
+  license.key = uuid();
+  license.status = 'UNUSED';
+  // license.usedDate = Date();
   license.save((err) => {
     if (err) {
       console.log(err);
@@ -81,6 +100,67 @@ router.post('/license', guard.ensureLoggedIn(), async (req, res, next) => {
       res.send('success');
     }
   });
+});
+
+
+// check for email validation
+router.post('/check/license/key', guard.ensureLoggedIn(), async (req, res) => {
+
+  const key = req.body.key;
+
+  const license = await License.findOne({ key: key, status: 'UNUSED' });
+
+  if (license) {
+    res.send('success');
+  } else {
+    res.send('failure');
+  }
+});
+
+
+router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) => {
+
+  const key = req.body.key;
+
+  const license = await License.findOne({ key: key, status: 'UNUSED' }).populate('_packageId');
+
+  if (license) {
+    license.usedDate = Date();
+    license.status = 'USED';
+    license._usedBy = req.user._storeId;
+    license.save((err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+    const monthlyDuration = license._packageId.monthlyDuration;
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + monthlyDuration);
+
+    const sub = await Subscription();
+    sub._storeId = req.user._storeId;
+    sub._packageId = license._packageId;
+    sub._licenseId = license._id;
+    sub._entryBy = req.user._id;
+    sub.activateDate = Date();
+    sub.expiredDate = currentDate;
+    sub.expired = false;
+    sub.save((err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        req.flash('info', 'You have Successfully Subscribe ');
+        res.redirect('/dashboard');
+      }
+    });
+
+  } else {
+
+    req.flash('info', 'Invalid License Key ');
+    res.redirect('/subscription/license');
+    
+  }
 });
 
 
