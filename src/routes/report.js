@@ -27,20 +27,14 @@ router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
     // const till1 = new Date(dateTill).toISOString();
 
     const bet1 = new Date(dateBet);
-    const bet2 = new Date(bet1);
-    bet2.setDate(bet2.getDate() + 1);
-    const betResult = new Date(bet2).toISOString().split('T')[0];
+    // const bet2 = new Date(bet1);
+    bet1.setDate(bet1.getDate() + 1);
+    const betResult = new Date(bet1).toISOString().split('T')[0];
 
     const till1 = new Date(dateTill);
-    const till2 = new Date(till1);
-    till2.setDate(till2.getDate() + 1);
-    const tillResult = new Date(till2).toISOString().split('T')[0];
-
-    // const till1 = new Date(dateTill);
-
-    /* console.log(betResult);
-    console.log(tillResult);*/
-
+    // const till2 = new Date(till1);
+    till1.setDate(till1.getDate() + 2);
+    const tillResult = new Date(till1).toISOString().split('T')[0];
 
     const sales = await Sales.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lte: tillResult } })
                               .populate('_productId').populate('_branchId')
@@ -73,23 +67,26 @@ router.post('/get/product', guard.ensureLoggedIn(), async (req, res) => {
 
   if (dateBet !== '' && dateTill !== '') {
 
-    //const bet1 = new Date(dateBet).toISOString();
-    //const till1 = new Date(dateTill).toISOString();
+    // const bet1 = new Date(dateBet).toISOString();
+    // const till1 = new Date(dateTill).toISOString();
 
     const bet1 = new Date(dateBet);
-    const bet2 = new Date(bet1);
-    bet2.setDate(bet2.getDate() + 1);
-    const betResult = new Date(bet2).toISOString().split('T')[0];
+    // const bet2 = new Date(bet1);
+    bet1.setDate(bet1.getDate() + 1);
+    const betResult = new Date(bet1).toISOString().split('T')[0];
 
     const till1 = new Date(dateTill);
-    const till2 = new Date(till1);
-    till2.setDate(till2.getDate() + 1);
-    const tillResult = new Date(till2).toISOString().split('T')[0];
+    // const till2 = new Date(till1);
+    till1.setDate(till1.getDate() + 1);
+    const tillResult = new Date(till1).toISOString().split('T')[0];
+
+    console.log(betResult);
+    console.log(tillResult);
 
     //console.log(bet1);
     //console.log(till1);
 
-    const branchproduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lte: tillResult } })
+    const branchproduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: bet1, $lte: till1 } })
                             .populate({
                               path: '_productId',
                               populate: { path: '_categoryId' }

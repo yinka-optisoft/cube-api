@@ -8,7 +8,7 @@ const Package = new Schema({
   price: Number,
   numberOfUser: Number,
   numberOfAdmin: Number,
-  monthlyDuration: Number,
+  duration: Number,
   createdAt: { type: Date, default: Date.now }
 });
 

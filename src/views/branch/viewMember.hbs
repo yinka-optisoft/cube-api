@@ -170,11 +170,11 @@
 
             </ul>
 
-            {{#if (ne users.roleId admin and ne users.roleId admin)}}
+            {{!-- {{#if (ne users.roleId admin and ne users.roleId admin)}} --}}
             <a class="btn btn-success" data-toggle="modal" data-target="#editmemberForm"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
-            {{else}}
+            {{!-- {{else}} --}}
 
-            {{/if}}
+            {{!-- {{/if}} --}}
             <br />
 
         </div>
@@ -256,36 +256,36 @@
                             <form class="form-horizontal form-label-left input_mask" method="POST" action="/branch/user/update/{{branch._id}}" enctype="multipart/form-data">
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="text" class="form-control has-feedback-left" value="{{user.firstname}}" name="firstname" placeholder="First Name" required>
+                                <input type="text" class="form-control has-feedback-left" value="{{users.firstname}}" name="firstname" placeholder="First Name" required>
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="text" class="form-control" value="{{user.middlename}}" name="middlename" placeholder="Middle Name">
+                                <input type="text" class="form-control" value="{{users.middlename}}" name="middlename" placeholder="Middle Name">
                                 <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="text" class="form-control has-feedback-left" name="lastname" value="{{user.lastname}}" placeholder="Last Name">
+                                <input type="text" class="form-control has-feedback-left" name="lastname" value="{{users.lastname}}" placeholder="Last Name">
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="text" class="form-control has-feedback-left" value="{{user.username}}" placeholder="Username" readonly>
+                                <input type="text" class="form-control has-feedback-left" value="{{users.username}}" placeholder="Username" readonly>
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="text" class="form-control has-feedback-left" name="email" value="{{user.email}}" placeholder="Email">
+                                <input type="text" class="form-control has-feedback-left" name="email" value="{{users.email}}" placeholder="Email">
                                 <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                                <input type="number" class="form-control" value="{{user.phone}}" name="phone" placeholder="Phone">
+                                <input type="number" class="form-control" value="{{users.phone}}" name="phone" placeholder="Phone">
                                 <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
                             </div>
 
-                            {{#if (eq user.roleId 'admin')}}
+                            {{#if (eq users.roleId 'admin')}}
 
                             {{!-- <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="roleId" id="e_roleId" required>
@@ -298,14 +298,16 @@
 
                             {{else}}
 
+                            {{!-- // TODO: come back to this --}}
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="_roleId" id="e_roleId" required>
-                                    <option>Select Role</option>
-                                    {{#select user._roleId.name}}
+                                    {{!-- <option>Select Role</option> --}}
+                                    <option value="{{users._roleId._id}}">{{users._roleId.name}} ({{users._roleId.roleType}})</option>
+                                    {{!-- {{#select users._roleId.name}} --}}
                                     {{#each roles}}
                                         <option value="{{_id}}">{{name}} ({{roleType}})</option>
                                     {{/each}}
-                                    {{/select}}
+                                    {{!-- {{/select}} --}}
                                 </select>
                             </div>
                             {{/if}}
@@ -313,7 +315,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="gender" id="egender" required>
                                     <option>Select Gender</option>
-                                    {{#select user.gender}}
+                                    {{#select users.gender}}
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     {{/select}}
@@ -322,7 +324,7 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="country" id="ecountry" required>
-                                    {{#select user.country}}
+                                    {{#select users.country}}
                                     <option>Select Country</option>
                                     <option value="Nigeria">Nigeria</option>
                                     {{/select}}
@@ -331,7 +333,7 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="state" id="estate" required>
-                                    {{#select user.state}}
+                                    {{#select users.state}}
                                     <option>Select State</option>
                                     <option value="Lagos State">Lagos State</option>
                                     <option value="Kwara State">Kwara State</option>
@@ -341,7 +343,7 @@
 
                             <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                 <select class="form-control" name="lga" id="elga" required>
-                                    {{#select user.lga}}
+                                    {{#select users.lga}}
                                     <option>Select L.G.A</option>
                                     <option value="ikeja">Ikeja</option>
                                     <option value="ilorin">Ilorin</option>
@@ -350,7 +352,7 @@
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                                <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Address' required>{{user.address}}</textarea>
+                                <textarea class="form-control" name="address" id="eaddress" rows="2" placeholder='Address' required>{{users.address}}</textarea>
                             </div>
 
                             <div class="form-group">
@@ -358,7 +360,7 @@
                                 <div class="col-md-9 col-sm-9 col-xs-12">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail" style="height: 170px;width:100%;" data-trigger="fileinput">
-                                            <img src="/images/member/{{user.passport}}" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
+                                            <img src="/images/member/{{users.passport}}" class="col-sm-12" style="width: 100%; height: 150px;" alt="...">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail" class="col-sm-12" style="width: 100%; height: 150px;"></div>
                                         <div class="text-center">
@@ -368,7 +370,7 @@
                                                 {{!-- {{#if (eq user.passport 'null')}}
                                                 <input type="file" name="passport" value="/images/member/{{user.passport}}" accept="image/*" required>
                                                 {{else}} --}}
-                                                <input type="file" name="passport" value="/images/member/{{user.passport}}" accept="image/*" required>
+                                                <input type="file" name="passport" value="/images/member/{{users.passport}}" accept="image/*">
                                                 {{!-- {{/if}} --}}
                                             </span>
                                             <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
@@ -377,7 +379,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" name="_memberId" value="{{user._id}}"/>
+                            <input type="hidden" name="_memberId" value="{{users._id}}"/>
                             
                             <div class="ln_solid"></div>
                             <div class="form-group">

@@ -48,7 +48,7 @@ router.post('/package/update', guard.ensureLoggedIn(), async (req, res, next) =>
     packag.price = req.body.price;
     packag.numberOfUser = req.body.numberOfUser;
     packag.numberOfAdmin = req.body.numberOfAdmin;
-    packag.monthlyDuration = req.body.monthlyDuration;
+    packag.duration = req.body.duration;
     packag.save((err) => {
       if (err) {
         console.log(err);
@@ -103,7 +103,7 @@ router.post('/license', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
-// check for email validation
+// check for key validation
 router.post('/check/license/key', guard.ensureLoggedIn(), async (req, res) => {
 
   const key = req.body.key;
@@ -134,9 +134,17 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
       }
     });
 
-    const monthlyDuration = license._packageId.monthlyDuration;
     const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() + monthlyDuration);
+
+    if (license._packageId.period === 'Month' || license._packageId.period === 'Months') {
+      const monthlyDuration = license._packageId.duration;
+      currentDate.setMonth(currentDate.getMonth() + monthlyDuration);
+
+    } else if (license._packageId.period === 'Year' || license._packageId.period === 'Years') {
+      const YearlyDuration = license._packageId.duration;
+      currentDate.setFullYear(currentDate.getFullYear() + YearlyDuration);
+    }
+
 
     const sub = await Subscription();
     sub._storeId = req.user._storeId;
@@ -150,7 +158,7 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
       if (err) {
         console.log(err);
       } else {
-        req.flash('info', 'You have Successfully Subscribe ');
+        req.flash('success', 'You have Successfully Subscribe ');
         res.redirect('/dashboard');
       }
     });
@@ -159,7 +167,7 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
 
     req.flash('info', 'Invalid License Key ');
     res.redirect('/subscription/license');
-    
+
   }
 });
 

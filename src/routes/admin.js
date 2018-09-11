@@ -28,7 +28,8 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
   const product = await Product.count({ _storeId: req.user._storeId });
   const account = await Account.count({ _storeId: req.user._storeId });
   const suppliers = await Supply.count({ _storeId: req.user._storeId });
-  res.render('admin/dashboard', { user, branch, product, account, suppliers, layout: 'layouts/user' });
+  res.render('admin/dashboard', { user, branch, product, account, suppliers, expressFlash: req.flash('success'),
+                                  layout: 'layouts/user' });
 });
 
 
@@ -37,9 +38,26 @@ router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const roles = await Role.find({ _storeId: req.session._storeId });
-  const staff = await Account.find({ _storeId: req.user._storeId })
+  const admins = await Account.find({ _storeId: req.user._storeId })
                                     .populate('_roleId').populate('_branchId');
-  res.render('staff/staff', { user, staff, roles, branches, expressFlash: req.flash('success'), 
+
+  // note that due to check exists query filter the store admin and any other staff that have
+  // the same privilege as admin out
+  const staff = await Account.find({ _storeId: req.user._storeId, _roleId: { $exists: true } })
+                                    .populate('_roleId').populate('_branchId');
+  res.render('staff/staff', { user, staff, admins, roles, branches, expressFlash: req.flash('success'),
+                              layout: 'layouts/user' });
+});
+
+
+// manage admins
+router.get('/admins', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branches = await Branch.find({ _storeId: req.session._storeId });
+  const roles = await Role.find({ _storeId: req.session._storeId });
+  const admins = await Account.find({ _storeId: req.user._storeId, roleId: { $exists: true } })
+                                    .populate('_roleId').populate('_branchId');
+  res.render('staff/admin', { user, admins, roles, branches, expressFlash: req.flash('success'),
                               layout: 'layouts/user' });
 });
 
@@ -136,7 +154,7 @@ router.post('/post', guard.ensureLoggedIn(), async (req, res) => {
 
   const post = await Account.findById(req.body.user);
   post._branchId = req.body._branchId;
-  post.moveDate = new Date;
+  post.moveDate = new Date();
   post.save(function(err) {
     if (err) {
       console.log(err);

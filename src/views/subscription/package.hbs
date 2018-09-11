@@ -91,7 +91,7 @@
                 <th>N/S</th>
                 <th>Category</th>
                 <th>Period</th>
-                <th>Monthly Duration</th>
+                <th>Duration</th>
                 <th>Number Of User</th>
                 <th>Number Of Admin</th>
                 <th>Price</th>
@@ -106,13 +106,13 @@
                     <td>{{inc @index}}</td>
                     <td id="{{_id}}">{{category}}</td>
                     <td id="{{_id}}">{{period}}</td>
-                    <td id="{{_id}}">{{monthlyDuration}}</td>
+                    <td id="{{_id}}">{{duration}}</td>
                     <td id="{{_id}}">{{numberOfUser}}</td>
                     <td id="{{_id}}">{{numberOfAdmin}}</td>
                     <td id="{{_id}}">{{price}}</td>
 
                     <td>
-                        <button title="Edit" data-toggle="modal" _packageId="{{_id}}" category="{{category}}" period="{{period}}" monthlyDuration="{{monthlyDuration}}" price="{{price}}" email="{{email}}" numberOfAdmin="{{numberOfAdmin}}" numberOfUser="{{numberOfUser}}" data-target="#editPackage" class="btn btn-primary btn-sm">
+                        <button title="Edit" data-toggle="modal" _packageId="{{_id}}" category="{{category}}" period="{{period}}" duration="{{duration}}" price="{{price}}" email="{{email}}" numberOfAdmin="{{numberOfAdmin}}" numberOfUser="{{numberOfUser}}" data-target="#editPackage" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
                         <button title="Delete" onclick="deletePackage(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -169,7 +169,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Duration</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="monthlyDuration" id="monthlyDuration" class="form-control" placeholder="Duration" required>
+                        <input type="text" name="duration" id="duration" class="form-control" placeholder="Duration" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -252,7 +252,7 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Duration</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="monthlyDuration" id="monthlyDuration" class="form-control" placeholder="Duration" required>
+                        <input type="text" name="duration" id="duration" class="form-control" placeholder="Duration" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -317,7 +317,7 @@
         var _packageId = $(opener).attr('_packageId'); // Extract info from data-* attributes
         var category = $(opener).attr('category');
         var period = $(opener).attr('period');
-        var monthlyDuration = $(opener).attr('monthlyDuration');
+        var duration = $(opener).attr('duration');
         var price = $(opener).attr('price');
         var numberOfUser = $(opener).attr('numberOfUser'); 
         var numberOfAdmin = $(opener).attr('numberOfAdmin');
@@ -327,7 +327,7 @@
         $('#packageForm').find('[name="category"]').val(category);
         $('#packageForm').find('[name="period"]').val(period);
         $('#packageForm').find('[name="price"]').val(price);
-        $('#packageForm').find('[name="monthlyDuration"]').val(monthlyDuration);
+        $('#packageForm').find('[name="duration"]').val(duration);
         $('#packageForm').find('[name="numberOfUser"]').val(numberOfUser);
         $('#packageForm').find('[name="numberOfAdmin"]').val(numberOfAdmin);
     });
