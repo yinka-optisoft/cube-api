@@ -106,8 +106,8 @@
                 <th>N/S</th>
                 <th>Name</th>
                 <th>Category</th>
-                {{!-- <th>Piece</th> --}}
                 <th>Price</th>
+                <th>Barcode Number</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -119,8 +119,8 @@
                     <td>{{inc @index}}</td>
                     <td id="productName{{_id}}">{{productName}}</td>
                     <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
-                    {{!-- <td id="pieces{{_id}}">{{pieces}}</td> --}}
                     <td id="sellingPrice{{_id}}">{{sellingPrice}}</td>
+                    <td id="barcodeNumber{{_id}}">{{barcodeNumber}}</td>
                          
                     <td>
                         <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" sellingPrice="{{sellingPrice}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
@@ -205,6 +205,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Barcode Number</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <input type="text" name="barcodeNumber" id="barcodeNumber" class="form-control" placeholder="Barcode Number" required>
+                        <span class="barcodeNumber"></span>
                     </div>
                     </div>
                     <div class="form-group">
@@ -733,6 +734,33 @@
             }
             });
     }
+
+
+    $(document).ready(function() {
+        $("input[name='barcodeNumber']").keyup(function() {
+
+            var barcodeNumber = $("input[name='barcodeNumber']").val();
+
+            console.log(barcodeNumber);
+
+            $.ajax({
+
+                type: "POST", // Post / Get method
+                url: "/product/check/barcodeNumber", //Where form data is sent on submission
+                dataType:"text", // Data type, HTML, json etc.
+                data:{ barcodeNumber:barcodeNumber}, //Form variables
+                success:function(response){
+
+                    if(response === 'success'){
+                        $('.barcodeNumber').text('*Barcode Number already Exist Kindly Generate new barcode for this product*').css('color', 'red');
+                    } else {
+                        $('.barcodeNumber').empty();
+                    }
+                }
+            })
+        })
+    });
+
 
 </script>
 

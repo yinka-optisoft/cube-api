@@ -39,6 +39,24 @@ router.get('/view/:productId', guard.ensureLoggedIn(), async (req, res, next) =>
 });
 
 
+// check for barcode number validation
+router.post('/check/barcodeNumber', guard.ensureLoggedIn(), async (req, res) => {
+
+  const barcode = req.body.barcodeNumber;
+
+  const barcodeNumber = await Product.findOne({ _storeId: req.user._storeId, barcodeNumber: barcode });
+
+  console.log(barcodeNumber);
+
+  if (barcodeNumber) {
+    res.send('success');
+  } else {
+    res.send('failure');
+  }
+});
+
+
+
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   var errors = req.validationErrors();

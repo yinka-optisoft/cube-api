@@ -1,0 +1,893 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+        .btn-file {
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    }
+    </style>
+
+{{/extend}}
+
+
+<div class="">
+    
+    <div class="text-center">
+        <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#customer">
+        <i class="fa fa-plus fa-2x"></i>
+        <span>New Customer</span>
+        </a>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+            <h2> Create Sales </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            <form class="form-horizontal form-label-left" id="allSales">
+            <!-- Smart Wizard -->
+            <div id="wizard" class="form_wizard wizard_horizontal">
+                <ul class="wizard_steps">
+                <li>
+                    <a href="#step-1">
+                    <span class="step_no">1</span>
+                    <span class="step_descr">
+                        Step 1<br />
+                        <small>Invoice Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-2">
+                    <span class="step_no">2</span>
+                    <span class="step_descr">
+                        Step 2<br />
+                        <small>Customer Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-3">
+                    <span class="step_no">3</span>
+                    <span class="step_descr">
+                        Step 3<br />
+                        <small>Product Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-4">
+                    <span class="step_no">4</span>
+                    <span class="step_descr">
+                        Step 4<br />
+                        <small>Sales Details</small>
+                    </span>
+                    </a>
+                </li>
+                </ul>
+                    <div id="step-1">
+                        <form class="form-horizontal form-label-left" id="saleStep1">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="date" required="required" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="step-2">
+                        <form class="form-horizontal form-label-left" id="saleStep2">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <select class="form-control" name="_customerId" id="_customerId" required>
+                                            <option>Select Customer</option>
+                                            {{#each customers}}
+                                                <option value="{{_id}}">{{name}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="step-3">
+                        <form class="form-horizontal form-label-left" id="saleProduct">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Barcode:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="barcodeNumber" onchange="getPieces(this.value)" name="barcodeNumber" placeholder="Product Barcode" autofocus required>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="productName" name="productName" placeholder="Product Name" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="piecesMsg col-md-6 col-sm-offset-3">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" placeholder="Pieces Available" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="piecesSold" id="piecesSold" placeholder="Enter Pieces" required>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Product Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice" placeholder="Product Price" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="getMsg col-md-6 col-md-offset-3">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="productPrice" id="productPrice" placeholder="Enter Price" required>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                    <h2>Sales </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Settings 1</a>
+                                            </li>
+                                            <li><a href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Product Name</th>
+                                            <th>Pieces</th>
+                                            <th>Unit Price</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="saleTable">
+
+                                        </tbody>
+                                    </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="step-4">
+                        <form class="form-horizontal form-label-left" id="saleStep4">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12" placeholder="Sum" name="sumAmt" id="sumAmt" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="discount" onchange="getDiscount(this.value)" class="form-control col-md-7 col-xs-12" placeholder="Discount Given To Customer" id="discount">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="vat" placeholder="VAT" id="vat">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="amtDueToCus" placeholder="Amount Due To Customer" id="amtDueToCus" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Balance Transaction:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="balanceTransaction" id="balanceTransaction" disabled>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            <!-- End SmartWizard Content -->
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="customer">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Create Customer</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/sales/create/customer">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Customer Name">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" class="form-control" id="phone" name="phone" placeholder="Phone">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Address</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="address" id="address" rows="2" placeholder="Address"></textarea>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="updateSales">
+<div class="modal-dialog modal-sm" style="width: 500px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Purchased Sales</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                    <form class="form-horizontal form-label-left saleProduct">
+                        <div class="row form-group" id="editSaleProduct">
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <select class="form-control" name="_productId" onchange="egetPieces(this.value)" required>
+                                    <option>Select Product</option>
+                                    {{#each products}}
+                                        <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="epiecesAvai" id="epiecesAvai" placeholder="Pieces Available" disabled>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="eenterPieces(this.value)" name="epiecesSold" id="epiecesSold" placeholder="Enter Pieces">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Product Price:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" name="egetPrice" id="egetPrice" placeholder="Product Price" disabled>
+                            </div>
+                            </div>
+                            <input type="hidden" name="_uproductId" id="_uproductId" value="" />
+                            <div class="form-group">
+                            <div class="egetMsg col-md-6 col-md-offset-3">
+
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3">Enter Price:
+                            </label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control col-md-7 col-xs-12" type="text" onchange="epricePay(this.value)" name="eproductPrice" id="eproductPrice" placeholder="Enter Price">
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="col-md-6 col-md-offset-3 text-center">
+                                <button type="submit" class="btn btn-success salesArrayUpdate">Submit</button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="salesSuccess" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                    <div class="text-center">
+                        <img src="/images/checked1.png" alt="..." width="200" height="200">
+                        <h4>Product Purchased Successful</h4>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                            <a href="/sales/get/pdf/" id="salesId" target="_blank">
+                                <button type="submit" class="btn btn-success">Click To view Invoice</button>
+                            </a>
+                            <br>
+                            <br>
+
+                            <button type="button" onclick="closeSales()" class="btn btn-danger" data-dismiss="modal">Click To Close</button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+
+
+
+{{#extend 'scripts'}}
+
+    <!-- jQuery Smart Wizard -->
+    <script src="/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+
+    <script>
+
+        // get current date
+        var saleDate = new Date().toDateString();
+        $('#saleDate').val(saleDate);
+
+        // generate invoice number
+        function genInvoiceNumb() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        for (var i = 0; i < 3; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+        var invoiceNumber = new Date().format('m-d-Y/h:i:s');
+        $('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
+
+
+        // generate waybill number
+        function genWayBilNumb() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 11; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+        }
+        $('#waybillNumber').val(genWayBilNumb());
+
+
+        // get product pieces thought barcode number
+        function getPieces(id){
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/get/barcodeNumber',
+                dataType: 'json',
+                data: { barcodeNumber:id },
+                success: function(data) {
+
+                    $('#productName').empty();
+                    $('#productName').val(data._productId.productName);
+
+                    // check if product is empty
+                    if(data.pieces < 0){
+
+                        var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'Product Unavailable'
+                            '</div>';
+
+                        $('.piecesMsg').append(msg);
+                        $('.piecesMsg').show().fadeOut( 10000 );
+
+                        $('#piecesSold').attr('disabled', 'disabled');
+                        $('#productPrice').attr('disabled', 'disabled');
+
+                        $('#piecesAvai').empty();
+                        $('#piecesAvai').val(0);
+
+                        $('#getPrice').empty();
+                        $('#getPrice').val(0);
+                    } else {
+
+                        $('#piecesSold').removeAttr("disabled");
+                        $('#productPrice').removeAttr("disabled");
+
+                        $('#piecesAvai').empty();
+                        $('#piecesAvai').val(data.pieces);
+
+                        $('#getPrice').empty();
+                        $('#getPrice').val(data._productId.sellingPrice);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        }
+
+        // enter price
+        function enterPieces(pieces){
+
+            var available = $('#piecesAvai').val();
+            var piecesSold = pieces;
+            var sub = (parseFloat(available) - parseFloat(piecesSold));
+
+            $('#piecesAvai').val(sub);
+        }
+
+
+        // price pay by customer
+        function pricePay(price){
+            var initPrice = price;
+            var presentPrice = $('#getPrice').val();
+
+            if(parseFloat(initPrice) < parseFloat(presentPrice)){
+                var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'You can\'t sell below ' + presentPrice+
+                            '</div>';
+
+                $('#productPrice').val(0);
+            }
+
+            $('.getMsg').append(msg);
+            $('.getMsg').show().fadeOut( 10000 );
+        }
+
+
+        $('#updateSales').on('show.bs.modal', function (e) {
+
+            var opener = e.relatedTarget; // Button that triggered the modal
+
+            var productId = $(opener).attr('productId'); // Extract info from data-* attributes
+            var pieces = $(opener).attr('pieces');
+            var price = $(opener).attr('price'); 
+
+            //$('#editSaleProduct').find('[name="_productId"]').val(productId);
+            $('#editSaleProduct').find('[name="_uproductId"]').val(productId);
+            $('#editSaleProduct').find('[name="pieces"]').val(pieces);
+            $('#editSaleProduct').find('[name="price"]').val(price);
+            
+        });
+
+        function getDiscount(e){
+
+            if(e < 0){
+                $('#discount').val(0);
+                return false
+            }
+
+            var sum = $('#sumAmt').val();
+            var totalDiscount = (sum - e);
+            $('#amtDueToCus').val(totalDiscount);
+            $('#balanceTransaction').val(totalDiscount);
+        }
+
+        function amountPaidByCus(e){
+            var amtDueToCus = $('#amtDueToCus').val();
+            var totalDiscount = (e - amtDueToCus);
+            $('#balanceTransaction').val(totalDiscount);
+        }
+
+
+        var salesArray = [];
+        var salesObj = { };
+
+        function checkexist(){
+            var inArray = -1;
+            for(var k = 0; k < salesArray.length; ++k ){
+                if($('#_productId').val() === salesArray[k]._productId)
+                inArray = k;
+            }
+
+
+            if(inArray > -1) {
+
+                console.log('come when tru');
+
+                salesArray[inArray].piecesSold = parseFloat(salesArray[inArray].piecesSold) + parseFloat($('#piecesSold').val());
+                salesArray[inArray].productTotalPrice = parseFloat(salesArray[inArray].piecesSold) * parseFloat(salesArray[inArray].productTotalPrice);
+
+                console.log(salesArray, 'if inArray is tru');
+                
+                tableAppend();
+
+            } else {
+
+                var salesObj = { };
+
+                console.log(salesArray, 'when inArray is false');
+                console.log('create new one');
+
+                var p = $('#saleProduct').find(':selected').attr('data-productName');
+
+                salesObj['_productId'] = $('#_productId').val();
+                salesObj['productName'] = p;
+                salesObj['piecesSold'] = $('#piecesSold').val();
+                salesObj['productPrice'] = $('#productPrice').val();
+                salesObj['productTotalPrice'] = parseFloat($('#productPrice').val()) *  parseFloat(salesObj['piecesSold'])
+
+                salesArray.push(salesObj);
+                salesObj = { };
+
+                tableAppend();
+
+            }
+
+        }
+
+        $('#saleProduct').submit(function(e){
+
+          e.preventDefault();
+
+            if(salesArray.length > 0 ){
+                console.log('enter');
+                checkexist();
+
+            }else{
+
+                console.log('create if zero');
+                
+                var p = $(this).find(':selected').attr('data-productName');
+
+                salesObj['_productId'] = $('#_productId').val();
+                salesObj['productName'] = p;
+                salesObj['piecesSold'] = $('#piecesSold').val();
+                salesObj['productPrice'] = $('#productPrice').val();
+                salesObj['productTotalPrice'] = $('#productPrice').val() *  salesObj['piecesSold']
+                salesArray.push(salesObj);
+                salesObj = { };
+
+                console.log(salesArray);
+
+                $("#saleProduct")[0].reset();
+
+                tableAppend();
+
+            }
+
+        });
+
+
+        
+        function tableAppend(){
+            var totalCal = [];
+             $('#saleTable').empty();
+            for (var i = 0, I = salesArray.length; i < I; i++) {
+
+                var cal = (salesArray[i].piecesSold * salesArray[i].productPrice);
+                totalCal.push(cal);
+
+
+                var tr = '<tr>'+
+                        '<td>'+ (1 + i) +'</td>'+
+                        '<td>'+salesArray[i].productName+'</td>'+
+                        '<td>'+salesArray[i].piecesSold+'</td>'+
+                        '<td>'+salesArray[i].productPrice+'</td>'+
+                        '<td>'+cal+'</td>'+
+                        '<td>'+
+                            /*'<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+*/
+                            '<button type="button" value="'+ salesArray[i]._productId +'" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>'
+                            +'</td>'+
+                    '</tr>'
+
+                $('#saleTable').append(tr);
+                $("#saleProduct")[0].reset();
+
+
+                // get sum of all the project on the table
+                sumTotalCal = 0;
+                $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
+
+                // assign sumTotalCal to Sum Amount By Sales and 
+                // amount due to customer and balance transaction
+
+                $('#sumAmt').val(sumTotalCal);
+                $('#amtDueToCus').val(sumTotalCal);
+                $('#balanceTransaction').val(sumTotalCal);
+            }
+        }
+
+
+            $('#allSales').submit(function(e){
+            e.preventDefault();
+
+            var dis = $('#discount').val();
+            var vat = $('#vat').val();
+            var amtDueToCus = $('#amtDueToCus').val();
+            var payByCus = $('#payByCus').val();
+            var balanceTransaction = $('#balanceTransaction').val();
+
+            var invoiceDate = $('#invoiceDate').val();
+            var invoiceNumber = $('#invoiceNumber').val();
+            var waybillNumber = $('#waybillNumber').val();
+
+            var customerId = $('#_customerId').val();
+
+            var totalPrice = sumTotalCal;
+
+            if(invoiceDate === ''){
+                alert('Invoice Date is empty');
+                return false;
+            }
+
+            console.log(totalPrice, 'total price');
+            console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
+            console.log(customerId, 'step2');
+            console.log(salesArray, 'step3');
+            console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, 'step4');
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/create/sale',
+                dataType: 'json',
+                data: {
+                    salesArray: salesArray,
+                    discount: dis,
+                    vat: vat,
+                    amtDueToCus: amtDueToCus,
+                    payByCus: payByCus,
+                    balanceTransaction: balanceTransaction,
+                    invoiceDate: invoiceDate,
+                    invoiceNumber: invoiceNumber,
+                    waybillNumber: waybillNumber,
+                    customerId: customerId,
+                    totalPrice: totalPrice
+                }
+                }).done(function(data){
+                    console.log(data);
+                    $('#salesSuccess').modal('show');
+
+                    console.log(data._id, 'for data');
+
+                    //var temp=$('a').attr('href').split('=')[0];
+                    //$('a').attr('href',temp+'='+data._id);
+                    $('a#salesId').attr('href','/sales/get/pdf/'+data._id);
+                });
+            });
+
+            function closeSales(){
+                location.reload();
+            }
+
+        // remove product from array
+        function deleteProduct(id){
+
+            var sum = $('#sumAmt').val();
+
+            for (var i = 0; i < salesArray.length; i++){
+                if(id === salesArray[i]._productId){
+                    var deductSum = parseFloat(sum - salesArray[i].productPrice);
+                    salesArray.splice(i, 1);
+                }
+            }
+
+            $('#sumAmt').val(deductSum);
+            tableAppend();
+        }
+
+        $('.salesArrayUpdate').click(function(e){
+            e.preventDefault();
+            
+            var productId = $('#_uproductId').val();
+            var piecesSold = $('#epiecesSold').val();
+            var productPrice = $('#eproductPrice').val();
+
+            for (var i = 0; i < salesArray.length; i++){
+                if(productId === salesArray[i]._productId){
+                    salesArray[i].piecesSold = piecesSold;
+                    salesArray[i].productPrice = productPrice;
+                }
+            }
+
+            $('#updateSales').modal('hide');
+
+            tableAppend();
+        });
+        
+        
+</script>
+
+{{/extend}}

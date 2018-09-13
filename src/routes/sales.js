@@ -45,8 +45,23 @@ router.get('/create/sales', guard.ensureLoggedIn(), async (req, res, next) => {
   res.render('sales/createSales', { user, expressFlash: req.flash('info'), customers, products, layout: 'layouts/user' });
 });
 
+
+router.get('/create/sales/pos', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const customers = await Customer.find({ _storeId: req.user._storeId, _branchId: req.user._branchId, show: true });
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_productId');
+  res.render('sales/posSales', { user, expressFlash: req.flash('info'), customers, products, layout: 'layouts/user' });
+});
+
 router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
   const product = await BranchProduct.findOne({ _productId: req.body._productId, _branchId: req.user._branchId }).populate('_productId');
+  return res.json(product);
+});
+
+
+router.post('/get/barcodeNumber', guard.ensureLoggedIn(), async (req, res, next) => {
+  const pro = await Product.findOne({ barcodeNumber: req.body.barcodeNumber, _storeId: req.user._storeId });
+  const product = await BranchProduct.findOne({ _productId: pro._id, _branchId: req.user._branchId }).populate('_productId');
   return res.json(product);
 });
 
