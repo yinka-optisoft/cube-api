@@ -138,6 +138,21 @@ router.post('/check/email', guard.ensureLoggedIn(), async (req, res) => {
 });
 
 
+// check for username validation
+router.post('/check/username', guard.ensureLoggedIn(), async (req, res) => {
+
+  const username = req.body.username;
+
+  const user = await Account.findOne({ username: username });
+
+  if (user) {
+    res.send('success');
+  } else {
+    res.send('failure');
+  }
+});
+
+
 // add new member
 router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next) => {
   const form = new formidable.IncomingForm();
@@ -155,6 +170,10 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
 
       const store = await Store.findById(req.session._storeId);
 
+      const convertToUpper = store.name;
+      const storeName = convertToUpper.toUpperCase();
+      const storeSub = storeName.substring(0, 3);
+
       const branchId = req.params._branchId;
 
       if (!store)
@@ -168,7 +187,8 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
       member._storeId = store._id;
       member._branchId = branchId;
       member.status = 1;
-      member.username = await generateUniqueID(store.shortCode);
+      member.username = `${storeSub}-field.username`;
+      // member.username = await generateUniqueID(store.shortCode);
       fs.readFile(passport.path, function(err, data) {
         fs.writeFile(dest,
                      data, function(err) {
@@ -180,15 +200,15 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
                            member.passport = name;
                            Account.register(
                              new Account(member), password, async (err, account) => {
-                              const tokenG = await Account.findById(account._id);
-                                console.log(tokenG);
-                                tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                                await tokenG.save(function(err) {
-                                  if (err) {
-                                    console.log(err);
-                                  }
-                                  console.log(tokenG);
-                                });
+                               const tokenG = await Account.findById(account._id);
+                               console.log(tokenG);
+                               tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                               await tokenG.save(function(err) {
+                                 if (err) {
+                                   console.log(err);
+                                 }
+                                 console.log(tokenG);
+                               });
 
                                if (err) {
                                  res.status(500);

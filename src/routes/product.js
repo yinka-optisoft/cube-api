@@ -50,6 +50,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const pieces = req.body.pieces;
   const sellingPrice = req.body.sellingPrice;
   const note = req.body.note;
+  const barcodeNumber = req.body.barcodeNumber;
 
   req.checkBody('productName', 'Product Name is required').notEmpty();
   req.checkBody('_categoryId', 'Category is required').notEmpty();
@@ -57,6 +58,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
   req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
+  req.checkBody('barcodeNumber', 'Barcode Number is required').notEmpty();
 
   console.log(errors);
 

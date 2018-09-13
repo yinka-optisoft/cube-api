@@ -4195,7 +4195,8 @@ footer {}
 
 .breadcumb-area {
   background: rgba(0, 0, 0, 0) url("../img/about/breadcumb-bg.jpg") repeat fixed center center;
-  padding: 275px 0 51px;
+  /* padding: 275px 0 51px; */
+  padding: 5px 0 5px;
 }
 
 .breadcumb-area::before {

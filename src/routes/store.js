@@ -72,7 +72,14 @@ router.post('/create-store', async (req, res, next) => {
 
         const convertToUpper = fields.name;
         const storeName = convertToUpper.toUpperCase();
-        storeName.substring(0, 2);
+        const storeSub = storeName.substring(0, 3);
+
+        // console.log(`${storeSub}-field.username`);
+
+        // console.log(storeName);
+        // console.log(storeSub);
+
+        // return false;
 
         const newStore = new Store();
         const logo = files.logo;
@@ -125,7 +132,7 @@ router.post('/create-store', async (req, res, next) => {
                                newAdmin.roleId = 'admin';
                                newAdmin._storeId = newStore._id;
                                newAdmin._branchId = newBranch._id;
-                               newAdmin.username = await generateUniqueID(storeName);
+                               newAdmin.username = await generateUniqueID(storeSub);
                                newAdmin.name = newStore.name;
                                /* newAdmin.firstname = fields.firstname;
                                newAdmin.middlename = fields.middlename;

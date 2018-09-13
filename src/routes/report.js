@@ -33,7 +33,7 @@ router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
 
     const till1 = new Date(dateTill);
     // const till2 = new Date(till1);
-    till1.setDate(till1.getDate() + 2);
+    till1.setDate(till1.getDate() + 1);
     const tillResult = new Date(till1).toISOString().split('T')[0];
 
     const sales = await Sales.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lte: tillResult } })

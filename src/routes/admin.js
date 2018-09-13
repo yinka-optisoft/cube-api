@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -77,45 +78,75 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
   form.parse(req, async (err, fields, files) => {
 
-    const store = await Store.findById(req.user._storeId);
+    const user = await Account.findOne({ email: fields.email });
 
-    // const branchId = req.params._branchId;
+    if (user) {
 
-    if (!store)
-      return res.status(400).json({ message: 'Store doesn\'t exist!' });
-    const passport = files.passport;
-    const member = fields;
-    const password = member.password;
-    delete member.password;
-    const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-    const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
-    member._storeId = store._id;
-    // member._branchId = branchId;
-    member.status = 1;
-    member.username = await generateUniqueID(store.shortCode);
-    fs.readFile(passport.path, function(err, data) {
-      fs.writeFile(dest,
-                   data, function(err) {
-                     fs.unlink(passport.path, function(err) {
-                       if (err) {
-                         console.log(err);
-                       } else {
-                         member.passport = name;
-                         Account.register(
-                           new Account(member), password, (err, account) => {
-                             if (err) {
-                               console.log(err);
-                             } else {
-                               req.flash('success', `Saved successfully! Your Username is ${member.username}`);
-                               res.redirect('/admin/staff');
-                             }
-                           });
-                       }
+      req.flash('success', 'E-mail Or Username Already Exist');
+      res.redirect('/admin/staff/');
+
+    } else {
+
+      const store = await Store.findById(req.user._storeId);
+
+      // const convertToUpper = store.name;
+      // const storeName = convertToUpper.toUpperCase();
+      // const storeSub = storeName.substring(0, 3);OPTI74715
+
+      // console.log(`${storeSub}${fields.username}`);
+
+      // return false;
+
+
+      if (!store)
+        return res.status(400).json({ message: 'Store doesn\'t exist!' });
+      const passport = files.passport;
+      const member = fields;
+      const password = member.password;
+      delete member.password;
+      const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+      const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+      member._storeId = store._id;
+      // member._branchId = branchId;
+      member.status = 1;
+      // member.username = await generateUniqueID(store.shortCode);
+      // member.username = `${storeSub}-field.username`;
+      member.username = fields.username;
+      fs.readFile(passport.path, function(err, data) {
+        fs.writeFile(dest,
+                     data, function(err) {
+                       fs.unlink(passport.path, function(err) {
+                         if (err) {
+                           console.log(err);
+                         } else {
+                           member.passport = name;
+                           Account.register(
+                             new Account(member), password, async (err, account) => {
+                               console.log(account, 'account');
+                               const tokenG = await Account.findById(account._id);
+                               console.log(tokenG);
+                               tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                               await tokenG.save(function(err) {
+                                 if (err) {
+                                   console.log(err);
+                                 }
+                                 console.log(tokenG);
+                               });
+
+                               if (err) {
+                                 res.status(500);
+                                 res.send(err);
+                               } else {
+                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                                 res.redirect('/admin/staff/');
+                               }
+                             });
+                         }
+                       });
                      });
-                   });
-    });
+      });
+    }
   });
-
 });
 
 

@@ -296,8 +296,9 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" value="{{username}}" id="inputSuccess2" placeholder="Username" readonly>
+                        <input type="text" class="form-control has-feedback-left" name="username" value="{{username}}" id="inputSuccess2" placeholder="Username">
                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                        <span class="usernameExist"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
@@ -553,6 +554,32 @@ $(document).ready(function() {
                     $('.exist').text('*E-mail already Exist*').css('color', 'red');
                 } else {
                     $('.exist').empty();
+                }
+            }
+        })
+    })
+});
+
+
+$(document).ready(function() {
+    $("input[name='username']").keyup(function() {
+
+        var username = $("input[name='username']").val();
+
+        console.log(username);
+
+        $.ajax({
+
+            type: "POST", // Post / Get method
+            url: "/branch/check/username", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ username:username}, //Form variables
+            success:function(response){
+
+                if(response === 'success'){
+                    $('.usernameExist').text('*Username already Exist*').css('color', 'red');
+                } else {
+                    $('.usernameExist').empty();
                 }
             }
         })
