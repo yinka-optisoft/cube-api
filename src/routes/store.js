@@ -17,7 +17,15 @@ const router = express.Router();
 
 
 router.get('/register', async (req, res) => {
-  const business = await Business.find();
+  const business = await Business.find((err, bus) => {
+    if(err){
+      console.log(err, 'Yes oooooooooooooooooo error');
+    } else {
+      console.log(bus, 'No ooooooooooooooo Not error');
+    }
+  });
+
+  console.log(business);
   res.render('site/register', { business, expressFlash: req.flash('info'), layout: 'layouts/site' });
 });
 

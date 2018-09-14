@@ -122,8 +122,23 @@ passport.deserializeUser(Account.deserializeUser());
 // mongoose.connect('mongodb://localhost/cube');
 
 // mongoose for online
-mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin&retryWrites=true');
+// mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin&retryWrites=true');
 
+try {
+  mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin');
+
+  console.log('connected');
+  Account.find({}, function(err, rec){
+    // if(err){
+      console.log(err, 'YYes error');
+    // } else {
+      console.log(rec);
+    // }
+  });
+
+  } catch (e) {
+    throw e;
+  }
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

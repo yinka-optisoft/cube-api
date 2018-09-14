@@ -187,7 +187,8 @@
                                 <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control col-md-7 col-xs-12" type="text" id="productName" name="productName" placeholder="Product Name" disabled>
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="productName" name="productName" placeholder="Product Name" readonly>
+                                    <input type="hidden" id="productNameId" name="productNameId">
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -567,6 +568,7 @@
 
                     $('#productName').empty();
                     $('#productName').val(data._productId.productName);
+                    $('#productNameId').val(data._productId._id);
 
                     // check if product is empty
                     if(data.pieces < 0){
@@ -701,7 +703,12 @@
                 console.log(salesArray, 'when inArray is false');
                 console.log('create new one');
 
-                var p = $('#saleProduct').find(':selected').attr('data-productName');
+                var p = $('#productName').val();
+
+                var pId = $('#_productId').val();
+
+                console.log(p);
+                console.log(pId);
 
                 salesObj['_productId'] = $('#_productId').val();
                 salesObj['productName'] = p;
@@ -730,9 +737,10 @@
 
                 console.log('create if zero');
                 
-                var p = $(this).find(':selected').attr('data-productName');
+                var p = $('#productName').val();
+                //var id = $('#productNameId').val();
 
-                salesObj['_productId'] = $('#_productId').val();
+                salesObj['_productId'] = $('#productNameId').val();
                 salesObj['productName'] = p;
                 salesObj['piecesSold'] = $('#piecesSold').val();
                 salesObj['productPrice'] = $('#productPrice').val();
