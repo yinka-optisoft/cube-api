@@ -38,6 +38,9 @@ const router = express.Router();
 
 router.post('/storeProduct', verifyToken, upload.single('avatar'), async (req, res) => {
 
+
+  console.log(req.file);
+  console.log(req.body);
   if (imageName == undefined) {
     imageName = 'defaultProduct.png';
   }
@@ -56,14 +59,7 @@ router.post('/storeProduct', verifyToken, upload.single('avatar'), async (req, r
   addProduct.note = req.body.note;
   addProduct.barcodeNumber = req.body.barcodeNumber;
   addProduct.productImage = imageName;
-  await addProduct.save(function(err) {
-    if (err) {
-      console.log(err);
-      return res.json({ error: 'An error occured, please try again later' });
-    }
-    // console.log('saved oo');
-    // return res.json({ success: 'product has been added' });
-  });
+  await addProduct.save();
 
   const addBranchproduct = await new BranchProduct();
   addBranchproduct._branchId = req.body.productBranch;
@@ -147,38 +143,43 @@ router.post('/deleteProduct', verifyToken, async (req, res) => {
   } else {
 
     const findProduct = await BranchProduct.findOne({ _productId: productId, _branchId: _branchId }).remove();
-    return res.json({ title: 'success', msg: 'Product has been deleted from branch'  });
+    return res.json({ title: 'success', msg: 'Product has been deleted from branch' });
   }
 });
 
 router.post('/deleteBranch', verifyToken, async (req, res) => {
-  //const productId = req.body._productId;
+  // const productId = req.body._productId;
   const _branchId = req.body._branchId;
-  const findSale = await Sales.findOne({ _branchId: _branchId, _storeId: req.user._storeId  });
+  console.log(_branchId);
+  const findSale = await Sales.findOne({ _branchId: _branchId, _storeId: req.user._storeId });
+  const findHeadBranch = await Branch.findOne({ _id: _branchId, _storeId: req.user._storeId });
+  if (findHeadBranch.headBranch == true) {
+    return res.json({ title: 'notdelete', msg: 'You can\'t delete the main branch' });
+  }
   if (findSale) {
 
     return res.json({ title: 'notdelete', msg: 'A sale has been made on this branch, branch cannot be deleted' });
 
   } else {
 
-    const findProduct = await Branch.findOne({ _branchId: _branchId, _storeId: req.user._storeId }).remove();
+    const findProduct = await Branch.findOne({ _id: _branchId, _storeId: req.user._storeId, headBranch: false }).remove();
     const DelBranchProduct = await BranchProduct.find({ _branchId: _branchId }).remove();
     return res.json({ title: 'success', msg: 'Branch has been deleted' });
   }
 });
 
 router.post('/deleteCategory', verifyToken, async (req, res) => {
-  //const productId = req.body._productId;
+  // const productId = req.body._productId;
   console.log(req.body);
   const categoryId = req.body._categoryId;
-  const findSale = await Product.findOne({ _categoryId: categoryId._id  });
+  const findSale = await Product.findOne({ _categoryId: categoryId._id });
   if (findSale) {
 
     return res.json({ title: 'notdelete', msg: 'A product is under this category' });
 
   } else {
 
-    const category = await Category.findOne({ _id: categoryId._id  }); 
+    const category = await Category.findOne({ _id: categoryId._id }).remove();
     return res.json({ title: 'success', msg: 'Category has been deleted' });
   }
 });

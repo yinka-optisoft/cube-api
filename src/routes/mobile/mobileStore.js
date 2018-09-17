@@ -115,6 +115,7 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     newBranch.country = req.body.storeCountry;
     newBranch.state = req.body.storeState;
     newBranch.city = req.body.storeCity;
+    newBranch.headBranch = true;
     await newBranch.save(function(err) {
       if (err) {
         // console.log(err);
@@ -200,6 +201,7 @@ router.post('/storeBranch', verifyToken, async (req, res) => {
   addBranch.country = req.body.country;
   addBranch.state = req.body.state;
   addBranch.city = req.body.city;
+  addBranch.headBranch = false;
 
   await addBranch.save(function(err) {
     if (err) {

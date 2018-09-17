@@ -97,7 +97,7 @@ router.post('/addSales', verifyToken, async (req, res) => {
 router.get('/fetchSales', verifyToken, async (req, res) => {
 
   const allSales = await Sales.find({ _storeId: req.user._storeId, _branchId: req.user._branchId })
-    .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 });;
+    .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 }); ;
   console.log(allSales);
   return res.json({ sales: allSales });
 });
@@ -134,7 +134,6 @@ const generateUniqueID = async storeShort => {
 };
 
 router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) => {
-
   var branchId;
   if (req.body._branchId) {
 
@@ -160,9 +159,9 @@ router.post('/addUser', verifyToken, upload.single('avatar'), async (req, res) =
   const password = newAdmin.password;
   delete newAdmin.password;
 
-  if(req.body.privilege == 'true'){
+  if (req.body.privilege == 'true') {
 
-   newAdmin.roleId = 'admin';
+    newAdmin.roleId = 'admin';
   } else {
     newAdmin._roleId = req.body.role;
   }
@@ -412,7 +411,7 @@ router.post('/editBranch', verifyToken, async (req, res) => {
     if (err) {
       console.log(err);
     }
-  }); 
+  });
   console.log(findBranch);
   return res.json({ success: 'Branch has been updated', title: 'success' });
 });
@@ -452,29 +451,29 @@ router.get('/fetchBranchDetails', verifyToken, upload.single('avatar'), async (r
 });
 
 router.post('/changeStatus', verifyToken, async (req, res) => {
-   const findBranch = await Branch.findOne({ _id: req.body.id });
-   findBranch.status = !findBranch.status;
-   await findBranch.save(function(err){
-     if(err){
-      return  res.json({ error: 'An error occured'});
-     }
+  const findBranch = await Branch.findOne({ _id: req.body.id });
+  findBranch.status = !findBranch.status;
+  await findBranch.save(function(err) {
+    if (err) {
+      return res.json({ error: 'An error occured' });
+    }
 
-     return  res.json({ success: 'Status has been changed' });
-   })
-  
+    return res.json({ success: 'Status has been changed' });
+  });
+
 });
 router.post('/blockUser', verifyToken, async (req, res) => {
   const findUser = await Account.findOne({ _id: req.body.userId });
-  
- findUser.status = !findUser.status;
-  await findUser.save(function(err){
-    if(err){
-     return  res.json({ error: 'An error occured'});
+
+  findUser.status = !findUser.status;
+  await findUser.save(function(err) {
+    if (err) {
+      return res.json({ error: 'An error occured' });
     }
 
     console.log(findUser.status);
-    return  res.json({ success: 'Status has been changed', status: findUser.status });
-  })
- 
+    return res.json({ success: 'Status has been changed', status: findUser.status });
+  });
+
 });
 export default router;

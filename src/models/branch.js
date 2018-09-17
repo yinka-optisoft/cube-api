@@ -10,6 +10,7 @@ const Branch = new Schema({
   country: String,
   state: String,
   city: String,
+  headBranch: { type: Boolean, default: false },
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
