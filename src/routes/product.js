@@ -82,8 +82,10 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   if (errors) {
 
-    req.session.errors = errors;
+    // req.session.errors = errors;
     res.redirect('/product');
+
+    // res.render('product/manage', { errors });
 
   } else {
 
@@ -117,6 +119,8 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 // update product
 router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 
+  var errors = req.validationErrors();
+
   const product = await Product.findById(req.body._productId);
 
   const name = req.body.name;
@@ -133,8 +137,6 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   // req.checkBody('pieces', 'Pieces is required').notEmpty();
   req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
-
-  var errors = req.validationErrors();
 
   console.log(errors);
 

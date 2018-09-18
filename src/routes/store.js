@@ -12,20 +12,13 @@ import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import jwt from 'jsonwebtoken';
+import Subscription from '../models/subscription';
 
 const router = express.Router();
 
 
 router.get('/register', async (req, res) => {
-  const business = await Business.find((err, bus) => {
-    if(err){
-      console.log(err, 'Yes oooooooooooooooooo error');
-    } else {
-      console.log(bus, 'No ooooooooooooooo Not error');
-    }
-  });
-
-  console.log(business);
+  const business = await Business.find();
   res.render('site/register', { business, expressFlash: req.flash('info'), layout: 'layouts/site' });
 });
 
@@ -128,7 +121,22 @@ router.post('/create-store', async (req, res, next) => {
                                newBranch.country = newStore.country;
                                newBranch.state = newStore.state;
                                newBranch.city = newStore.city;
+                               newBranch.mainBranch = true;
                                await newBranch.save(function(err) {
+                                 if (err) {
+                                   console.log(err);
+                                 }
+                               });
+
+                               const currentDate = new Date();
+                               currentDate.setMonth(currentDate.getMonth() + 1);
+
+                               const sub = await Subscription();
+                               sub._storeId = newStore._id;
+                               sub.activateDate = Date();
+                               sub.expiredDate = currentDate;
+                               sub.expired = false;
+                               sub.save((err) => {
                                  if (err) {
                                    console.log(err);
                                  }
@@ -150,6 +158,8 @@ router.post('/create-store', async (req, res, next) => {
                                newAdmin.email = fields.admin_email;*/
                                Account.register(new Account(newAdmin), password,
                                                 async (err, account) => {
+                                                  
+                                                  // return false;
                                                   const tokenG = await Account.findById(account._id);
                                                   console.log(tokenG);
                                                   tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');

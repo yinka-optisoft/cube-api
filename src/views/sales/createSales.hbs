@@ -601,30 +601,7 @@
         }
 
 
-        // for edit
-        function egetPieces(id){
-            var productId = id;
-
-            console.log(productId);
-
-            $.ajax({
-                type: 'POST',
-                url: '/sales/get/pieces',
-                dataType: 'json',
-                data: { _productId: productId },
-                success: function(data) {
-                    // for edit
-                    $('#epiecesAvai').empty();
-                    $('#epiecesAvai').val(data.pieces);
-
-                    $('#egetPrice').empty();
-                    $('#egetPrice').val(data._productId.sellingPrice);
-                },
-                error: function(jqXHR, textStatus, errorThrow) {
-                    $.alert(errorThrow);
-                }
-            });
-        }
+        
 
         function enterPieces(pieces){
 
@@ -633,15 +610,6 @@
             var sub = (parseFloat(available) - parseFloat(piecesSold));
 
             $('#piecesAvai').val(sub);
-        }
-
-        // for edit
-        function eenterPieces(pieces){
-            var available = $('#epiecesAvai').val();
-            var piecesSold = pieces;
-            var sub = (parseFloat(available) - parseFloat(piecesSold));
-
-            $('#epiecesAvai').val(sub);
         }
 
 
@@ -661,25 +629,6 @@
 
             $('.getMsg').append(msg);
             $('.getMsg').show().fadeOut( 10000 );
-        }
-
-        // for edit
-        function epricePay(price) {
-            var initPrice = price;
-            var presentPrice = $('#egetPrice').val();
-
-            if(parseFloat(initPrice) < parseFloat(presentPrice)){
-                var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
-                            '</button>'+
-                            'You can\'t sell below ' + presentPrice+
-                            '</div>';
-
-                $('#eproductPrice').val(0);
-            }
-
-            $('.egetMsg').append(msg);
-            $('.egetMsg').show().fadeOut( 10000 );
         }
 
 

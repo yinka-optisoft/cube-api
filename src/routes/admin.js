@@ -120,27 +120,29 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                            console.log(err);
                          } else {
                            member.passport = name;
-                           Account.register(
-                             new Account(member), password, async (err, account) => {
-                               console.log(account, 'account');
-                               const tokenG = await Account.findById(account._id);
-                               console.log(tokenG);
-                               tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                               await tokenG.save(function(err) {
-                                 if (err) {
-                                   console.log(err);
-                                 }
-                                 console.log(tokenG);
-                               });
 
-                               if (err) {
-                                 res.status(500);
-                                 res.send(err);
-                               } else {
-                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                 res.redirect('/admin/staff/');
-                               }
-                             });
+                           Account.register(new Account(member), password,
+                                            async (err, account) => {
+
+                                              // return false;
+                                              const tokenG = await Account.findById(account._id);
+                                              console.log(tokenG);
+                                              tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                                              await tokenG.save(function(err) {
+                                                if (err) {
+                                                  console.log(err);
+                                                }
+                                                console.log(tokenG);
+                                              });
+
+                                              if (err) {
+                                                console.log(err);
+                                              } else {
+                                                req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                                                res.redirect('/admin/staff/');
+                                              }
+                                            });
+
                          }
                        });
                      });

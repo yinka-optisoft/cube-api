@@ -61,8 +61,20 @@ router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.post('/get/barcodeNumber', guard.ensureLoggedIn(), async (req, res, next) => {
   const pro = await Product.findOne({ barcodeNumber: req.body.barcodeNumber, _storeId: req.user._storeId });
-  const product = await BranchProduct.findOne({ _productId: pro._id, _branchId: req.user._branchId }).populate('_productId');
-  return res.json(product);
+
+  if (pro !== null) {
+
+    const product = await BranchProduct.findOne({ _productId: pro._id, _branchId: req.user._branchId }, (err, product) => {
+      if (err) {
+        console.log(err);
+        return res.json('failure');
+      } else {
+        return res.json(product);
+      }
+    }).populate('_productId');
+  } else {
+    return res.json('failure');
+  }
 });
 
 
@@ -76,7 +88,7 @@ router.get('/manage/sales', guard.ensureLoggedIn(), async (req, res, next) => {
 router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) => {
 
   var errors = req.validationErrors();
-  
+
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
@@ -190,7 +202,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
   const store = await Store.findById(req.user._storeId);
   const sale = await Sales.findById(req.params.saleId)
                             .populate('_customerId').populate('_productId');
-                            
+
   // iterate tru product and send it to salesObject
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {

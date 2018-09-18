@@ -47,7 +47,7 @@
 
 {{# if errors }}
     {{# each errors }}
-          <p class="alert alert-danger">{{ this.msg }}</p>
+          <p class="alert alert-danger">{{ errors }}</p>
     {{/each}}
 {{/if}}
 
@@ -131,9 +131,6 @@
                                 <i class="fa fa-eye"></i>
                             </button>
                         </a>
-                        {{!-- <button title="View" data-toggle="modal" _supplierId="{{_supplierId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" price="{{price}}" pieces="{{pieces}}" note="{{note}}" data-target="#viewProduct" class="btn btn-success btn-sm">
-                            <i class="fa fa-eye"></i>
-                        </button> --}}
                         <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </td>
                 </tr>

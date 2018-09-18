@@ -185,6 +185,11 @@
                                 </div>
                                 </div>
                                 <div class="form-group">
+                                <div class="barMsg col-md-6 col-sm-offset-3">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
                                 <div class="col-md-6 col-sm-6">
                                     <input class="form-control col-md-7 col-xs-12" type="text" id="productName" name="productName" placeholder="Product Name" readonly>
@@ -230,7 +235,7 @@
                                 </div>
                                 <div class="form-group">
                                 <div class="col-md-6 col-md-offset-3 text-center">
-                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <button type="submit" id="submitBtn" class="btn btn-success">Submit</button>
                                 </div>
                                 </div>
                             </div>
@@ -566,40 +571,60 @@
                 data: { barcodeNumber:id },
                 success: function(data) {
 
-                    $('#productName').empty();
-                    $('#productName').val(data._productId.productName);
-                    $('#productNameId').val(data._productId._id);
+                    $('#submitBtn').removeAttr("disabled");
 
-                    // check if product is empty
-                    if(data.pieces < 0){
+                    if(data === 'failure'){
 
                         var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
-                            '</button>'+
-                            'Product Unavailable'
-                            '</div>';
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                                '</button>'+
+                                'Invalid Barcode'
+                                '</div>';
 
-                        $('.piecesMsg').append(msg);
-                        $('.piecesMsg').show().fadeOut( 10000 );
+                            $('.barMsg').append(msg);
+                            $('.barMsg').show().fadeOut( 10000 );
 
-                        $('#piecesSold').attr('disabled', 'disabled');
-                        $('#productPrice').attr('disabled', 'disabled');
+                            $('#piecesSold').attr('disabled', 'disabled');
+                            $('#productPrice').attr('disabled', 'disabled');
+                            $('#submitBtn').attr('disabled', 'disabled');
 
-                        $('#piecesAvai').empty();
-                        $('#piecesAvai').val(0);
-
-                        $('#getPrice').empty();
-                        $('#getPrice').val(0);
                     } else {
 
-                        $('#piecesSold').removeAttr("disabled");
-                        $('#productPrice').removeAttr("disabled");
+                        $('#productName').empty();
+                        $('#productName').val(data._productId.productName);
+                        $('#productNameId').val(data._productId._id);
 
-                        $('#piecesAvai').empty();
-                        $('#piecesAvai').val(data.pieces);
+                        // check if product is empty
+                        if(data.pieces < 0){
 
-                        $('#getPrice').empty();
-                        $('#getPrice').val(data._productId.sellingPrice);
+                            var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                                '</button>'+
+                                'Product Unavailable'
+                                '</div>';
+
+                            $('.piecesMsg').append(msg);
+                            $('.piecesMsg').show().fadeOut( 10000 );
+
+                            $('#piecesSold').attr('disabled', 'disabled');
+                            $('#productPrice').attr('disabled', 'disabled');
+
+                            $('#piecesAvai').empty();
+                            $('#piecesAvai').val(0);
+
+                            $('#getPrice').empty();
+                            $('#getPrice').val(0);
+                        } else {
+
+                            $('#piecesSold').removeAttr("disabled");
+                            $('#productPrice').removeAttr("disabled");
+
+                            $('#piecesAvai').empty();
+                            $('#piecesAvai').val(data.pieces);
+
+                            $('#getPrice').empty();
+                            $('#getPrice').val(data._productId.sellingPrice);
+                        }
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrow) {

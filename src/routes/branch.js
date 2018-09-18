@@ -59,6 +59,8 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   newBranch.state = req.body.state;
   newBranch.city = req.body.city;
   newBranch.status = true;
+  newBranch.mainBranch = false;
+
   newBranch.save(function(err) {
     if (err) {
       console.log(err);
@@ -106,7 +108,12 @@ router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) =>
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branch = await Branch.findById(req.params._branchId);
   const roles = await Role.find({ _storeId: req.session._storeId });
-  const staff = await Account.find({ _storeId: req.session._storeId, _branchId: branch._id }).populate('_roleId');
+
+
+  // note that due to check exists query filter the store admin and any other staff that have
+  // the same privilege as admin out
+  const staff = await Account.find({ _storeId: req.user._storeId, _branchId: branch._id, _roleId: { $exists: true } })
+                                    .populate('_roleId').populate('_branchId');
   const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
                                       .populate(
                                         { path: '_productId',
@@ -117,10 +124,15 @@ router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) =>
 
 // delete branch
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
-
   const id = req.body.id;
-  await Branch.findById(id).remove();
-  res.send('success');
+  const trueBranch = await Branch.findOne({ _id: id, mainBranch: true });
+  if (trueBranch) {
+    req.flash('info', 'You can\'t Delete Head Branch');
+    res.redirect('/branch');
+  } else {
+    await Branch.findOne({ _id: id, mainBranch: false }).remove();
+    res.send('success');
+  }
 });
 
 // check for email validation
