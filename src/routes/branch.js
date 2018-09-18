@@ -125,12 +125,12 @@ router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) =>
 // delete branch
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
   const id = req.body.id;
-  const trueBranch = await Branch.findOne({ _id: id, mainBranch: true });
+  const trueBranch = await Branch.findOne({ _id: id, headBranch: true });
   if (trueBranch) {
     req.flash('info', 'You can\'t Delete Head Branch');
     res.redirect('/branch');
   } else {
-    await Branch.findOne({ _id: id, mainBranch: false }).remove();
+    await Branch.findOne({ _id: id, headBranch: false }).remove();
     res.send('success');
   }
 });
