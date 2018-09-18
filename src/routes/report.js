@@ -19,6 +19,8 @@ router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
 
   console.log(req.body);
 
+  // return  false;
+
   const { branchId, dateBet, dateTill } = req.body;
 
   if (dateBet !== '' && dateTill !== '') {
