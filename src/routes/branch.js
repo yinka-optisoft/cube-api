@@ -95,6 +95,8 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   await branch.save(function(err) {
     if (err) {
       console.log(err);
+      req.flash('info', 'Unable To Update Branch');
+      res.redirect('/branch');
     } else {
       req.flash('info', 'Branch Update Saved Successfully');
       res.redirect('/branch');
