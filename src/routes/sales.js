@@ -163,8 +163,8 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale.invoiceDate = req.body.invoiceDate;
     sale.invoiceNumber = req.body.invoiceNumber;
     sale.waybillNumber = req.body.waybillNumber;
-    sale.amountDue = req.body.amountDue;
-    sale.amountPaid = req.body.amountPaid;
+    sale.amountDue = req.body.amtDueToCus;
+    sale.amountPaid = req.body.payByCus;
     sale.balanceTransaction = req.body.balanceTransaction;
     sale.discount = req.body.discount;
 

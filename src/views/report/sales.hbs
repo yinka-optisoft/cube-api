@@ -285,7 +285,7 @@
                 dataType: 'json',
                 data: {branchId: branchId, dateBet: dateBet, dateTill: dateTill },
                 success: function(data) {
-                  //  console.log(data);
+                    //console.log(data);
 
                     if ( $.fn.DataTable.isDataTable('#datatable') ) {
                         $('#datatable').DataTable().destroy();
@@ -300,7 +300,7 @@
                     for(var i = 0; i < data.length; i++){
                         var proName = [];
                         for(var j = 0; j < data[i]._productId.length; j++){
-                            proName.push(data[i]._productId[j].name);
+                            proName.push(data[i]._productId[j].productName);
                         }
 
                             var tr = '<tr>'+

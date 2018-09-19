@@ -15,6 +15,9 @@ import { Strategy } from 'passport-local';
 import hbs from 'hbs';
 import hbsutils from 'hbs-utils';
 
+// for window auto
+// var Service = require('node-windows').Service;
+
 // routes are imported here, note any auth or init middleware are to be placed
 // above this line.
 import index from './routes/index';
@@ -127,6 +130,21 @@ try {
 } catch (e) {
   throw e;
 }
+
+// Create a new service object
+// var svc = new Service({
+//   name:'CUBE700',
+//   description: 'CUBE700 auto start server',
+//   script: 'C:\CUBENode\src\app.js'
+// });
+
+// // Listen for the "install" event, which indicates the
+// // process is available as a service.
+// svc.on('install',function(){
+//   svc.start();
+// });
+
+// svc.install();
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
