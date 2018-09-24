@@ -26,6 +26,7 @@ const Account = new Schema({
   lga: String,
   token: String,
   moveDate: Date,
+  rightToDeleteAdmin: { type: Boolean, default: false },
   status: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });

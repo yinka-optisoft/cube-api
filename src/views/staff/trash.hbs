@@ -11,6 +11,11 @@
 {{/extend}}
 
 
+<div class="col-sm-12 col-offset-3 accessMsg">
+
+</div>
+
+
 <div class="">
 
     <div class="row">
@@ -168,7 +173,7 @@ function deleteMember(id){
 
     	$.confirm({
 			title: '<div style="color:red">Confirm!</div>',
-			content: 'Are you sure you want to Delete permanetly?',
+			content: 'Are you sure you want to Delete permanently?',
 			buttons: {
 				confirm: function () {
 					delete_user(id);
@@ -202,7 +207,18 @@ var delete_user = function(id){
                         },
                     }
                 });
-              }
+
+                } else if(response === "fail"){
+
+                    var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'You Don\'t Have Access To Performed This Operation '+
+                            '</div>';
+
+                    $('.accessMsg').html(msg).css('text-align: center');
+                    $('.accessMsg').show().fadeOut( 1000000 );
+                }
 
             },
             error:function (xhr, ajaxOptions, thrownError){

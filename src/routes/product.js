@@ -15,6 +15,7 @@ import Supply from '../models/supply';
 import BranchProduct from '../models/branchProduct';
 import ProductTransfer from '../models/productTransfer';
 import Sales from '../models/sales';
+import { Types } from 'mongoose';
 
 
 const router = express.Router();
@@ -23,7 +24,7 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const products = await Product.find({ _storeId: req.session._storeId }).populate('_categoryId');
   const categories = await Category.find({ _storeId: req.session._storeId });
-  const suppliers = await Supply.find({ _storeId: req.user._storeId });
+  const suppliers = await Supply.find({ _storeId: req.user._storeId, show: true });
   const branches = await Branch.find({ _storeId: req.session._storeId });
   res.render('product/manage', { user, suppliers, expressFlash: req.flash('info'), products, branches, categories, layout: 'layouts/user' });
 });
@@ -63,7 +64,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   const productName = req.body.productName;
   const _categoryId = req.body._categoryId;
-  const _supplierId = req.body._supplierId;
+  // const _supplierId = req.body._supplierId;
   const _branchId = req.body._branchId;
   const pieces = req.body.pieces;
   const sellingPrice = req.body.sellingPrice;
@@ -72,7 +73,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   req.checkBody('productName', 'Product Name is required').notEmpty();
   req.checkBody('_categoryId', 'Category is required').notEmpty();
-  req.checkBody('_supplierId', 'Supplier is required').notEmpty();
+  // req.checkBody('_supplierId', 'Supplier is required').notEmpty();
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   req.checkBody('pieces', 'Pieces is required').notEmpty();
   req.checkBody('sellingPrice', 'Selling Price is required').notEmpty();
@@ -89,28 +90,30 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   } else {
 
+    console.log(req.body);
+
     const product = await Product(req.body);
     product._storeId = req.user._storeId;
     product._createdBy = req.user._id;
-    product.save((err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
-
-    const branchproduct = await BranchProduct();
-    branchproduct._storeId = req.user._storeId;
-    branchproduct._productId = product._id;
-    branchproduct._branchId = req.body._branchId;
-    branchproduct._movedBy = req.user._id;
-    branchproduct.pieces = req.body.pieces;
-    branchproduct.save((err) => {
-
+    product._supplierId = (req.body._supplierId !== '') ? req.body._supplierId : Types.ObjectId('5b9facb0a4b3e95860f2ad9f');
+    product.save((err, product) => {
       if (err) {
         console.log(err);
       } else {
-        req.flash('info', 'Product Created');
-        res.redirect('/product');
+        const branchproduct = new BranchProduct();
+        branchproduct._storeId = req.user._storeId;
+        branchproduct._productId = product._id;
+        branchproduct._branchId = req.body._branchId;
+        branchproduct._movedBy = req.user._id;
+        branchproduct.pieces = req.body.pieces;
+        branchproduct.save((err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            req.flash('info', 'Product Created');
+            res.redirect('/product');
+          }
+        });
       }
     });
   }

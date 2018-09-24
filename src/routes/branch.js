@@ -249,26 +249,28 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
   const user = await Account.findById(id);
-
-  if (user.status === false) {
-    user.status = 1;
-    user.save(function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send('success');
-      };
-    });
-  } else {
-    user.status = 0;
-    user.save(function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send('success');
-      };
-    });
-  }
+  // if(user.roleId === 'admin' && user.rightToDeleteAdmin === true){
+  if(user.roleId === 'admin'){
+    res.send('fail');
+    } else if (user.status === false) {
+        user.status = 1;
+        user.save(function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send('success');
+          };
+        });
+    } else {
+      user.status = 0;
+      user.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send('success');
+        };
+      });
+      }
 });
 
 

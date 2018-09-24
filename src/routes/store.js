@@ -150,6 +150,7 @@ router.post('/create-store', async (req, res, next) => {
                                newAdmin._branchId = newBranch._id;
                                newAdmin.username = await generateUniqueID(storeSub);
                                newAdmin.name = newStore.name;
+                               newAdmin.rightToDeleteAdmin = true;
                                /* newAdmin.firstname = fields.firstname;
                                newAdmin.middlename = fields.middlename;
                                newAdmin.lastname = fields.lastname;

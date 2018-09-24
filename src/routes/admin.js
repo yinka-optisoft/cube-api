@@ -72,7 +72,6 @@ router.get('/trash', guard.ensureLoggedIn(), async (req, res) => {
 });
 
 
-// add new member
 router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
   const form = new formidable.IncomingForm();
 
@@ -88,14 +87,6 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
     } else {
 
       const store = await Store.findById(req.user._storeId);
-
-      // const convertToUpper = store.name;
-      // const storeName = convertToUpper.toUpperCase();
-      // const storeSub = storeName.substring(0, 3);OPTI74715
-
-      // console.log(`${storeSub}${fields.username}`);
-
-      // return false;
 
 
       if (!store)
@@ -137,6 +128,9 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
                                               if (err) {
                                                 console.log(err);
+                                              } else if (account.roleId === 'admin') {
+                                                req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                                                res.redirect('/admin/admins/');
                                               } else {
                                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
                                                 res.redirect('/admin/staff/');
@@ -174,11 +168,15 @@ router.post('/restore', guard.ensureLoggedIn(), async (req, res) => {
 // delete user permanetly
 router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
-  const id = req.body.id;
-  await Account.findById(id).remove();
+  const user = await Account.findById(req.user._id);
 
-  res.send('success');
-
+  if (user.roleId === 'admin' && user.rightToDeleteAdmin === true) {
+    const id = req.body.id;
+    await Account.findById(id).remove();
+    res.send('success');
+  } else {
+    res.send('fail');
+  }
 });
 
 

@@ -270,9 +270,10 @@
                 <div class="col-md-12 col-xs-12">
 
                     <form class="form-horizontal form-label-left input_mask" method="POST" action="/admin/new-member" enctype="multipart/form-data">
+                    {{!-- <form class="form-horizontal form-label-left input_mask" id="createStaff"> --}}
 
                       <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                        <select class="form-control" name="_branchId" required>
+                        <select class="form-control" name="_branchId" id="_branchId" required>
                             <option>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
@@ -281,45 +282,45 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" id="inputSuccess2" name="firstname" placeholder="First Name" required>
+                        <input type="text" class="form-control has-feedback-left" id="firstname" name="firstname" placeholder="First Name" required>
                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control" id="inputSuccess3" name="middlename" placeholder="Middle Name">
+                        <input type="text" class="form-control" id="middlename" name="middlename" placeholder="Middle Name">
                         <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" name="lastname" id="inputSuccess2" placeholder="Last Name">
+                        <input type="text" class="form-control has-feedback-left" name="lastname" id="lastname" placeholder="Last Name">
                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" name="username" value="{{username}}" id="inputSuccess2" placeholder="Username">
+                        <input type="text" class="form-control has-feedback-left" name="username" value="{{username}}" id="username" placeholder="Username">
                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         <span class="usernameExist"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" name="email" id="inputSuccess4" placeholder="Email">
+                        <input type="text" class="form-control has-feedback-left" name="email" id="email" placeholder="Email">
                         <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                         <span class="exist"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="text" class="form-control has-feedback-left" name="password" id="inputSuccess2" placeholder="Password" required>
+                        <input type="text" class="form-control has-feedback-left" name="password" id="password" placeholder="Password" required>
                         <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                        <input type="number" class="form-control" name="phone" id="inputSuccess5" placeholder="Phone">
+                        <input type="number" class="form-control" name="phone" id="phone" placeholder="Phone">
                         <span class="fa fa-phone form-control-feedback right" aria-hidden="true"></span>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                          <select class="form-control" name="_roleId" required>
-                              <option>Select Role</option>
+                          <select class="form-control" name="_roleId" id="_roleId" required>
+                              <option value="">Select Role</option>
                             {{#each roles}}
                                 <option value="{{_id}}">{{name}} ({{roleType}})</option>
                             {{/each}}
@@ -327,7 +328,7 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                          <select class="form-control" name="gender" id="country" required>
+                          <select class="form-control" name="gender" id="gender" required>
                             <option>Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -342,7 +343,7 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                          <select class="form-control" name="state" id="country" required>
+                          <select class="form-control" name="state" id="state" required>
                             <option>Select State</option>
                             <option value="Lagos State">Lagos State</option>
                             <option value="Kwara State">Kwara State</option>
@@ -350,7 +351,7 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                          <select class="form-control" name="lga" id="country" required>
+                          <select class="form-control" name="lga" id="lga" required>
                             <option>Select L.G.A</option>
                             <option value="ikeja">Ikeja</option>
                             <option value="ilorin">Ilorin</option>
@@ -358,7 +359,7 @@
                       </div>
 
                       <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                          <textarea class="form-control" name="address" id="inputSuccess5" rows="2" placeholder='Address' required></textarea>
+                          <textarea class="form-control" name="address" id="address" rows="2" placeholder='Address' required></textarea>
                       </div>
 
                       <div class="form-group">
@@ -373,7 +374,7 @@
                                     <span class="btn btn-default btn-file">
                                         <span class="fileinput-new">Select logo</span>
                                         <span class="fileinput-exists">Change logo</span>
-                                        <input type="file" name="passport" accept="image/*" required>
+                                        <input type="file" name="passport" id="passport" accept="image/*" required>
                                     </span>
                                     <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
                                 </div>
@@ -494,10 +495,10 @@
 
     	$.confirm({
 			title: '<div style="color:red">Confirm!</div>',
-			content: 'Are you sure you want to Ban?',
+			content: 'Are you sure you want to Perform this Action?',
 			buttons: {
 				confirm: function () {
-					delete_branch(id);
+					ban_member(id);
 				},
 				cancel: function () {
 					$.alert('Canceled!');
@@ -509,7 +510,7 @@
 
 
 
-var delete_branch = function(id){
+var ban_member = function(id){
 
     $.ajax({
         type: "POST", // Post / Get method
@@ -521,7 +522,7 @@ var delete_branch = function(id){
             if (response === "success") {
             $.confirm({
                 title: '<div style="color:green">Success</div>',
-                content: 'Banned Successfully',
+                content: 'Action Performed Successfully',
                 buttons: {
                     ok: function () {
                         location.reload(true)
@@ -585,6 +586,58 @@ $(document).ready(function() {
         })
     })
 });
+
+//TODO: might come back for you later
+
+/*$('#createStaff').submit(function(e){
+    e.preventDefault();
+
+    var _branchId = $('#_branchId').val();
+    var firstname = $('#firstname').val();
+    var middlename = $('#middlename').val();
+    var lastname = $('#lastname').val();
+    var username = $('#username').val();
+
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var phone = $('#phone').val();
+
+    var _roleId = $('#_roleId').val();
+    var gender = $('#gender').val();
+    var state = $('#state').val();
+    var lga = $('#lga').val();
+    var address = $('#address').val();
+    var passport = $('#passport').val();
+
+    if(_roleId === ''){
+        alert('Select Role For User');
+        return false;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/admin/new-member',
+        dataType: 'json',
+        data: {
+            _branchId: _branchId,
+            firstname: firstname,
+            middlename: middlename,
+            lastname: lastname,
+            username: username,
+            email: email,
+            password: password,
+            phone: phone,
+            _roleId: _roleId,
+            gender: gender,
+            state: state,
+            lga: lga,
+            address: address,
+            passport: passport
+        }
+        }).done(function(data){
+            console.log(data);
+        });
+    });*/
 
 </script>
 

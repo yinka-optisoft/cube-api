@@ -167,6 +167,11 @@
 {{/extend}}
 
 
+<div class="col-sm-12 col-offset-2 accessMsg">
+
+</div>
+
+
 <div class="">
     
     <div class="text-center">
@@ -175,10 +180,10 @@
         <span>Member</span>
         </a>
 
-        <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#move">
+        {{!-- <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#move">
         <i class="fa fa-plus fa-2x"></i>
         <span>Post Member</span>
-        </a>
+        </a> --}}
     </div>
 
 
@@ -186,7 +191,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-            <h2>All Staff </h2>
+            <h2>All Admins </h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
@@ -224,19 +229,25 @@
                         {{#each admins}}
                         <tr>
                             <td>{{inc @index}}</td>
-                            <td>{{_roleId.name}} ({{_roleId.roleType}})</td>
+                            <td>{{roleId}}</td>
                             <td id="name{{_id}}">{{firstname}} {{middlename}} {{lastname}}</td>
                             <td id="username{{_id}}">{{username}}</td>
                             <td id="email{{_id}}">{{email}}</td>
                             <td id="phone{{_id}}">{{phone}}</td>
                             <td>{{_branchId.name}}</td>
                             <td>
+                                {{#if (eq rightToDeleteAdmin true)}}
+
+                                {{!-- <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a> --}}
+
+                                {{else}}
                                 <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
 
                                 {{#if (eq status true)}}
                                 <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Di-activate</i></button>
-                                {{else}}
+                                {{else }}
                                 <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">activate</button>
+                                {{/if}}
                                 {{/if}}
                             </td>
                         </tr>
@@ -259,7 +270,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
             </button>
-            <h4 class="modal-title" id="myModalLabel2">Add Member</h4>
+            <h4 class="modal-title" id="myModalLabel2">Add Admin</h4>
         </div>
         <div class="modal-body">
             
@@ -318,11 +329,9 @@
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
-                          <select class="form-control" name="_roleId" required>
-                              <option>Select Role</option>
-                            {{#each roles}}
-                                <option value="{{_id}}">{{name}} ({{roleType}})</option>
-                            {{/each}}
+                          <select class="form-control" name="roleId" required>
+                                <option value="">Select Role</option>
+                                <option value="admin" selected>Admin</option>
                         </select>
                       </div>
 
@@ -489,102 +498,107 @@
         $("#editmemberModal").modal('show');
     }
 
-
+    
     function banMember(id){
 
     	$.confirm({
 			title: '<div style="color:red">Confirm!</div>',
-			content: 'Are you sure you want to Ban?',
+			content: 'Are you sure you want to Perform this Action?',
 			buttons: {
 				confirm: function () {
-					delete_branch(id);
+					ban_member(id);
 				},
 				cancel: function () {
 					$.alert('Canceled!');
 				},
-
 			}
 		});
     }
 
 
+    var ban_member = function(id){
 
-var delete_branch = function(id){
+        $.ajax({
+            type: "POST", // Post / Get method
+            url: "/branch/ban", //Where form data is sent on submission
+            dataType:"text", // Data type, HTML, json etc.
+            data:{ id:id}, //Form variables
+            success:function(response){
 
-    $.ajax({
-        type: "POST", // Post / Get method
-        url: "/branch/ban", //Where form data is sent on submission
-        dataType:"text", // Data type, HTML, json etc.
-        data:{ id:id}, //Form variables
-        success:function(response){
+                if (response === "success") {
+                    $.confirm({
+                    title: '<div style="color:green">Success</div>',
+                    content: 'Action Performed Successfully',
+                    buttons: {
+                        ok: function () {
+                            location.reload(true)
+                        },
+                    }
+                    });
+                } else if(response === "fail"){
 
-            if (response === "success") {
-            $.confirm({
-                title: '<div style="color:green">Success</div>',
-                content: 'Banned Successfully',
-                buttons: {
-                    ok: function () {
-                        location.reload(true)
-                    },
+                    var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                            '</button>'+
+                            'You Don\'t Have Access To Performed This Operation '+
+                            '</div>';
+
+                    $('.accessMsg').html(msg).css('text-align: center');
+                    $('.accessMsg').show().fadeOut( 1000000 );
                 }
-            });
             }
+        });
+    }
 
-        },
-        error:function (xhr, ajaxOptions, thrownError){
-                $.alert('Could not Banned');
-        }
+    $(document).ready(function() {
+        $("input[name='email']").keyup(function() {
+
+            var email = $("input[name='email']").val();
+
+            $.ajax({
+
+                type: "POST", // Post / Get method
+                url: "/branch/check/email", //Where form data is sent on submission
+                dataType:"text", // Data type, HTML, json etc.
+                data:{ email:email}, //Form variables
+                success:function(response){
+
+                    if(response === 'success'){
+                        $('.exist').text('*E-mail already Exist*').css('color', 'red');
+                    } else {
+                        $('.exist').empty();
+                    }
+                }
+            })
+        })
     });
-}
 
-$(document).ready(function() {
-    $("input[name='email']").keyup(function() {
 
-        var email = $("input[name='email']").val();
+    $(document).ready(function() {
+        $("input[name='username']").keyup(function() {
 
-        $.ajax({
+            var username = $("input[name='username']").val();
 
-            type: "POST", // Post / Get method
-            url: "/branch/check/email", //Where form data is sent on submission
-            dataType:"text", // Data type, HTML, json etc.
-            data:{ email:email}, //Form variables
-            success:function(response){
+            console.log(username);
 
-                if(response === 'success'){
-                    $('.exist').text('*E-mail already Exist*').css('color', 'red');
-                } else {
-                    $('.exist').empty();
+            $.ajax({
+
+                type: "POST", // Post / Get method
+                url: "/branch/check/username", //Where form data is sent on submission
+                dataType:"text", // Data type, HTML, json etc.
+                data:{ username:username}, //Form variables
+                success:function(response){
+
+                    if(response === 'success'){
+                        $('.usernameExist').text('*Username already Exist*').css('color', 'red');
+                    } else {
+                        $('.usernameExist').empty();
+                    }
                 }
-            }
+            })
         })
-    })
-});
+    });
 
-
-$(document).ready(function() {
-    $("input[name='username']").keyup(function() {
-
-        var username = $("input[name='username']").val();
-
-        console.log(username);
-
-        $.ajax({
-
-            type: "POST", // Post / Get method
-            url: "/branch/check/username", //Where form data is sent on submission
-            dataType:"text", // Data type, HTML, json etc.
-            data:{ username:username}, //Form variables
-            success:function(response){
-
-                if(response === 'success'){
-                    $('.usernameExist').text('*Username already Exist*').css('color', 'red');
-                } else {
-                    $('.usernameExist').empty();
-                }
-            }
-        })
-    })
-});
 
 </script>
 

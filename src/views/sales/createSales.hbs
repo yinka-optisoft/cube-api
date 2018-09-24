@@ -571,7 +571,8 @@
                             'Product Unavailable'
                             '</div>';
 
-                        $('.piecesMsg').append(msg);
+                        //$('.piecesMsg').append(msg);
+                        $('.piecesMsg').html(msg);
                         $('.piecesMsg').show().fadeOut( 10000 );
 
                         $('#piecesSold').attr('disabled', 'disabled');
@@ -627,7 +628,8 @@
                 $('#productPrice').val(0);
             }
 
-            $('.getMsg').append(msg);
+            //$('.getMsg').append(msg);
+            $('.getMsg').html(msg);
             $('.getMsg').show().fadeOut( 10000 );
         }
 

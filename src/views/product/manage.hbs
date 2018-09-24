@@ -173,8 +173,8 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" name="_supplierId" id="_supplierId" required>
-                            <option>Select Supplier</option>
+                        <select class="form-control" name="_supplierId" id="_supplierId">
+                            <option value="">Select Supplier</option>
                             {{#each suppliers}}
                             <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
                             {{/each}}

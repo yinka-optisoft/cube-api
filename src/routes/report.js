@@ -17,41 +17,34 @@ router.get('/', guard.ensureLoggedIn(), async (req, res) => {
 
 router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
 
-  console.log(req.body);
-
-  // return  false;
-
   const { branchId, dateBet, dateTill } = req.body;
 
-  if (dateBet !== '' && dateTill !== '') {
 
-    // const bet1 = new Date(dateBet).toISOString();
-    // const till1 = new Date(dateTill).toISOString();
+  const bet1 = new Date(dateBet);
+  bet1.setDate(bet1.getDate() + 1);
+  const betResult = new Date(bet1).toISOString().split('T')[0];
 
-    const bet1 = new Date(dateBet);
-    // const bet2 = new Date(bet1);
-    bet1.setDate(bet1.getDate() + 1);
-    const betResult = new Date(bet1).toISOString().split('T')[0];
+
+  let tillResult;
+  if (dateTill !== '') {
 
     const till1 = new Date(dateTill);
-    // const till2 = new Date(till1);
-    till1.setDate(till1.getDate() + 1);
-    const tillResult = new Date(till1).toISOString().split('T')[0];
-
-    const sales = await Sales.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lte: tillResult } })
-                              .populate('_productId').populate('_branchId')
-                              .populate('_salesBy').populate('_customerId');
-
-    return res.json(sales);
+    till1.setDate(till1.getDate() + 2);
+    tillResult = new Date(till1).toISOString().split('T')[0];
 
   } else {
 
-    const sales = await Sales.find({ _storeId: req.user._storeId, _branchId: branchId })
-                              .populate('_productId').populate('_branchId')
-                              .populate('_salesBy').populate('_customerId');
-
-    return res.json(sales);
+    const till1 = new Date(betResult);
+    till1.setDate(till1.getDate() + 1);
+    tillResult = new Date(till1).toISOString().split('T')[0];
   }
+
+
+  const sales = await Sales.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lte: tillResult } })
+                            .populate('_productId').populate('_branchId')
+                            .populate('_salesBy').populate('_customerId');
+
+  return res.json(sales);
 });
 
 
@@ -67,48 +60,38 @@ router.post('/get/product', guard.ensureLoggedIn(), async (req, res) => {
 
   const { branchId, dateBet, dateTill } = req.body;
 
-  if (dateBet !== '' && dateTill !== '') {
+  const bet1 = new Date(dateBet);
+  bet1.setDate(bet1.getDate() + 1);
+  const betResult = new Date(bet1).toISOString().split('T')[0];
 
-    // const bet1 = new Date(dateBet).toISOString();
-    // const till1 = new Date(dateTill).toISOString();
+  console.log(betResult);
 
-    const bet1 = new Date(dateBet);
-    // const bet2 = new Date(bet1);
-    bet1.setDate(bet1.getDate() + 1);
-    const betResult = new Date(bet1).toISOString().split('T')[0];
+
+  let tillResult;
+  if (dateTill !== '') {
 
     const till1 = new Date(dateTill);
-    // const till2 = new Date(till1);
-    till1.setDate(till1.getDate() + 1);
-    const tillResult = new Date(till1).toISOString().split('T')[0];
-
-    console.log(betResult);
-    console.log(tillResult);
-
-    //console.log(bet1);
-    //console.log(till1);
-
-    const branchproduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: bet1, $lte: till1 } })
-                            .populate({
-                              path: '_productId',
-                              populate: { path: '_categoryId' }
-                            }).populate('_branchId')
-                            .populate('_movedBy');
-
-    return res.json(branchproduct);
+    till1.setDate(till1.getDate() + 2);
+    tillResult = new Date(till1).toISOString().split('T')[0];
 
   } else {
 
-    const branchproduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branchId })
-                              .populate({
-                                path: '_productId',
-                                populate: { path: '_categoryId' }
-                              }).populate('_branchId')
-                              .populate('_movedBy');
-
-
-    return res.json(branchproduct);
+    const till1 = new Date(betResult);
+    till1.setDate(till1.getDate() + 1);
+    tillResult = new Date(till1).toISOString().split('T')[0];
   }
+
+  console.log(tillResult);
+
+  const branchproduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branchId, createdAt: { $gte: betResult, $lt: tillResult } })
+                          .populate({
+                            path: '_productId',
+                            populate: { path: '_categoryId' }
+                          }).populate('_branchId')
+                          .populate('_movedBy');
+
+  console.log(branchproduct);
+  return res.json(branchproduct);
 });
 
 export default router;
