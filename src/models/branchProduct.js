@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+var mongoosePaginate = require('mongoose-paginate');
 const Schema = mongoose.Schema;
 
 const branchProduct = new Schema({
@@ -11,4 +12,5 @@ const branchProduct = new Schema({
   updatedAt: Date,
 });
 
+branchProduct.plugin(mongoosePaginate);
 export default mongoose.model('branchproducts', branchProduct);

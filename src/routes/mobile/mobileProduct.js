@@ -66,12 +66,21 @@ router.post('/storeProduct', verifyToken, upload.single('avatar'), async (req, r
   addBranchproduct.pieces = req.body.pieces;
   addBranchproduct._productId = addProduct._id;
   addBranchproduct._storeId = req.user._storeId;
-  await addBranchproduct.save(function(err) {
+  await addBranchproduct.save(async function(err) {
     if (err) {
       console.log(err);
       return res.json({ error: 'An error occured, please try again later' });
     }
-    return res.json({ success: 'Product has been added' });
+
+   const fetchProduct = await BranchProduct.findOne({ _id: addBranchproduct._id }).populate({
+      path: '_productId',
+      populate: {
+        path: '_categoryId',
+        dmodel: 'categories'
+      }
+    });
+    console.log(fetchProduct);
+    return res.json({ success: 'Product has been added', products: fetchProduct });
   });
 });
 
@@ -182,6 +191,20 @@ router.post('/deleteCategory', verifyToken, async (req, res) => {
     const category = await Category.findOne({ _id: categoryId._id }).remove();
     return res.json({ title: 'success', msg: 'Category has been deleted' });
   }
+});
+
+router.post('/fetchData', verifyToken, async (req, res) => {
+  // const productId = req.body._productId;
+  console.log(req.user);
+  const fetchProduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate({
+    path: '_productId',
+    populate: {
+      path: '_categoryId',
+      model: 'categories'
+    }
+  });
+  console.log(fetchProduct);
+  return res.json({ head: 'Success', title: 'Products have been saved', data: fetchProduct });
 });
 export default router;
 // export default router;

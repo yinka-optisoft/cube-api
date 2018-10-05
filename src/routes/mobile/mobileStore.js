@@ -170,26 +170,61 @@ router.get('/getCategories', verifyToken, async (req, res) => {
 });
 
 router.get('/fetchProduct', verifyToken, async (req, res) => {
-  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate({
-    path: '_productId',
-    populate: {
-      path: '_categoryId',
-      model: 'categories'
-    }
-  }).sort({ 'createdAt': -1 });
-  const categories = await Category.find({ _storeId: req.user._storeId });
-  const branches = await Branch.find({ _storeId: req.user._storeId });
+
+  let categories = [];
+  let branches = [];
+  const page = parseInt(req.headers.page);
+  const products = await BranchProduct.paginate({ _storeId: req.user._storeId },
+                                                { offset: page, sort: { createdAt: -1 }, limit: 10, populate: ['_branchId', '_userId', '_salesBy',
+                                                                                                               {
+                                                                                                                 path: '_productId',
+                                                                                                                 populate: {
+                                                                                                                   path: '_categoryId',
+                                                                                                                   model: 'categories'
+                                                                                                                 },
+                                                                                                                 model: 'products',
+                                                                                                               }] });
+
+
+  // const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate({
+  //   path: '_productId',
+  //   populate: {
+  //     path: '_categoryId',
+  //     model: 'categories'
+  //   }
+  // }).sort({ 'createdAt': -1 });
+  console.log(page);
+
+  if (page == 0) {
+    categories = await Category.find({ _storeId: req.user._storeId });
+    branches = await Branch.find({ _storeId: req.user._storeId });
+  }
   return res.json({ products: products, branches: branches, categories: categories });
 });
 
 
 router.get('/fetchProductStaff', verifyToken, async (req, res) => {
-  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId').sort({ 'createdAt': -1 });
-  const categories = await Category.find({ _storeId: req.user._storeId });
-  const branches = await Branch.find({ _storeId: req.user._storeId });
+  // const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId').sort({ 'createdAt': -1 });
+  let categories = [];
+  let branches = [];
+  const page = parseInt(req.headers.page);
+  const products = await BranchProduct.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
+                                                { offset: page, sort: { createdAt: -1 }, limit: 10, populate: ['_branchId', '_userId', '_salesBy',
+                                                                                                               {
+                                                                                                                 path: '_productId',
+                                                                                                                 populate: {
+                                                                                                                   path: '_categoryId',
+                                                                                                                   model: 'categories'
+                                                                                                                 },
+                                                                                                                 model: 'products',
+                                                                                                               }] });
+  if (page == 0) {
+    categories = await Category.find({ _storeId: req.user._storeId });
+    branches = await Branch.find({ _storeId: req.user._storeId });
+  }
   // const categoriest = await Branch.find({ categories: req.user._storeId });
   return res.json({ products: products, branches: branches, categories: categories });
-});
+}); '';
 router.post('/storeBranch', verifyToken, async (req, res) => {
 
   const addBranch = await new Branch();

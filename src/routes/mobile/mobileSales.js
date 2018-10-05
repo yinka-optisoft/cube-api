@@ -10,6 +10,9 @@ import Role from '../../models/role';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';
 import fs from 'fs';
+import Fawn from 'fawn';
+
+
 Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 var jwt = require('jsonwebtoken');
@@ -94,12 +97,28 @@ router.post('/addSales', verifyToken, async (req, res) => {
     console.log(e);
   }
 });
-router.get('/fetchSales', verifyToken, async (req, res) => {
 
-  const allSales = await Sales.find({ _storeId: req.user._storeId, _branchId: req.user._branchId })
-    .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 }); ;
-  console.log(allSales);
-  return res.json({ sales: allSales });
+router.get('/fetchSales', verifyToken, async (req, res) => {
+  let pagiSales;
+  const page = parseInt(req.headers.page);
+  const total = parseInt(req.headers.total);
+  // const allSales = await Sales.find({ _storeId: req.user._storeId, _branchId: req.user._branchId })
+  //   .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 }); ;
+
+  pagiSales = await Sales.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
+                                   { offset: page, limit: 10, populate: ['_branchId', '_userId', '_salesBy', '_productId'] });
+
+  // console.log(req.headers.page);
+
+  // if (total > pagiSales.total && page == parseInt(pagiSales.page)) {
+
+  //   pagiSales = await Sales.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
+  //                                    { offset: total, limit: 10, populate: ['_branchId', '_userId', '_salesBy', '_productId'] });
+
+  //   return res.json({ sales: pagiSales });
+  // }
+
+  return res.json({ sales: pagiSales });
 });
 
 
@@ -474,6 +493,68 @@ router.post('/blockUser', verifyToken, async (req, res) => {
     console.log(findUser.status);
     return res.json({ success: 'Status has been changed', status: findUser.status });
   });
+});
 
+router.post('/submitPending', verifyToken, async (req, res) => {
+  console.log(req.body);
+  var task = Fawn.Task();
+  const details = req.body.pendingSale;
+  const submittedIds = [];
+  // const enterEmpty = await new Sales();
+  // await enterEmpty.save();
+
+
+  const newSales = await new Sales();
+
+
+  for (let i = 0; i < details.length; i++) {
+    const checkOfflineId = await Sales.findOne({ offlineId: details[i]._id, _branchId: req.user._branchId, _storeId: req.user._storeId,
+    _salesBy: req.user._id });
+    if (checkOfflineId) {
+      submittedIds.push(details[i]._id);
+      continue;
+    }
+    newSales.invoiceNumber = details[i].invoiceNumber;
+    newSales.waybillNumber = details[i].wayBillNumber;
+    newSales.invoiceDate = details[i].invoiceDate;
+    newSales.discount = details[i].discount;
+    newSales.balanceTransaction = details[i].balanceTransaction;
+    newSales.amountDue = details[i].amountDue;
+    newSales.amountPaid = details[i].amountPaid;
+    newSales._salesBy = req.user._id;
+    newSales._branchId = req.user._branchId;
+    newSales._storeId = req.user._storeId;
+    newSales.offlineId = details[i]._id;
+    submittedIds.push(details[i]._id);
+    // fawnSale._customerId = customerId;
+    for (let k = 0; k < details[i]._productId.length; k++) {
+
+      // console.log(productBought[i]._productDetail._productId._id);
+      newSales._productId.push(details[i]._productId[k]._id);
+      // console.log( productBought[i]._productDetail._productId._id);
+      newSales.piecesSold.push(details[i].pieces[k]);
+      // console.log(details[i].pieces[k]);
+      newSales.unitPrice.push(details[i].unitPrice[k]);
+      // console.log(details[i].unitPrice[k])
+      newSales.totalPrice.push(details[i].totalPrice[k]);
+      // console.log(productBought[i].piecesDetails.priceSold);
+      const deductProduct = await BranchProduct.findOne({ _productId: details[i]._productId[k]._id, _branchId: req.user._branchId });
+      // const newdeductProduct = deductProduct.toObject();
+      deductProduct.pieces -= details[i].pieces[k];
+      deductProduct.save((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+
+    await newSales.save(function(err) {
+      if (err) {
+
+      }
+    });
+  }
+
+  return res.json({ head: 'success', data:  submittedIds });
 });
 export default router;

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
+var mongoosePaginate = require('mongoose-paginate');
 
 const Sale = new Schema({
   _storeId: { type: Schema.Types.ObjectId, ref: 'stores' },
@@ -17,9 +18,10 @@ const Sale = new Schema({
   piecesSold: [Number],
   unitPrice: [Number],
   totalPrice: [Number],
+  offlineId: String,
   createdAt: { type: Date, default: Date.now }
 });
 
-
+Sale.plugin(mongoosePaginate);
 export default mongoose.model('sales', Sale);
 
