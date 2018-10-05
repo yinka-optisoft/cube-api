@@ -40,11 +40,12 @@ import customerRoute from './routes/mobile/customer';
 import mobileRegister from './routes/mobile/mobileregister';
 import mobileProduct from './routes/mobile/mobileProduct';
 import cors from 'cors';
+import Fawn from 'fawn';
 const app = express();
 
 const blocks = {};
 const templateUtil = hbsutils(hbs);
-
+Fawn.init(mongoose);
 // export locals ato template
 hbs.localsAsTemplateData(app);
 app.locals.defaultPageTitle = 'Cube700';
