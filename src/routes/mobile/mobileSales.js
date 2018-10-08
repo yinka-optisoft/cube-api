@@ -10,7 +10,7 @@ import Role from '../../models/role';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';
 import fs from 'fs';
-import Fawn from 'fawn';
+// import Fawn from 'fawn';
 
 
 Handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
@@ -497,7 +497,7 @@ router.post('/blockUser', verifyToken, async (req, res) => {
 
 router.post('/submitPending', verifyToken, async (req, res) => {
   console.log(req.body);
-  var task = Fawn.Task();
+  //var task = Fawn.Task();
   const details = req.body.pendingSale;
   const submittedIds = [];
   // const enterEmpty = await new Sales();

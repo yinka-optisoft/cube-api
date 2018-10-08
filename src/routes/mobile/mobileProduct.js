@@ -195,7 +195,6 @@ router.post('/deleteCategory', verifyToken, async (req, res) => {
 
 router.post('/fetchData', verifyToken, async (req, res) => {
   // const productId = req.body._productId;
-  console.log(req.user);
   const fetchProduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate({
     path: '_productId',
     populate: {
@@ -203,7 +202,6 @@ router.post('/fetchData', verifyToken, async (req, res) => {
       model: 'categories'
     }
   });
-  console.log(fetchProduct);
   return res.json({ head: 'Success', title: 'Products have been saved', data: fetchProduct });
 });
 export default router;
