@@ -6,6 +6,7 @@ import Account from '../models/account';
 import Branch from '../models/branch';
 import Product from '../models/product';
 import Supply from '../models/supply';
+import Subscription from '../models/subscription';
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
@@ -29,7 +30,9 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
   const product = await Product.count({ _storeId: req.user._storeId });
   const account = await Account.count({ _storeId: req.user._storeId });
   const suppliers = await Supply.count({ _storeId: req.user._storeId });
-  res.render('admin/dashboard', { user, branch, product, account, suppliers, expressFlash: req.flash('success'),
+  const sub = await Subscription.findOne({ _storeId: req.user._storeId,
+                                           $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] });
+  res.render('admin/dashboard', { user, branch, product, account, suppliers, sub, expressFlash: req.flash('success'),
                                   layout: 'layouts/user' });
 });
 

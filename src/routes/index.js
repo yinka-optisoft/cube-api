@@ -62,7 +62,7 @@ router.post('/login', passport.authenticate('local',
                                                          $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] },
                                                        (err, sub) => {
 
-                                                         if (!sub === '') {
+                                                         if (sub) {
 
                                                            const presentDate = new Date();
                                                            const expiredDate = sub.expiredDate;
@@ -101,8 +101,15 @@ router.post('/login', passport.authenticate('local',
                                                              }
                                                            }
                                                          } else {
-                                                           req.flash('info', 'Subscription Expired');
-                                                           res.redirect('/login');
+
+                                                           sub.expired = true;
+                                                           sub.save();
+
+                                                           req.flash('success', 'Subscription Expired');
+                                                           //  res.redirect('/login');
+                                                           if (user.roleId === 'admin') {
+                                                             res.redirect('/admin/dashboard');
+                                                           }
                                                          }
                                                        });
               }
