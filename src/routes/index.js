@@ -62,7 +62,7 @@ router.post('/login', passport.authenticate('local',
                                                          $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] },
                                                        (err, sub) => {
 
-                                                         if (!err) {
+                                                         if (!sub === '') {
 
                                                            const presentDate = new Date();
                                                            const expiredDate = sub.expiredDate;
@@ -101,7 +101,7 @@ router.post('/login', passport.authenticate('local',
                                                              }
                                                            }
                                                          } else {
-                                                           req.flash('success', 'Subscription Expired');
+                                                           req.flash('info', 'Subscription Expired');
                                                            res.redirect('/login');
                                                          }
                                                        });
