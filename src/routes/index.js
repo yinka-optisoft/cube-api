@@ -75,11 +75,11 @@ router.post('/login', passport.authenticate('local',
                                                              // check if user is ban
                                                              if (user.status === false) {
                                                                req.flash('success', 'You Are Not Activated');
-                                                               res.redirect('/');
+                                                               res.redirect('/login');
                                                              } else {
                                                                if (!store && user.roleId === 'sadmin') res.redirect('/sadmin/dashboard');
 
-                                                               if (!store) res.redirect('/');
+                                                               if (!store) res.redirect('/login');
                                                                req.session._storeId = store._id;
                                                                req.session.save((err) => {
                                                                  if (err) {
