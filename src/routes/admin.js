@@ -47,10 +47,27 @@ router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
 
   // note that due to check exists query filter the store admin and any other staff that have
   // the same privilege as admin out
+  const allStaff = await Account.find({ _storeId: req.user._storeId, _roleId: { $exists: true } })
+                                    .populate('_roleId').populate('_branchId');
+  const branchStaff = await Account.find({ _storeId: req.user._storeId, _branchId: req.user._branchId,
+                                           _roleId: { $exists: true } }).populate('_roleId').populate('_branchId');
+  res.render('staff/staff', { user, allStaff, branchStaff, admins, roles, branches, expressFlash: req.flash('success'),
+                              layout: 'layouts/user' });
+});
+
+
+// manage staff that enter product
+router.get('/staff/enter/product', guard.ensureLoggedIn(), async (req, res) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  const branch = await Branch.findOne({ _storeId: req.session._storeId, headBranch: true });
+  const roles = await Role.find({ _storeId: req.session._storeId });
   const staff = await Account.find({ _storeId: req.user._storeId, _roleId: { $exists: true } })
                                     .populate('_roleId').populate('_branchId');
-  res.render('staff/staff', { user, staff, admins, roles, branches, expressFlash: req.flash('success'),
-                              layout: 'layouts/user' });
+
+  const allStaff = await Account.find({ _storeId: req.user._storeId, enterProduct: true })
+                                    .populate('_roleId').populate('_branchId');
+  res.render('staff/enterProduct', { user, allStaff, staff, roles, branch, expressFlash: req.flash('success'),
+                                     layout: 'layouts/user' });
 });
 
 
@@ -63,6 +80,33 @@ router.get('/admins', guard.ensureLoggedIn(), async (req, res) => {
                                     .populate('_roleId').populate('_branchId');
   res.render('staff/admin', { user, admins, roles, branches, expressFlash: req.flash('success'),
                               layout: 'layouts/user' });
+});
+
+
+router.post('/di-active', guard.ensureLoggedIn(), async (req, res) => {
+
+  const id = req.body.id;
+  const user = await Account.findById(id);
+  if (user) {
+    user.enterProduct = false;
+    user.save(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send('success');
+      };
+    });
+  }
+//   else {
+//   user.status = 0;
+//   user.save(function(err) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.send('success');
+//     };
+//   });
+// }
 });
 
 
@@ -106,6 +150,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
       // member.username = await generateUniqueID(store.shortCode);
       // member.username = `${storeSub}-field.username`;
       member.username = fields.username;
+      member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
+      console.log(member.enterProduct, 'logggggggggggggggg member');
       fs.readFile(passport.path, function(err, data) {
         fs.writeFile(dest,
                      data, function(err) {
@@ -183,7 +229,7 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 });
 
 
-// move user from one staff to another
+// move user from one store to another
 router.post('/post', guard.ensureLoggedIn(), async (req, res) => {
 
   const post = await Account.findById(req.body.user);
@@ -195,6 +241,22 @@ router.post('/post', guard.ensureLoggedIn(), async (req, res) => {
     } else {
       req.flash('success', `${post.firstname} ${post.lastname} Moved`);
       res.redirect('/admin/staff');
+    };
+  });
+});
+
+
+// Give Existing Staff Right To Enter Product
+router.post('/right/product', guard.ensureLoggedIn(), async (req, res) => {
+
+  const post = await Account.findById(req.body.user);
+  post.enterProduct = true;
+  post.save(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', `${post.firstname} ${post.lastname} Given Right To Enter Product`);
+      res.redirect('/admin/staff/enter/product');
     };
   });
 });

@@ -68,10 +68,12 @@
     <span>Update Existing Product</span>
     </a>
 
+    {{#if (eq user.roleId 'admin')}}
     <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#moveProduct">
     <i class="fa fa-square-o fa-2x"></i>
     <span>Move Product</span>
     </a>
+    {{/if}}
     
 </div>    
 
@@ -422,7 +424,7 @@
 </div>
 <!-- /modals -->
 
-
+{{#if (eq user.roleId 'admin')}}
 <!-- Small modal -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="moveProduct">
 <div class="modal-dialog modal-sm" style="width: 400px;">
@@ -498,6 +500,9 @@
 </div>
 </div>
 <!-- /modals -->
+{{else}}
+
+{{/if}}
 
 
 {{#extend 'scripts'}}

@@ -165,7 +165,7 @@
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-3">
                                         <select class="form-control" name="_customerId" id="_customerId" required>
-                                            <option>Select Customer</option>
+                                            <option value="">Select Customer</option>
                                             {{#each customers}}
                                                 <option value="{{_id}}">{{name}}</option>
                                             {{/each}}
@@ -312,7 +312,7 @@
                                 <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus" required>
                                 </div>
                                 </div>
                                 <div class="form-group">
@@ -320,6 +320,16 @@
                                 </label>
                                 <div class="col-md-6 col-sm-6">
                                     <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="balanceTransaction" id="balanceTransaction" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pay By:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select class="form-control" id="_paidBy" name="_paidBy" required>
+                                        <option value="cash">Cash</option>
+                                        <option value="cash">Transfer</option>
+                                        <option value="cash">POS</option>
+                                    </select>
                                 </div>
                                 </div>
                             </div>
@@ -774,7 +784,7 @@
                 $("#saleProduct")[0].reset();
 
 
-                // get sum of all the project on the table
+                // get sum of all the product on the table
                 sumTotalCal = 0;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
 
@@ -788,7 +798,7 @@
         }
 
 
-            $('#allSales').submit(function(e){
+        $('#allSales').submit(function(e){
             e.preventDefault();
 
             var dis = $('#discount').val();
@@ -796,6 +806,7 @@
             var amtDueToCus = $('#amtDueToCus').val();
             var payByCus = $('#payByCus').val();
             var balanceTransaction = $('#balanceTransaction').val();
+            var paidBy = $('#_paidBy').val();
 
             var invoiceDate = $('#invoiceDate').val();
             var invoiceNumber = $('#invoiceNumber').val();
@@ -804,6 +815,9 @@
             var customerId = $('#_customerId').val();
 
             var totalPrice = sumTotalCal;
+            //var productPerPrice = totalCal;
+
+            console.log(totalCal, 'log it');
 
             if(invoiceDate === ''){
                 alert('Invoice Date is empty');
@@ -814,7 +828,7 @@
             console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
             console.log(customerId, 'step2');
             console.log(salesArray, 'step3');
-            console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, 'step4');
+            console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, paidBy, 'step4');
 
             $.ajax({
                 type: 'POST',
@@ -827,11 +841,13 @@
                     amtDueToCus: amtDueToCus,
                     payByCus: payByCus,
                     balanceTransaction: balanceTransaction,
+                    paidBy: paidBy,
                     invoiceDate: invoiceDate,
                     invoiceNumber: invoiceNumber,
                     waybillNumber: waybillNumber,
                     customerId: customerId,
-                    totalPrice: totalPrice
+                    totalPrice: totalPrice,
+              //      productPerPrice: productPerPrice
                 }
                 }).done(function(data){
                     console.log(data);

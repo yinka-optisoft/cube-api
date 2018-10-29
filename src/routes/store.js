@@ -121,7 +121,7 @@ router.post('/create-store', async (req, res, next) => {
                                newBranch.country = newStore.country;
                                newBranch.state = newStore.state;
                                newBranch.city = newStore.city;
-                               newBranch.mainBranch = true;
+                               newBranch.headBranch = true;
                                await newBranch.save(function(err) {
                                  if (err) {
                                    console.log(err);

@@ -28,6 +28,7 @@ const Account = new Schema({
   moveDate: Date,
   rightToDeleteAdmin: { type: Boolean, default: false },
   status: { type: Boolean, default: true },
+  enterProduct: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 

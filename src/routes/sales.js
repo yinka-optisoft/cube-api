@@ -159,7 +159,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
     sale.totalPrice = req.body.totalPrice;
-    sale._customerId = (req.body.customerId === '') ? req.body.customerId : Types.ObjectId('5b87a5f019e03f50077a671b');
+    sale._customerId = (req.body.customerId === '') ? Types.ObjectId('5b87a5f019e03f50077a671b') : req.body.customerId;
     sale.invoiceDate = req.body.invoiceDate;
     sale.invoiceNumber = req.body.invoiceNumber;
     sale.waybillNumber = req.body.waybillNumber;
@@ -167,6 +167,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale.amountPaid = req.body.payByCus;
     sale.balanceTransaction = req.body.balanceTransaction;
     sale.discount = req.body.discount;
+    sale.paidBy = req.body.paidBy;
 
     for (let i = 0; i < req.body.salesArray.length; i++) {
       sale._productId.push(req.body.salesArray[i]._productId);

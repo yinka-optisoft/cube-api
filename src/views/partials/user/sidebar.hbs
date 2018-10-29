@@ -48,6 +48,7 @@
                     <ul class="nav child_menu">
                         <li><a href="/admin/admins">Manage Admins</a></li>
                         <li><a href="/admin/staff">Manage Staff</a></li>
+                        <li><a href="/admin/staff/enter/product">Give Right To Enter Product</a></li>
                         <li><a href="/admin/trash">Trash</a></li>
                     </ul>
                     </li>
@@ -74,6 +75,7 @@
                     <ul class="nav child_menu">
                         <li><a href="/report">Manage Sales Report</a></li>
                         <li><a href="/report/product">Manage Product Report</a></li>
+                        <li><a href="/report/account">Manage Account Report</a></li>
                     </ul>
                     </li>
                     <li><a><i class="fa fa-user"></i> Promotion Management <span class="fa fa-chevron-down"></span></a>
@@ -96,23 +98,20 @@
             {{else if (eq user._roleId.name 'admin')}}
                 <ul class="nav side-menu">
                     <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
-                    <li><a><i class="fa fa-home"></i> Branch Management <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="/branch">Manage Branch</a></li>
-                    </ul>
-                    </li>
                     <li><a><i class="fa fa-user"></i> Staff Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/admin/staff">Manage Staff</a></li>
                         <li><a href="/admin/trash">Trash</a></li>
                     </ul>
                     </li>
+                    {{#if (eq user.enterProduct true)}}
                     <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/store/categories">Categories</a></li>
                         <li><a href="/product">Manage Product</a></li>
                     </ul>
                     </li>
+                    {{/if}}
                     <li><a><i class="fa fa-user"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/sales/create/sales">Enter Sales manually</a></li>
@@ -120,32 +119,42 @@
                         <li><a href="/sales/manage/sales">Manage Sales</a></li>
                     </ul>
                     </li>
+                    {{#if (eq user.enterProduct true)}}
                     <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li><a href="/sales/create/sales">Enter Sales</a></li>
-                        <li><a href="/sales/manage/sales">Manage Sales</a></li>
+                        <li><a href="/supplier">Manage Suppliers</a></li>
                     </ul>
                     </li>
+                    {{/if}}
                     <li><a><i class="fa fa-user"></i> Report Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/report">Manage Sales Report</a></li>
                         <li><a href="/report/product">Manage Product Report</a></li>
+                        <li><a href="/report/account">Manage Account Report</a></li>
                     </ul>
                     </li>
-                    <li><a><i class="fa fa-user"></i> Promotion Management <span class="fa fa-chevron-down"></span></a>
+                    {{!-- <li><a><i class="fa fa-user"></i> Promotion Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/promotion">Manage Product For Promotion</a></li>
                     </ul>
-                    </li>
-                    <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
+                    </li> --}}
+                    {{!-- <li><a><i class="fa fa-windows"></i> Control Panel <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/store/roles">Manage Roles</a></li>
                     </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             {{else if (eq user._roleId.name 'staff')}}
                 <ul class="nav side-menu">
                     <li><a href="/dashboard"><i class="fa fa-laptop"></i>Dashboard</a></li>
+                    {{#if (eq user.enterProduct true)}}
+                    <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="/store/categories">Categories</a></li>
+                        <li><a href="/product">Manage Product</a></li>
+                    </ul>
+                    </li>
+                    {{/if}}
                     <li><a><i class="fa fa-home"></i> Sales Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/sales/create/sales">Enter Sales manually</a></li>
@@ -153,9 +162,31 @@
                         <li><a href="/sales/manage/sales">Manage Sales</a></li>
                     </ul>
                     </li>
+                    {{#if (eq user.enterProduct true)}}
+                    <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="/supplier">Manage Suppliers</a></li>
+                    </ul>
+                    </li>
+                    {{/if}}
                     <li><a><i class="fa fa-user"></i> Promotion Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li><a href="/promo">Manage Product For Promotion</a></li>
+                    </ul>
+                    </li>
+                </ul>
+            {{else if (eq user.enterProduct true)}}
+                <ul class="nav side-menu">
+                    <li><a><i class="fa fa-user"></i> Product Management <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="/store/categories">Categories</a></li>
+                        <li><a href="/product">Manage Product</a></li>
+                    </ul>
+                    </li>
+                    
+                    <li><a><i class="fa fa-user"></i> Supply Management <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li><a href="/supplier">Manage Suppliers</a></li>
                     </ul>
                     </li>
                 </ul>

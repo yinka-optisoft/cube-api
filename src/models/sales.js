@@ -18,7 +18,10 @@ const Sale = new Schema({
   piecesSold: [Number],
   unitPrice: [Number],
   totalPrice: [Number],
+  productPerPrice: [Number],
   offlineId: String,
+  paidBy: { type: String, lowercase: true, trim: true,
+            enum: ['cash', 'pos', 'transfer'] },
   createdAt: { type: Date, default: Date.now }
 });
 

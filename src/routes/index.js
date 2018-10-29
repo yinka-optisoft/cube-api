@@ -88,6 +88,9 @@ router.post('/login', passport.authenticate('local',
 
                                                                  if (user.roleId === 'admin') {
                                                                    res.redirect('/admin/dashboard');
+                                                                   // TODO: come back again for this
+                                                                 } else if (user.enterProduct === true) {
+                                                                   res.redirect('/product');
                                                                  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
                                                                    res.redirect('/admin/dashboard');
                                                                  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {

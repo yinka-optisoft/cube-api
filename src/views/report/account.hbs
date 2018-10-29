@@ -241,29 +241,34 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/report/get/sales',
+                url: '/report/get/account',
                 dataType: 'json',
                 data: {branchId: branchId, dateBet: dateBet, dateTill: dateTill },
                 success: function(data) {
-                    //console.log(data);
+                    console.log(data);
 
                     if ( $.fn.DataTable.isDataTable('#datatable') ) {
                         $('#datatable').DataTable().destroy();
                     }
 
-                    /*if ( $.fn.DataTable.isDataTable('#datatable-buttons') ) {
-                        $('#datatable-buttons').DataTable().destroy();
-                    }*/
-
                     $('#datatable tbody').empty();
 
                     for(var i = 0; i < data.length; i++){
-                        var proName = [];
-                        for(var j = 0; j < data[i]._productId.length; j++){
-                            proName.push(data[i]._productId[j].productName);
+
+                        //console.log(data.totalPrice);
+
+
+                        var proSaleObj = {};
+                        for(var j = 0; j < data[i].totalPrice.length; j++){
+                            //console.log(data[i].totalPrice);
+                            //proSaleObj.push(data[i].totalPrice);
+                            proSaleObj = data[i].totalPrice;
                         }
 
-                            var tr = (
+                        console.log(proSaleObj);
+
+
+                            /*var tr = (
                             '<tr>'+
                                 '<td>'+(i + 1)+'</td>'+
                                 '<td>'+
@@ -280,7 +285,7 @@
                             );
 
                             $('#reportTable').append(tr);
-                            $('#reportModal').modal('hide');
+                            $('#reportModal').modal('hide');*/
                     }
 
                     $('#reportModal').modal('hide');
