@@ -545,7 +545,7 @@
         $('#saleDate').val(saleDate);
 
         // generate invoice number
-        function genInvoiceNumb() {
+        /*function genInvoiceNumb() {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -555,7 +555,23 @@
             return text;
         }
         var invoiceNumber = new Date().format('m-d-Y/h:i:s');
-        $('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
+        $('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());*/
+
+        function genInvoiceNumb() {
+        var text = "";
+        //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var possible = "0123456789";
+        //var possible = new Date().format('mdhi');
+
+        for (var i = 0; i < 8; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+            //text += possible;
+
+            return text;
+        }
+        //var invoiceNumber = new Date().format('m-d-Y/h:i:s');
+        //$('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
+        $('#invoiceNumber').val(genInvoiceNumb());
 
 
         // generate waybill number

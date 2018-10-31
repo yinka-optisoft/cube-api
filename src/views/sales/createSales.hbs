@@ -540,16 +540,19 @@
         // generate invoice number
         function genInvoiceNumb() {
         var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        //var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var possible = "0123456789";
+        //var possible = new Date().format('mdhi');
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 8; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
+            //text += possible;
 
             return text;
         }
-        var invoiceNumber = new Date().format('m-d-Y/h:i:s');
-        $('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
-
+        //var invoiceNumber = new Date().format('m-d-Y/h:i:s');
+        //$('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
+        $('#invoiceNumber').val(genInvoiceNumb());
 
         // generate waybill number
         function genWayBilNumb() {
@@ -786,6 +789,7 @@
 
                 // get sum of all the product on the table
                 sumTotalCal = 0;
+                productSum = totalCal;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
 
                 // assign sumTotalCal to Sum Amount By Sales and 
@@ -816,11 +820,12 @@
 
             //TODO: use this for now
             var totalPrice = sumTotalCal;
+            var s = productSum;
 
             //var totalPrice = sumTotalCal;
             //var productPerPrice = totalCal;
 
-            //console.log(totalCal, 'log it');
+            console.log(s, 'log it');
 
             if(invoiceDate === ''){
                 alert('Invoice Date is empty');

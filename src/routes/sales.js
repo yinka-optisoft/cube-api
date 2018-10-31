@@ -207,7 +207,13 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
   // iterate tru product and send it to salesObject
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
-    salesObj.push(sale._productId[i].productName);
+    const productId = sale._productId[i];
+    const qty = sale.piecesSold[i];
+    const unitPrice = sale.unitPrice[i];
+    const subTotal = (unitPrice * qty);
+    const findProduct =await Product.findOne({_id:productId });
+    salesObj.push({productName: findProduct.productName, qty: qty, unitPrice: unitPrice, subTotal: subTotal});
+
   }
 
   const html = fs.readFile(path.join(__dirname, '..', 'views', 'pdf', 'invoice.html'),
@@ -238,7 +244,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                 htmlPdf.create(html, {
                                   format: 'A4',
                                   orientation: 'portrait',
-                                  border: '10mm'
+                                  // border: '2mm'
                                 })
                                         .toStream((err, stream) => {
                                           if (!err) {
