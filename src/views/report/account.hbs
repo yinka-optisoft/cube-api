@@ -63,7 +63,7 @@
 
     <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#reportModal">
     <i class="fa fa-plus fa-2x"></i>
-    <span>View Sales Report</span>
+    <span>View Account Report</span>
     </a>
     
 </div>
@@ -95,15 +95,10 @@
             <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>N/S</th>
-                        <th>Product Name</th>
-                        <th>Pieces Sold</th>
-                        <th>Product Price</th>
-                        <th>Total Price</th>
-                        <th>Paid By</th>
-                        <th>Sales Date</th>
-                        <th>Sales Branch</th>
-                        <th>SalesBy</th>
+                        {{!-- <th>N/S</th> --}}
+                        <th>Total Amount</th>
+                        <th>Total Balance Remain</th>
+                        <th>Total Discount</th>
                     </tr>
                 </thead>
 
@@ -245,7 +240,7 @@
                 dataType: 'json',
                 data: {branchId: branchId, dateBet: dateBet, dateTill: dateTill },
                 success: function(data) {
-                    console.log(data);
+                    //console.log(data);
 
                     if ( $.fn.DataTable.isDataTable('#datatable') ) {
                         $('#datatable').DataTable().destroy();
@@ -253,40 +248,38 @@
 
                     $('#datatable tbody').empty();
 
+                    var totalAmtArray = [];
+                    var totalDisArray = [];
+                    var totalBlnArray = [];
                     for(var i = 0; i < data.length; i++){
 
-                        //console.log(data.totalPrice);
-
-
-                        var proSaleObj = {};
-                        for(var j = 0; j < data[i].totalPrice.length; j++){
-                            //console.log(data[i].totalPrice);
-                            //proSaleObj.push(data[i].totalPrice);
-                            proSaleObj = data[i].totalPrice;
-                        }
-
-                        console.log(proSaleObj);
-
-
-                            /*var tr = (
-                            '<tr>'+
-                                '<td>'+(i + 1)+'</td>'+
-                                '<td>'+
-                                    proName
-                                    +'</td>'+
-                                '<td>'+data[i].piecesSold+'</td>'+
-                                '<td>'+data[i].unitPrice+'</td>'+
-                                '<td>'+data[i].totalPrice+'</td>'+
-                                '<td>'+data[i].paidBy+'</td>'+
-                                '<td>'+data[i].createdAt+'</td>'+
-                                '<td>'+data[i]._branchId.name+'</td>'+
-                                '<td>'+data[i]._salesBy.username+'</td>'+
-                            '</tr>'
-                            );
-
-                            $('#reportTable').append(tr);
-                            $('#reportModal').modal('hide');*/
+                        totalAmtArray.push(data[i].totalPrice);
+                        totalDisArray.push(data[i].discount);
+                        totalBlnArray.push(data[i].balanceTransaction);
                     }
+
+                    // get sum of all the product on the table
+                    sumTotalAmt = 0;
+                    $.each(totalAmtArray, function(){sumTotalAmt+=parseFloat(this) || 0;});
+
+                    sumTotalDis = 0;
+                    $.each(totalDisArray, function(){sumTotalDis+=parseFloat(this) || 0;});
+
+                    sumTotalBln = 0;
+                    $.each(totalBlnArray, function(){sumTotalBln+=parseFloat(this) || 0;});
+                    
+
+                    var tr = (
+                    '<tr>'+
+                        //'<td>'+( + 1)+'</td>'+
+                        '<td>'+sumTotalAmt+'</td>'+
+                        '<td>'+sumTotalDis+'</td>'+
+                        '<td>'+sumTotalBln+'</td>'+
+                    '</tr>'
+                    );
+
+                    $('#reportTable').append(tr);
+                    $('#reportModal').modal('hide');
 
                     $('#reportModal').modal('hide');
 
