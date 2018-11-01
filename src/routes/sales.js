@@ -1,16 +1,10 @@
 import express from 'express';
-import passport from 'passport';
 import Store from '../models/store';
-import Branch from '../models/branch';
 import Account from '../models/account';
-import Role from '../models/role';
-import Category from '../models/category';
 import Product from '../models/product';
-import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import guard from 'connect-ensure-login';
-import { check, validationResult } from 'express-validator/check';
 import Customer from '../models/customer';
 import BranchProduct from '../models/branchProduct';
 import Sales from '../models/sales';
