@@ -838,6 +838,7 @@
 
                 // get sum of all the project on the table
                 sumTotalCal = 0;
+                subtotal = totalCal;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
 
                 // assign sumTotalCal to Sum Amount By Sales and 
@@ -867,6 +868,7 @@
             var customerId = $('#_customerId').val();
 
             var totalPrice = sumTotalCal;
+            var subtotal = subtotal;
 
             if(invoiceDate === ''){
                 alert('Invoice Date is empty');
@@ -895,7 +897,8 @@
                     invoiceNumber: invoiceNumber,
                     waybillNumber: waybillNumber,
                     customerId: customerId,
-                    totalPrice: totalPrice
+                    totalPrice: totalPrice,
+                    subtotal: subtotal
                 }
                 }).done(function(data){
                     console.log(data);

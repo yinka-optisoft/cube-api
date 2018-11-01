@@ -789,7 +789,7 @@
 
                 // get sum of all the product on the table
                 sumTotalCal = 0;
-                productSum = totalCal;
+                subtotal = totalCal;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
 
                 // assign sumTotalCal to Sum Amount By Sales and 
@@ -818,9 +818,8 @@
 
             var customerId = $('#_customerId').val();
 
-            //TODO: use this for now
             var totalPrice = sumTotalCal;
-            var s = productSum;
+            var subtotal = subtotal;
 
             //var totalPrice = sumTotalCal;
             //var productPerPrice = totalCal;
@@ -855,7 +854,7 @@
                     waybillNumber: waybillNumber,
                     customerId: customerId,
                     totalPrice: totalPrice,
-              //      productPerPrice: productPerPrice
+                    subtotal: subtotal
                 }
                 }).done(function(data){
                     console.log(data);
