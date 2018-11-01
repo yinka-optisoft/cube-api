@@ -789,8 +789,10 @@
 
                 // get sum of all the product on the table
                 sumTotalCal = 0;
-                subtotal = totalCal;
+                subtotal = 0;
                 $.each(totalCal, function(){sumTotalCal+=parseFloat(this) || 0;});
+
+                subtotal = totalCal;
 
                 // assign sumTotalCal to Sum Amount By Sales and 
                 // amount due to customer and balance transaction
@@ -815,27 +817,14 @@
             var invoiceDate = $('#invoiceDate').val();
             var invoiceNumber = $('#invoiceNumber').val();
             var waybillNumber = $('#waybillNumber').val();
-
             var customerId = $('#_customerId').val();
-
             var totalPrice = sumTotalCal;
-            var subtotal = subtotal;
 
-            //var totalPrice = sumTotalCal;
-            //var productPerPrice = totalCal;
-
-            console.log(s, 'log it');
 
             if(invoiceDate === ''){
                 alert('Invoice Date is empty');
                 return false;
             }
-
-            console.log(totalPrice, 'total price');
-            console.log(invoiceDate, invoiceNumber, waybillNumber, 'step1');
-            console.log(customerId, 'step2');
-            console.log(salesArray, 'step3');
-            console.log(dis, vat, amtDueToCus, payByCus, balanceTransaction, paidBy, 'step4');
 
             $.ajax({
                 type: 'POST',
@@ -854,6 +843,8 @@
                     waybillNumber: waybillNumber,
                     customerId: customerId,
                     totalPrice: totalPrice,
+
+                    //TODO: This is get from append table
                     subtotal: subtotal
                 }
                 }).done(function(data){

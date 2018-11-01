@@ -152,6 +152,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale._storeId = req.user._storeId;
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
+    sale.subtotal = req.body.subtotal;
     sale.totalPrice = req.body.totalPrice;
     sale._customerId = (req.body.customerId === '') ? Types.ObjectId('5b87a5f019e03f50077a671b') : req.body.customerId;
     sale.invoiceDate = req.body.invoiceDate;
