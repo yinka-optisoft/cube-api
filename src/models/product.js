@@ -9,7 +9,7 @@ const Product = new Schema({
   _categoryId: { type: Schema.Types.ObjectId, ref: 'categories' },
   _createdBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _updatedBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
-  productName: String,
+  productName: { type: String, text: true },
   pieces: Number,
   sellingPrice: Number,
   expiryDate: String,

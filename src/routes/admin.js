@@ -149,9 +149,9 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
       member.status = 1;
       // member.username = await generateUniqueID(store.shortCode);
       // member.username = `${storeSub}-field.username`;
+      member.phone = `+234 ${fields.phone}`;
       member.username = fields.username;
       member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
-      console.log(member.enterProduct, 'logggggggggggggggg member');
       fs.readFile(passport.path, function(err, data) {
         fs.writeFile(dest,
                      data, function(err) {
@@ -160,6 +160,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                            console.log(err);
                          } else {
                            member.passport = name;
+
+                           console.log(member, 'member');
 
                            Account.register(new Account(member), password,
                                             async (err, account) => {

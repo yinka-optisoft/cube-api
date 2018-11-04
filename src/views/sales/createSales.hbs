@@ -180,15 +180,34 @@
                             <div class="row form-group">
                                 <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
-                                <div class="col-md-6 col-sm-6">
+                                {{!-- <div class="col-md-6 col-sm-6 ">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name">
                                     <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
                                         <option>Select Product</option>
                                         {{#each products}}
                                             <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
                                         {{/each}}
                                     </select>
+                                </div> --}}
+
+                                <div class="col-md-6 col-sm-6 ui-widget">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name">
+                                    {{!-- <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
+                                        <option>Select Product</option>
+                                        {{#each products}}
+                                            <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
+                                        {{/each}}
+                                    </select> --}}
                                 </div>
                                 </div>
+                                {{!-- <div class="ui-widget">
+                                    <label for="_productId">Your city: </label>
+                                    <input id="_productId">
+                                </div> --}}
+                                {{!-- <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+                                    Result:
+                                    <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+                                </div> --}}
                                 <div class="form-group">
                                 <div class="piecesMsg col-md-6 col-sm-offset-3">
 
@@ -897,6 +916,126 @@
 
             tableAppend();
         });
+
+
+        /*$(function () {
+
+            $("#_productId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/sales/get/product",
+                        type: "POST",
+                        data: request,  // request is the value of search input
+                        success: function (data) {
+                        // Map response values to fiedl label and value
+                        response($.map(data, function (el) {
+                            return {
+                                label: el.productName,
+                                value: el._id
+                            };
+                            }));
+                        }
+                        });
+                    },
+                    
+                    // The minimum number of characters a user must type before a search is performed.
+                    minLength: 1, 
+                    
+                    // set an onFocus event to show the result on input field when result is focused
+                    focus: function (event, ui) { 
+                        this.value = ui.item.label; 
+                        // Prevent other event from not being execute
+                        event.preventDefault();
+                    },
+                    select: function (event, ui) {
+                        // Prevent value from being put in the input:
+                        this.value = ui.item.label;
+                        // Set the id to the next input hidden field
+                        $(this).next("input").val(ui.item.value); 
+                        // Prevent other event from not being execute            
+                        event.preventDefault();
+                        // optionnal: submit the form after field has been filled up
+                        //$('#quicksearch').submit();
+                    }
+            });
+
+        });*/
+
+
+
+
+
+        $(function() {
+
+            function log( message ) {
+                $( "<div>" ).text( message ).prependTo( "#log" );
+                $( "#log" ).scrollTop( 0 );
+            }
+
+            $( "#_productId" ).autocomplete({
+
+                source: function( request, response ) {
+                    console.log(request.term);
+                    $.ajax({
+                        url: "/sales/get/product/"+request.term,
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            q: request.term
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function( event, ui ) {
+                    log( ui.item ?
+                    "Selected: " + ui.item.label :
+                    "Nothing selected, input was " + this.value);
+                },
+                open: function() {
+                    $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+                },
+                close: function() {
+                    $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+                }
+            });
+        });
+
+        
+
+
+        //$( function() {
+            /*var availableTags = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+            ];*/
+            /*$( "#_productId" ).autocomplete({
+            //source: availableTags
+            source: "/sales/get/product"
+            });*/
+        //} );
         
         
 </script>

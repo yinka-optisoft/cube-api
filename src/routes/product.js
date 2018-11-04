@@ -380,4 +380,11 @@ router.get('/move', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
+router.get('/barcode', guard.ensureLoggedIn(), async (req, res, next) => {
+  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+
+  res.render('product/barcode', { user, expressFlash: req.flash('info'), layout: 'layouts/user' });
+});
+
+
 export default router;

@@ -1,0 +1,538 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 100px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+    </style>
+
+{{/extend}}
+
+{{# if errors }}
+    {{# each errors }}
+          <p class="alert alert-danger">{{ errors }}</p>
+    {{/each}}
+{{/if}}
+
+<div class="alertMsg">
+
+</div>
+
+
+<div class="text-center">
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newProduct">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>New Product</span>
+    </a>
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#existProduct">
+    <i class="fa fa-bars fa-2x"></i>
+    <span>Update Existing Product</span>
+    </a>
+
+    {{#if (eq user.roleId 'admin')}}
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#moveProduct">
+    <i class="fa fa-square-o fa-2x"></i>
+    <span>Move Product</span>
+    </a>
+    {{/if}}
+    
+</div>    
+
+
+{{!-- <div class="col-md-12 col-sm-12 col-xs-12">
+    
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>All Product</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+
+        <table id="datatable" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>N/S</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Barcode Number</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <td>{{inc @index}}</td>
+                    <td id="productName{{_id}}">{{productName}}</td>
+                    <td id="_categoryId{{_id}}">{{_categoryId.name}}</td>
+                    <td id="sellingPrice{{_id}}">{{sellingPrice}}</td>
+                    <td id="barcodeNumber{{_id}}">{{barcodeNumber}}</td>
+                         
+                    <td>
+                        <button title="Edit" data-toggle="modal" _supplierId="{{_supplierId.name}}", _supplierId="{{_branchId.name}}", productId="{{_id}}" productName="{{productName}}" categoryId="{{_categoryId.name}}" sellingPrice="{{sellingPrice}}" pieces="{{pieces}}" note="{{note}}" data-target="#editProduct" class="btn btn-primary btn-sm">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <a href="/product/view/{{_id}}">
+                            <button title="View" class="btn btn-success btn-sm">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </a>
+                        <button title="Delete" onclick="deleteProduct(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div> --}}
+
+
+<svg id="barcode"></svg>
+<!-- or -->
+<canvas id="canvas"></canvas>
+<!-- or -->
+<img id="barcode"/>
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newProduct">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Add New Product</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/product" id="save_branch">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_branchId" id="_branchId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_supplierId" id="_supplierId">
+                            <option value="">Select Supplier</option>
+                            {{#each suppliers}}
+                            <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="productName" id="productName" class="form-control" placeholder="Product Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_categoryId" id="_categoryId" required>
+                            <option>Select Category</option>
+                            {{#each categories}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Barcode Number</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="barcodeNumber" id="barcodeNumber" class="form-control" placeholder="Barcode Number" required>
+                        <span class="barcodeNumber"></span>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Pieces</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" placeholder="Price" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Note
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="note" id="note" rows="2" placeholder='Note'></textarea>
+                    </div>
+                    </div>
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="existProduct">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Existing Product</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" id="existingProductForm">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_branchId" id="_branchId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" onchange="getCategory(this.value)" name="_exCategoryId" id="_exCategoryId" required>
+                            <option>Select Category</option>
+                            {{#each categories}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Product Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_exProductId" id="_exProductId" required>
+                            
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Pieces</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="upieces" id="upieces" class="form-control" placeholder="Pieces" required>
+                    </div>
+                    </div>
+                    {{!-- <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="uprice" id="uprice" class="form-control" placeholder="Price" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Note
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="unote" id="unote" rows="2" placeholder='Note'></textarea>
+                    </div>
+                    </div> --}}
+                    
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="editProduct">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Update Product</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/product/update" id="productForm">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_branchId" id="_branchId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_supplierId" id="_supplierId" required>
+                            {{!-- {{#select product._supplierId.firstname}} --}}
+                                <option>Select Supplier</option>
+                                {{#each suppliers}}
+                                <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
+                                {{/each}}
+                            {{!-- {{/select}} --}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="productName" id="productName" class="form-control name" placeholder="Product Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="_categoryId" id="_categoryId" required>
+                            <option>Select Category</option>
+                            {{#each categories}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    {{!-- <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Pieces</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                    </div>
+                    </div> --}}
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" placeholder="Price" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Note
+                    </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <textarea class="form-control" name="note" id="note" rows="2" placeholder='Note'></textarea>
+                    </div>
+                    </div>
+                    <input type="hidden" name="_productId" id="_productId" value=""/>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+{{#if (eq user.roleId 'admin')}}
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="moveProduct">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Move Product</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" method="POST" action="/product/move/product">
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Send From</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="fromId" id="fromId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Product</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select onchange="getPieces(this.value)" class="form-control" name="productId" id="productId" required>
+      
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch Available Pieces</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" name="pieces" id="get_pieces" class="form-control" placeholder="Pieces" disabled>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Enter Pieces</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="number" onchange="countPieces(this.value)" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Send To</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select class="form-control" name="toId" id="toId" required>
+                            <option>Select Branch</option>
+                            {{#each branches}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+{{else}}
+
+{{/if}}
+
+
+{{#extend 'scripts'}}
+    <!-- Datatables -->
+    <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+    <script src="/vendors/barcode/JsBarcode.all.min.js"></script>
+
+    <script>
+        var n = '8776789907888';
+        JsBarcode("#barcode", n);
+        // or with jQuery
+        //$("#barcode").JsBarcode("Hinn!");
+    </script>
+
+{{/extend}}

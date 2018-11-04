@@ -53,9 +53,22 @@
     <hr/>
 
     <div class="info">
-      <p>Name: <b>{{store.name}}</b></p>
-      <p>adr: {{store.address}}</p>
+      <p>Store Name: <b>{{store.name}}</b></p>
+      <p>ADD: {{store.address}}</p>
       <p>Phone: {{store.phone}}</p>
+    </div>
+
+    <hr/>
+
+    <div class="info">
+      <p>CUST Name: <b>{{sale._customerId.name}}</b></p>
+      <p>Phone: {{sale._customerId.phone}}</p>
+    </div>
+
+    <hr/>
+
+    <div class="info">
+      <p>Paid By: <b>{{sales.paidBy}}</b></p>
     </div>
 
     <hr/>
@@ -77,6 +90,7 @@
                 <p>To</p>
                 <p><b>{{sale._customerId.name}}</b></p>
                 <p>{{sale._customerId.address}}</p>
+                <p><b>{{sale._customerId.name}}</b></p>
                 <p>Phone: {{sale._customerId.phone}}</p>
                 <p>E-mail: {{sale._customerId.email}}</p>
             </div>
@@ -135,8 +149,8 @@
           <td class="totalprice">Total Price</td>
           <td>NGN {{sale.totalPrice }}</td>
         </tr>
-        
       </tbody>
     </table>
+    <p>Thanks For Coming </p>
   </body>
 </html>

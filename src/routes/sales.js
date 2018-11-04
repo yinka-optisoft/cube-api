@@ -193,6 +193,24 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 });
 
 
+router.get('/get/product/:product', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  const productName = req.params.product;
+
+  console.log(productName);
+
+  // const product = await Product.findOne({ _storeId: req.user._storeId, productName: productName });
+
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate({ path: '_productId', select: 'productName' });
+  // .populate('_productId');
+
+  console.log(products);
+
+
+  return res.json(products);
+});
+
+
 router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) => {
 
   const store = await Store.findById(req.user._storeId);
@@ -206,11 +224,11 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
     const qty = sale.piecesSold[i];
     const unitPrice = sale.unitPrice[i];
     const subTotal = (unitPrice * qty);
-    const findProduct =await Product.findOne({_id:productId });
-    salesObj.push({productName: findProduct.productName, qty: qty, unitPrice: unitPrice, subTotal: subTotal});
+    const findProduct = await Product.findOne({ _id: productId });
+    salesObj.push({ productName: findProduct.productName, qty: qty, unitPrice: unitPrice, subTotal: subTotal });
 
   }
-
+  
   const html = fs.readFile(path.join(__dirname, '..', 'views', 'pdf', 'invoice.html'),
                            { encoding: 'utf8' },
                            (err, data) => {
