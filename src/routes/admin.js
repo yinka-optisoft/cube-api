@@ -149,7 +149,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
       member.status = 1;
       // member.username = await generateUniqueID(store.shortCode);
       // member.username = `${storeSub}-field.username`;
-      member.phone = `+234 ${fields.phone}`;
+      member.phone = `+234${fields.phone}`;
       member.username = fields.username;
       member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
       fs.readFile(passport.path, function(err, data) {
@@ -181,10 +181,10 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                                                 console.log(err);
                                               } else if (account.roleId === 'admin') {
                                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                                res.redirect('/admin/admins/');
+                                                res.redirect('/admin/admins');
                                               } else {
                                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                                res.redirect('/admin/staff/');
+                                                res.redirect('/admin/staff');
                                               }
                                             });
 

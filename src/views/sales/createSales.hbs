@@ -85,6 +85,255 @@
             </div>
             <div class="x_content">
 
+            {{!-- <form class="form-horizontal form-label-left" id="allSales">
+            <!-- Smart Wizard -->
+            <div id="wizard" class="form_wizard wizard_horizontal">
+                <ul class="wizard_steps">
+                <li>
+                    <a href="#step-1">
+                    <span class="step_no">1</span>
+                    <span class="step_descr">
+                        Step 1<br />
+                        <small>Invoice Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-2">
+                    <span class="step_no">2</span>
+                    <span class="step_descr">
+                        Step 2<br />
+                        <small>Customer Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-3">
+                    <span class="step_no">3</span>
+                    <span class="step_descr">
+                        Step 3<br />
+                        <small>Product Details</small>
+                    </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-4">
+                    <span class="step_no">4</span>
+                    <span class="step_descr">
+                        Step 4<br />
+                        <small>Sales Details</small>
+                    </span>
+                    </a>
+                </li>
+                </ul>
+                    <div id="step-1">
+                        <form class="form-horizontal form-label-left" id="saleStep1">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="date" required="required" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="step-2">
+                        <form class="form-horizontal form-label-left" id="saleStep2">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <select class="form-control" name="_customerId" id="_customerId" required>
+                                            <option value="">Select Customer</option>
+                                            {{#each customers}}
+                                                <option value="{{_id}}">{{name}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="step-3">
+                        <form class="form-horizontal form-label-left" id="saleProduct">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
+                                <div class="col-md-6 col-sm-6 ui-widget">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="piecesMsg col-md-6 col-sm-offset-3">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pieces Available:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="piecesAvai" id="piecesAvai" placeholder="Pieces Available" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Pieces:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="enterPieces(this.value)" name="piecesSold" id="piecesSold" placeholder="Enter Pieces">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Product Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="getPrice" id="getPrice" placeholder="Product Price" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="getMsg col-md-6 col-md-offset-3">
+
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Enter Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="pricePay(this.value)" name="productPrice" id="productPrice" placeholder="Enter Price">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                    <h2>Sales </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+                                        <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Settings 1</a>
+                                            </li>
+                                            <li><a href="#">Settings 2</a>
+                                            </li>
+                                        </ul>
+                                        </li>
+                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Product Name</th>
+                                            <th>Pieces</th>
+                                            <th>Unit Price</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="saleTable">
+
+                                        </tbody>
+                                    </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="step-4">
+                        <form class="form-horizontal form-label-left" id="saleStep4">
+                            <div class="row form-group">
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="first-name">Sum Amount By Sales Price:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" required="required" class="form-control col-md-7 col-xs-12" placeholder="Sum" name="sumAmt" id="sumAmt" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3" for="last-name">Discount Given To Customer:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input type="text" name="discount" onchange="getDiscount(this.value)" class="form-control col-md-7 col-xs-12" placeholder="Discount Given To Customer" id="discount">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">%VAT:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="vat" placeholder="VAT" id="vat">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Due To Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" name="amtDueToCus" placeholder="Amount Due To Customer" id="amtDueToCus" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Amount Paid By Customer:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" onchange="amountPaidByCus(this.value)" placeholder="Amount Paid By Customer" name="payByCus" id="payByCus" required>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3">Balance Transaction:
+                                </label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" placeholder="Balance Transaction" name="balanceTransaction" id="balanceTransaction" disabled>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Pay By:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select class="form-control" id="_paidBy" name="_paidBy" required>
+                                        <option value="cash">Cash</option>
+                                        <option value="cash">Transfer</option>
+                                        <option value="cash">POS</option>
+                                    </select>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            <!-- End SmartWizard Content -->
+            </div>
+            </form> --}}
+
             <form class="form-horizontal form-label-left" id="allSales">
             <!-- Smart Wizard -->
             <div id="wizard" class="form_wizard wizard_horizontal">
@@ -180,7 +429,17 @@
                             <div class="row form-group">
                                 <div class="form-group">
                                 <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Name:</label>
-                                {{!-- <div class="col-md-6 col-sm-6 ">
+                                <div class="col-md-6 col-sm-6 ">
+                                    {{!-- <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name"> --}}
+                                    <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
+                                        <option>Select Product</option>
+                                        {{#each products}}
+                                            <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+
+                                {{!-- <div class="col-md-6 col-sm-6 ui-widget">
                                     <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name">
                                     <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
                                         <option>Select Product</option>
@@ -189,25 +448,7 @@
                                         {{/each}}
                                     </select>
                                 </div> --}}
-
-                                <div class="col-md-6 col-sm-6 ui-widget">
-                                    <input class="form-control col-md-7 col-xs-12" type="text" name="_productId" id="_productId" placeholder="Product Name">
-                                    {{!-- <select class="form-control" id="_productId" name="_productId" onchange="getPieces(this.value)" required>
-                                        <option>Select Product</option>
-                                        {{#each products}}
-                                            <option value="{{_productId._id}}" data-productName="{{_productId.productName}}">{{_productId.productName}}</option>
-                                        {{/each}}
-                                    </select> --}}
                                 </div>
-                                </div>
-                                {{!-- <div class="ui-widget">
-                                    <label for="_productId">Your city: </label>
-                                    <input id="_productId">
-                                </div> --}}
-                                {{!-- <div class="ui-widget" style="margin-top:2em; font-family:Arial">
-                                    Result:
-                                    <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
-                                </div> --}}
                                 <div class="form-group">
                                 <div class="piecesMsg col-md-6 col-sm-offset-3">
 
