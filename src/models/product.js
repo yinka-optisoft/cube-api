@@ -30,5 +30,7 @@ const Product = new Schema({
   promoPieces: Number,
 });
 Product.plugin(mongoosePaginate);
-Product.plugin(mongoosastic);
+// var esClient = new elasticsearch.Client({ host: 'localhost:9200' });
+// Product.plugin(mongoosastic, {  esClient: esClient });
+Product.plugin(mongoosastic, { hosts: ['127.0.0.1:9200'], bulk: { size: 2800, delay: 100 } });
 export default mongoose.model('products', Product);

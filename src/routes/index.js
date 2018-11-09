@@ -106,8 +106,8 @@ router.post('/login', passport.authenticate('local',
                                                          } else {
 
                                                            // TODO:Come back to this later
-                                                           sub.expired = true;
-                                                           sub.save();
+                                                           //  sub.expired = true;
+                                                           //  sub.save();
 
                                                            req.flash('success', 'Subscription Expired');
                                                            //  res.redirect('/login');
