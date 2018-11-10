@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 var mongoosePaginate = require('mongoose-paginate');
-import mongoosastic from 'mongoosastic';
 const Schema = mongoose.Schema;
 
 const Product = new Schema({
@@ -10,7 +9,7 @@ const Product = new Schema({
   _categoryId: { type: Schema.Types.ObjectId, ref: 'categories' },
   _createdBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _updatedBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
-  productName: { type: String, es_indexed: true },
+  productName:  String,
   pieces: Number,
   sellingPrice: Number,
   expiryDate: String,
@@ -30,5 +29,4 @@ const Product = new Schema({
   promoPieces: Number,
 });
 Product.plugin(mongoosePaginate);
-Product.plugin(mongoosastic);
 export default mongoose.model('products', Product);
