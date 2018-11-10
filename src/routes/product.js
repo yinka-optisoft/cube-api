@@ -106,12 +106,13 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         branchproduct._branchId = req.body._branchId;
         branchproduct._movedBy = req.user._id;
         branchproduct.pieces = req.body.pieces;
-        branchproduct.save((err, pro) => {
+        branchproduct.save((err) => {
           if (err) {
             console.log(err);
+            
           } else {
 
-            pro.on('es-indexed', (err, prod) => {
+            product.on('es-indexed', (err, prod) => {
               if (err) throw err;
               console.log(prod, 'after mongosstatic');
             });
