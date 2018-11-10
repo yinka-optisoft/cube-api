@@ -195,19 +195,18 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 
 router.get('/get/product/:product', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const productName = req.params.product;
+  const productNam = req.params.product;
 
-  console.log(productName);
+  const branchProduct = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId });
 
-  // const product = await Product.findOne({ _storeId: req.user._storeId, productName: productName });
+  const ProductIds = [];
+  for (let i = 0; i < branchProduct.length; i++) {
+    ProductIds.push(branchProduct[i]._productId);
+  }
+  const pro = await Product.find({ _id: { $in:  ProductIds } });
+  const final = pro.filter(p => p.productName.toLowerCase().indexOf(productNam.toLowerCase()) > -1);
 
-  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate({ path: '_productId', select: 'productName' });
-  // .populate('_productId');
-
-  console.log(products);
-
-
-  return res.json(products);
+  return res.json(final);
 });
 
 
@@ -228,7 +227,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
     salesObj.push({ productName: findProduct.productName, qty: qty, unitPrice: unitPrice, subTotal: subTotal });
 
   }
-  
+
   const html = fs.readFile(path.join(__dirname, '..', 'views', 'pdf', 'invoice.html'),
                            { encoding: 'utf8' },
                            (err, data) => {
