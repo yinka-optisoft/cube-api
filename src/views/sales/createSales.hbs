@@ -94,7 +94,7 @@
                     <span class="step_no">1</span>
                     <span class="step_descr">
                         Step 1<br />
-                        <small>Invoice Details</small>
+                        <small>Customer Details</small>
                     </span>
                     </a>
                 </li>
@@ -103,7 +103,7 @@
                     <span class="step_no">2</span>
                     <span class="step_descr">
                         Step 2<br />
-                        <small>Customer Details</small>
+                        <small>Product Details</small>
                     </span>
                     </a>
                 </li>
@@ -112,54 +112,12 @@
                     <span class="step_no">3</span>
                     <span class="step_descr">
                         Step 3<br />
-                        <small>Product Details</small>
-                    </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#step-4">
-                    <span class="step_no">4</span>
-                    <span class="step_descr">
-                        Step 4<br />
                         <small>Sales Details</small>
                     </span>
                     </a>
                 </li>
                 </ul>
                     <div id="step-1">
-                        <form class="form-horizontal form-label-left" id="saleStep1">
-                            <div class="row form-group">
-                                <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3" for="first-name">Record Invoice Date:
-                                </label>
-                                <div class="col-md-6 col-sm-6">
-                                    <input type="date" required="required" name="invoiceDate" id="invoiceDate" class="form-control col-md-7 col-xs-12">
-                                </div>
-                                </div>
-                                <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3" for="last-name">Date:
-                                </label>
-                                <div class="col-md-6 col-sm-6">
-                                    <input type="text" name="saleDate" id="saleDate" class="form-control col-md-7 col-xs-12" disabled>
-                                </div>
-                                </div>
-                                <div class="form-group">
-                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Invoice No:</label>
-                                <div class="col-md-6 col-sm-6">
-                                    <input class="form-control col-md-7 col-xs-12" type="text" id="invoiceNumber" name="invoiceNumber" disabled>
-                                </div>
-                                </div>
-                                <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3">WAYBILLNo:
-                                </label>
-                                <div class="col-md-6 col-sm-6">
-                                    <input class="form-control col-md-7 col-xs-12" disabled type="text" id="waybillNumber" name="waybillNumber">
-                                </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="step-2">
                         <form class="form-horizontal form-label-left" id="saleStep2">
                             <div class="row form-group">
                                 <div class="form-group">
@@ -175,9 +133,20 @@
                             </div>
                         </form>
                     </div>
-                    <div id="step-3">
+                    <div id="step-2">
                         <form class="form-horizontal form-label-left" id="saleProduct">
                             <div class="row form-group">
+                                <div class="form-group">
+                                <label for="middle-name" class="control-label col-md-3 col-sm-3">Product Barcode:</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control col-md-7 col-xs-12" type="text" id="barcodeNumber" onchange="getBarcode(this.value)" name="barcodeNumber" placeholder="Product Barcode">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <div class="barMsg col-md-6 col-sm-offset-3">
+
+                                </div>
+                                </div>
                                 <div class="form-group">
                                 <label for="_productId" class="control-label col-md-3 col-sm-3">Product Name:</label>
                                 <div class="col-md-6 col-sm-6 ui-widget">
@@ -276,7 +245,7 @@
                         </div>
 
                     </div>
-                    <div id="step-4">
+                    <div id="step-3">
                         <form class="form-horizontal form-label-left" id="saleStep4">
                             <div class="row form-group">
                                 <div class="form-group">
@@ -530,8 +499,8 @@
     <script>
 
         // get current date
-        var saleDate = new Date().toDateString();
-        $('#saleDate').val(saleDate);
+        var inDate = new Date();
+        var invoiceDates = (inDate.getMonth()+1) + '/' + inDate.getDate() + '/' + inDate.getFullYear();
 
         // generate invoice number
         function genInvoiceNumb() {
@@ -548,7 +517,7 @@
         }
         //var invoiceNumber = new Date().format('m-d-Y/h:i:s');
         //$('#invoiceNumber').val('INVOP-'+invoiceNumber+'-'+genInvoiceNumb());
-        $('#invoiceNumber').val(genInvoiceNumb());
+        //$('#invoiceNumber').val(genInvoiceNumb());
 
         // generate waybill number
         function genWayBilNumb() {
@@ -561,6 +530,89 @@
         return text;
         }
         $('#waybillNumber').val(genWayBilNumb());
+
+
+        // get product pieces thought barcode number
+        function getBarcode(id){
+
+            $.ajax({
+                type: 'POST',
+                url: '/sales/get/barcodeNumber',
+                dataType: 'json',
+                data: { barcodeNumber:id },
+                success: function(data) {
+
+                    $('#submitBtn').removeAttr("disabled");
+
+                    if(data === 'failure'){
+
+                        var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                                '</button>'+
+                                'Invalid Barcode'
+                                '</div>';
+
+                            $('.barMsg').html(msg);
+                            $('.barMsg').show().fadeOut( 10000 );
+
+                            $('#piecesSold').attr('disabled', 'disabled');
+                            $('#productPrice').attr('disabled', 'disabled');
+                            $('#submitBtn').attr('disabled', 'disabled');
+
+
+                            // enable product name field
+                            $('#_productName').val('').removeAttr('disabled');
+                            $('#piecesSold').val('').removeAttr('disabled');
+                            $('#productPrice').val('').removeAttr('disabled');
+                            $('#piecesAvai').val('');
+                            $('#getPrice').val('');
+
+                    } else {
+
+                        $('#_productName').empty();
+                        $('#_productName').val(data._productId.productName).attr('disabled', 'disabled');
+                        $('#productNameId').val(data._productId._id);
+                        $('#_productId').val(data._productId._id);
+
+                        // check if product is empty
+                        if(data.pieces < 0){
+
+                            var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
+                                '</button>'+
+                                'Product Unavailable'
+                                '</div>';
+
+                            $('.piecesMsg').append(msg);
+                            $('.piecesMsg').show().fadeOut( 10000 );
+
+                            $('#piecesSold').attr('disabled', 'disabled');
+                            $('#productPrice').attr('disabled', 'disabled');
+
+                            $('#piecesAvai').empty();
+                            $('#piecesAvai').val(0);
+
+                            $('#getPrice').empty();
+                            $('#getPrice').val(0);
+                        } else {
+
+                            $('#piecesSold').removeAttr("disabled");
+                            $('#productPrice').removeAttr("disabled");
+
+                            $('#piecesAvai').empty();
+                            $('#piecesAvai').val(data.pieces);
+
+                            $('#getPrice').empty();
+                            $('#getPrice').val(data._productId.sellingPrice);
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrow) {
+                    $.alert(errorThrow);
+                }
+            });
+        }
+
 
 
         function getPieces(id){
@@ -635,6 +687,8 @@
                             '</div>';
 
                 $('#productPrice').val(0);
+            } else {
+                var msg = '';
             }
 
             //$('.getMsg').append(msg);
@@ -691,12 +745,12 @@
 
             if(inArray > -1) {
 
-                //console.log('come when tru');
+                console.log('come when tru');
 
                 salesArray[inArray].piecesSold = parseFloat(salesArray[inArray].piecesSold) + parseFloat($('#piecesSold').val());
                 salesArray[inArray].productTotalPrice = parseFloat(salesArray[inArray].piecesSold) * parseFloat(salesArray[inArray].productTotalPrice);
 
-                //console.log(salesArray, 'if inArray is tru');
+                console.log(salesArray, 'if inArray is tru');
                 
                 tableAppend();
 
@@ -704,13 +758,13 @@
 
                 var salesObj = { };
 
-                //console.log(salesArray, 'when inArray is false');
-                //console.log('create new one');
+                console.log(salesArray, 'when inArray is false');
+                console.log('create new one');
 
-                var p = $('#saleProduct').find(':selected').attr('data-productName');
+                //var p = $('#saleProduct').find(':selected').attr('data-productName');
 
                 salesObj['_productId'] = $('#_productId').val();
-                salesObj['productName'] = p;
+                salesObj['productName'] = $('#_productName').val();
                 salesObj['piecesSold'] = $('#piecesSold').val();
                 salesObj['productPrice'] = $('#productPrice').val();
                 salesObj['productTotalPrice'] = parseFloat($('#productPrice').val()) *  parseFloat(salesObj['piecesSold'])
@@ -728,15 +782,22 @@
 
           e.preventDefault();
 
+            pieces = $('#piecesSold').val();
+            proPrice = $('#productPrice').val();
+            proName = $('#_productName').val();
+
+            if(proName === '' || pieces === '' || proPrice === ''){
+                alert('Select Product Or Enter Pieces Sold Or Product Price');
+                return false;
+            }
+
             if(salesArray.length > 0 ){
-                //console.log('enter');
+                console.log('enter');
                 checkexist();
 
             }else{
 
-                //console.log('create if zero');
-                
-                //var p = $(this).find(':selected').attr('data-productName');
+                console.log('create if zero');
 
                 salesObj['_productId'] = $('#_productId').val();
                 salesObj['productName'] = $('#_productName').val();
@@ -753,6 +814,9 @@
                 tableAppend();
 
             }
+
+            // remove disable attribute in product name form after submitting sales
+            $('#_productName').removeAttr("disabled");
 
         });
 
@@ -810,15 +874,14 @@
             var balanceTransaction = $('#balanceTransaction').val();
             var paidBy = $('#_paidBy').val();
 
-            var invoiceDate = $('#invoiceDate').val();
+            var invoiceDate = invoiceDates;
             var invoiceNumber = $('#invoiceNumber').val();
             var waybillNumber = $('#waybillNumber').val();
             var customerId = $('#_customerId').val();
             var totalPrice = sumTotalCal;
 
-
-            if(invoiceDate === ''){
-                alert('Invoice Date is empty');
+            if(payByCus === ''){
+                alert('Enter Amount Customer Give You In Step 4 ');
                 return false;
             }
 
@@ -835,7 +898,7 @@
                     balanceTransaction: balanceTransaction,
                     paidBy: paidBy,
                     invoiceDate: invoiceDate,
-                    invoiceNumber: invoiceNumber,
+                    invoiceNumber: genInvoiceNumb(),
                     waybillNumber: waybillNumber,
                     customerId: customerId,
                     totalPrice: totalPrice,
