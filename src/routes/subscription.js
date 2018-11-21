@@ -82,15 +82,15 @@ router.get('/manage/license', guard.ensureLoggedIn(), async (req, res, next) => 
 });
 
 
-router.post('/license', guard.ensureLoggedIn(), async (req, res, next) => {
-
-  console.log(req.body.id);
+router.post('/license', async (req, res, next) => {
 
   const license = new License();
+
   license._packageId = req.body.id;
   license._storeId = req.user._storeId;
   license._createdBy = req.user._id;
   license.key = uuid();
+
   license.status = 'UNUSED';
   // license.usedDate = Date();
   license.save((err) => {

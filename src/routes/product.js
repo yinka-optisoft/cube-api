@@ -111,11 +111,6 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
             console.log(err);
             
           } else {
-
-            product.on('es-indexed', (err, prod) => {
-              if (err) throw err;
-              console.log(prod, 'after mongosstatic');
-            });
             req.flash('info', 'Product Created');
             res.redirect('/product');
           }
@@ -134,14 +129,14 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
 
   const name = req.body.name;
   const _categoryId = req.body._categoryId;
-  const _supplierId = req.body._supplierId;
+  // const _supplierId = req.body._supplierId;
   const _branchId = req.body._branchId;
   // const pieces = req.body.pieces;
   const sellingPrice = req.body.sellingPrice;
   const note = req.body.note;
 
   req.checkBody('name', 'Name is required').notEmpty();
-  req.checkBody('_supplierId', 'Supplier is required').notEmpty();
+  // req.checkBody('_supplierId', 'Supplier is required').notEmpty();
   req.checkBody('_categoryId', 'Category is required').notEmpty();
   req.checkBody('_branchId', 'Branch is required').notEmpty();
   // req.checkBody('pieces', 'Pieces is required').notEmpty();

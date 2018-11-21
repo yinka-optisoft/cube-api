@@ -237,7 +237,9 @@
 
     <script>
 
-        var activeSub = {{JSON sub}}
+        var activeSub = {{JSON getExpire}}
+
+        console.log(activeSub, 'you');
 
         if(activeSub.expired === true){
             $('a').each(function(){

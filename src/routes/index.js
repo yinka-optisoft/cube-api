@@ -62,6 +62,8 @@ router.post('/login', passport.authenticate('local',
                                                          $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] },
                                                        (err, sub) => {
 
+                                                         console.log(sub, 'remainingDays');
+
                                                          if (sub) {
 
                                                            const presentDate = new Date();
@@ -116,6 +118,16 @@ router.post('/login', passport.authenticate('local',
                                                            }
                                                          }
                                                        });
+                if (sub === null) {
+                  const getExpire = await Subscription.findOne({ _storeId: req.user._storeId });
+                  getExpire.expired = true;
+                  getExpire.save((err) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                  });
+                  console.log(getExpire);
+                }
               }
             });
 
