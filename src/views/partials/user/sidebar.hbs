@@ -89,12 +89,12 @@
                         <li><a href="/store/roles">Manage Roles</a></li>
                     </ul>
                     </li>
-                    <li><a><i class="fa fa-windows"></i> Subscription <span class="fa fa-chevron-down"></span></a>
+                    {{!-- <li><a><i class="fa fa-windows"></i> Subscription <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu subs">
                         {{!-- <li><a href="/subscription">Manage subscription</a></li> --}}
                         <li><a href="/subscription/license">Enter License Key</a></li>
                     </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             {{else if (eq user._roleId.name 'admin')}}
                 <ul class="nav side-menu">
@@ -235,7 +235,7 @@
 
 {{#extend 'scripts'}}
 
-    <script>
+    {{!-- <script>
 
         var activeSub = {{JSON sub}}
 
@@ -251,6 +251,6 @@
             });
         }
         
-    </script>
+    </script> --}}
 
 {{/extend}}

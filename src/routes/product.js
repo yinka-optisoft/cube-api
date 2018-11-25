@@ -170,6 +170,8 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
         res.redirect('/product');
       }
     });
+
+    // TODO: remind me create update product history
   }
 });
 

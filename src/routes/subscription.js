@@ -25,7 +25,43 @@ router.get('/packages', guard.ensureLoggedIn(), async (req, res, next) => {
 
 
 router.post('/package', guard.ensureLoggedIn(), async (req, res, next) => {
-  const packag = await Package(req.body);
+
+  const { category, period, duration, numberOfShop, numberOfUser } = req.body;
+
+  const packag = new Package();
+
+  if (category === 'Value') {
+
+    packag.price = 'NGN 20,000';
+    packag.category = category;
+    packag.period = period;
+    packag.duration = duration;
+    packag.numberOfShop = numberOfShop;
+    packag.numberOfUser = numberOfUser;
+    packag._createdBy = req.user._id;
+
+  } else if (category === 'Premium') {
+
+    packag.price = 'NGN 50,000';
+    packag.category = category;
+    packag.period = period;
+    packag.duration = duration;
+    packag.numberOfShop = numberOfShop;
+    packag.numberOfUser = numberOfUser;
+    packag._createdBy = req.user._id;
+
+  } else if (category === 'Enterprise') {
+
+    packag.price = 'NGN 100,000';
+    packag.category = category;
+    packag.period = period;
+    packag.duration = duration;
+    packag.numberOfShop = numberOfShop;
+    packag.numberOfUser = numberOfUser;
+    packag._createdBy = req.user._id;
+
+  }
+
   packag._createdBy = req.user._id;
   packag.save((err) => {
     if (err) {
@@ -47,7 +83,7 @@ router.post('/package/update', guard.ensureLoggedIn(), async (req, res, next) =>
     packag.period = req.body.period;
     packag.price = req.body.price;
     packag.numberOfUser = req.body.numberOfUser;
-    packag.numberOfAdmin = req.body.numberOfAdmin;
+    packag.numberOfShop = req.body.numberOfShop;
     packag.duration = req.body.duration;
     packag.save((err) => {
       if (err) {
@@ -61,10 +97,18 @@ router.post('/package/update', guard.ensureLoggedIn(), async (req, res, next) =>
 });
 
 
+router.post('/delete/package', guard.ensureLoggedIn(), async (req, res, next) => {
+
+  await Package.findByIdAndRemove(req.body.id);
+  res.send('success');
+
+});
+
+
 router.get('/license', guard.ensureLoggedIn(), async (req, res, next) => {
-  const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-  const packages = await Package.find();
-  res.render('subscription/license', { user, packages, expressFlash: req.flash('info'), layout: 'layouts/user' });
+  // const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
+  // const packages = await Package.find();
+  res.render('subscription/license', { expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 
@@ -82,17 +126,60 @@ router.get('/manage/license', guard.ensureLoggedIn(), async (req, res, next) => 
 });
 
 
-router.post('/license', guard.ensureLoggedIn(), async (req, res, next) => {
+router.post('/license', async (req, res, next) => {
 
-  console.log(req.body.id);
+  console.log(req.body);
+
+  const { licenseName, key, licenseGenBy, userId, id } = req.body;
+
+  const category = await Package.findById(id);
 
   const license = new License();
-  license._packageId = req.body.id;
-  license._storeId = req.user._storeId;
-  license._createdBy = req.user._id;
-  license.key = uuid();
+
+  if (licenseName === 'Value') {
+
+    license.key = key;
+    license.purchasedBy = userId;
+    license.licenseGenBy = licenseGenBy;
+    license.licenseName = licenseName;
+    license.licensePrice = 'NGN 20,000';
+
+  } else if (licenseName === 'Premium') {
+
+    license.key = key;
+    license.purchasedBy = userId;
+    license.licenseGenBy = licenseGenBy;
+    license.licenseName = licenseName;
+    license.licensePrice = 'NGN 50,000';
+
+  } else if (licenseName === 'Enterprise') {
+
+    license.key = key;
+    license.purchasedBy = userId;
+    license.licenseGenBy = licenseGenBy;
+    license.licenseName = licenseName;
+    license.licensePrice = 'NGN 100,000';
+
+  } else if (category.category === 'Value') {
+
+    license._packageId = id;
+    license._createdBy = req.user._id;
+    license.key = uuid();
+
+  } else if (category.category === 'Premium') {
+
+    license._packageId = id;
+    license._createdBy = req.user._id;
+    license.key = uuid();
+
+  } else if (category.category === 'Enterprise') {
+
+    license._packageId = id;
+    license._createdBy = req.user._id;
+    license.key = uuid();
+  }
+
   license.status = 'UNUSED';
-  // license.usedDate = Date();
   license.save((err) => {
     if (err) {
       console.log(err);
@@ -165,7 +252,7 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
 
   } else {
 
-    req.flash('info', 'Invalid License Key ');
+    req.flash('success', 'Invalid License Key ');
     res.redirect('/subscription/license');
 
   }

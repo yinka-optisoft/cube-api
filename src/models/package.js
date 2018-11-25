@@ -5,9 +5,9 @@ const Package = new Schema({
   _createdBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   category: String,
   period: String,
-  price: Number,
-  numberOfUser: Number,
-  numberOfAdmin: Number,
+  price: String,
+  numberOfUser: String,
+  numberOfShop: String,
   duration: Number,
   createdAt: { type: Date, default: Date.now }
 });

@@ -97,12 +97,12 @@
                 {{#each licenses}}
                 <tr>
                     <td>{{inc @index}}</td>
-                    <td id="{{_id}}">{{_packageId.category}}</td>
-                    <td id="{{_id}}">{{_createdBy.firstname}} {{_createdBy.middlename}} {{_createdBy.lastname}}</td>
+                    <td id="{{_id}}">{{_packageId.category}} {{licenseName}}</td>
+                    <td id="{{_id}}">{{_createdBy.firstname}} {{_createdBy.middlename}} {{_createdBy.lastname}} {{licenseGenBy}}</td>
                     <td id="{{_id}}">{{key}}</td>
                     <td id="{{_id}}">{{status}}</td>
                     <td id="{{_id}}">{{dateFormat usedDate "ddd, MMMM Do YYYY"}}</td>
-                    <td id="{{_id}}">{{_packageId.price}}</td>
+                    <td id="{{_id}}">{{_packageId.price}} {{licensePrice}}</td>
                     <td id="{{_id}}">{{dateFormat _packageId.createdAt "ddd, MMMM Do YYYY"}}</td>
                     <td id="{{_id}}">{{_usedBy.name}}</td>
                 </tr>
