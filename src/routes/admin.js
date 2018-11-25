@@ -40,8 +40,8 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
 // manage staff
 router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-  const branches = await Branch.find({ _storeId: req.session._storeId });
-  const roles = await Role.find({ _storeId: req.session._storeId });
+  const branches = await Branch.find({ _storeId: req.user._storeId });
+  const roles = await Role.find({ _storeId: req.user._storeId });
   const admins = await Account.find({ _storeId: req.user._storeId })
                                     .populate('_roleId').populate('_branchId');
 
@@ -59,8 +59,8 @@ router.get('/staff', guard.ensureLoggedIn(), async (req, res) => {
 // manage staff that enter product
 router.get('/staff/enter/product', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
-  const branch = await Branch.findOne({ _storeId: req.session._storeId, headBranch: true });
-  const roles = await Role.find({ _storeId: req.session._storeId });
+  const branch = await Branch.findOne({ _storeId: req.user._storeId, headBranch: true });
+  const roles = await Role.find({ _storeId: req.user._storeId });
   const staff = await Account.find({ _storeId: req.user._storeId, _roleId: { $exists: true } })
                                     .populate('_roleId').populate('_branchId');
 
@@ -138,60 +138,53 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
       if (!store)
         return res.status(400).json({ message: 'Store doesn\'t exist!' });
+      // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
       const passport = files.passport;
       const member = fields;
       const password = member.password;
       delete member.password;
-      const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-      const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
       member._storeId = store._id;
-      // member._branchId = branchId;
+      member._branchId = member._branchId;
       member.status = 1;
       // member.username = await generateUniqueID(store.shortCode);
       // member.username = `${storeSub}-field.username`;
       member.phone = `+234${fields.phone}`;
       member.username = fields.username;
       member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
-      fs.readFile(passport.path, function(err, data) {
-        fs.writeFile(dest,
-                     data, function(err) {
-                       fs.unlink(passport.path, function(err) {
+      if (passport && passport.name) {
+        const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+        const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+        const data = fs.readFileSync(passport.path);
+        fs.writeFileSync(dest, data);
+        fs.unlinkSync(passport.path);
+        member.passport = name;
+      }
+      // console.log(member);
+      Account.register(new Account(member), password,
+                       async (err, account) => {
+
+                         // return false;
+                         const tokenG = await Account.findById(account._id);
+                         //  console.log(tokenG);
+                         tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                         await tokenG.save(function(err) {
+                           if (err) {
+                             console.log(err);
+                           }
+                           //  console.log(tokenG);
+                         });
+
                          if (err) {
                            console.log(err);
+                         } else if (account.roleId === 'admin') {
+                           req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                           res.redirect('/admin/admins');
                          } else {
-                           member.passport = name;
-
-                           console.log(member, 'member');
-
-                           Account.register(new Account(member), password,
-                                            async (err, account) => {
-
-                                              // return false;
-                                              const tokenG = await Account.findById(account._id);
-                                              console.log(tokenG);
-                                              tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                                              await tokenG.save(function(err) {
-                                                if (err) {
-                                                  console.log(err);
-                                                }
-                                                console.log(tokenG);
-                                              });
-
-                                              if (err) {
-                                                console.log(err);
-                                              } else if (account.roleId === 'admin') {
-                                                req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                                res.redirect('/admin/admins');
-                                              } else {
-                                                req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                                res.redirect('/admin/staff');
-                                              }
-                                            });
-
+                           req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                           res.redirect('/admin/staff');
                          }
                        });
-                     });
-      });
+
     }
   });
 });

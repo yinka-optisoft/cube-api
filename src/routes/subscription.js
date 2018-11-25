@@ -5,6 +5,7 @@ import License from '../models/license';
 import guard from 'connect-ensure-login';
 import uuid from 'uuid/v1';
 import Subscription from '../models/subscription';
+import Store from '../models/store';
 
 
 const router = express.Router();
@@ -245,8 +246,8 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
       if (err) {
         console.log(err);
       } else {
-        req.flash('success', 'You have Successfully Subscribe ');
-        res.redirect('/dashboard');
+        req.flash('info', 'You have Successfully Subscribe Login TO Enjoy Your Store');
+        res.redirect('/login');
       }
     });
 

@@ -97,92 +97,84 @@ router.post('/create-store', async (req, res, next) => {
         if (logo && logo.name) {
           const name = `${Math.round(Math.random() * 10000)}.${logo.name.split('.').pop()}`;
           const dest = path.join(__dirname, '..', 'public', 'images', 'store', name);
-          fs.readFile(logo.path, function(err, data) {
-            fs.writeFile(dest,
-                         data, function(err) {
-                           fs.unlink(logo.path, async (err) => {
-                             if (err) {
-                               res.status(500);
-                               res.json(err);
-                             } else {
-                               newStore.logo = name;
-                               await newStore.save(function(err) {
-                                 if (err) {
-                                   console.log(err);
-                                 }
-                               });
+          const data = fs.readFileSync(logo.path);
+          fs.writeFileSync(dest, data);
+          fs.unlinkSync(logo.path);
+          newStore.logo = name;
+        }
+        await newStore.save(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
 
-                               const newBranch = new Branch();
-                               newBranch._storeId = newStore._id;
-                               newBranch.name = `${newStore.name}(H.B)`;
-                               newBranch.address = newStore.address;
-                               newBranch.email = newStore.email;
-                               newBranch.phone = `+234 ${newStore.phone}`;
-                               newBranch.country = newStore.country;
-                               newBranch.state = newStore.state;
-                               newBranch.city = newStore.city;
-                               newBranch.headBranch = true;
-                               await newBranch.save(function(err) {
-                                 if (err) {
-                                   console.log(err);
-                                 }
-                               });
+        const newBranch = new Branch();
+        newBranch._storeId = newStore._id;
+        newBranch.name = `${newStore.name}(H.B)`;
+        newBranch.address = newStore.address;
+        newBranch.email = newStore.email;
+        newBranch.phone = `+234${newStore.phone}`;
+        newBranch.country = newStore.country;
+        newBranch.state = newStore.state;
+        newBranch.city = newStore.city;
+        newBranch.headBranch = true;
+        await newBranch.save(function(err) {
+          if (err) {
+            console.log(err);
+          }
+        });
 
-                               const currentDate = new Date();
-                               currentDate.setMonth(currentDate.getMonth() + 1);
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + 1);
 
-                               const sub = await Subscription();
-                               sub._storeId = newStore._id;
-                               sub.activateDate = Date();
-                               sub.expiredDate = currentDate;
-                               sub.expired = false;
-                               sub.save((err) => {
-                                 if (err) {
-                                   console.log(err);
-                                 }
-                               });
+        const sub = await Subscription();
+        sub._storeId = newStore._id;
+        sub.activateDate = Date();
+        sub.expiredDate = currentDate;
+        sub.expired = false;
+        sub.save((err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
 
-                               const newAdmin = fields;
-                               const password = newAdmin.password;
-                               delete newAdmin.password;
-                               newAdmin.roleId = 'admin';
-                               newAdmin._storeId = newStore._id;
-                               newAdmin._branchId = newBranch._id;
-                               newAdmin.username = await generateUniqueID(storeSub);
-                               newAdmin.name = newStore.name;
-                               newAdmin.rightToDeleteAdmin = true;
-                               /* newAdmin.firstname = fields.firstname;
+        const newAdmin = fields;
+        const password = newAdmin.password;
+        delete newAdmin.password;
+        newAdmin.roleId = 'admin';
+        newAdmin._storeId = newStore._id;
+        newAdmin._branchId = newBranch._id;
+        newAdmin.username = await generateUniqueID(storeSub);
+        newAdmin.name = newStore.name;
+        newAdmin.rightToDeleteAdmin = true;
+        /* newAdmin.firstname = fields.firstname;
                                newAdmin.middlename = fields.middlename;
                                newAdmin.lastname = fields.lastname;
                                newAdmin.address = fields.admin_address;
                                newAdmin.phone = fields.admin_phone;
                                newAdmin.email = fields.admin_email;*/
-                               Account.register(new Account(newAdmin), password,
-                                                async (err, account) => {
-                                                  
-                                                  // return false;
-                                                  const tokenG = await Account.findById(account._id);
-                                                  console.log(tokenG);
-                                                  tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                                                  await tokenG.save(function(err) {
-                                                    if (err) {
-                                                      console.log(err);
-                                                    }
-                                                    console.log(tokenG);
-                                                  });
+        Account.register(new Account(newAdmin), password,
+                         async (err, account) => {
 
-                                                  if (err) {
-                                                    console.log(err);
-                                                  } else {
-                                                    req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
-                                                    res.redirect('/login');
-                                                  }
-                                                });
+                           // return false;
+                           const tokenG = await Account.findById(account._id);
+                           console.log(tokenG);
+                           tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                           await tokenG.save(function(err) {
+                             if (err) {
+                               console.log(err);
                              }
+                             console.log(tokenG);
                            });
+
+                           if (err) {
+                             console.log(err);
+                           } else {
+                             req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
+                             res.redirect('/login');
+                           }
                          });
-          });
-        }
+
       } catch (e) {
         console.log(e);
       }

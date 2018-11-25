@@ -1,9 +1,9 @@
 <div class="left_col scroll-view">    
     <!-- menu profile quick info -->
-    <a href="/">
+    <a href="/dashboard">
         <div class="profile clearfix">
             <div class="profile_pic" style="padding: 5px">
-            {{#if (ne user._storeId.logo '')}}
+            {{#if (eq user._storeId.logo '')}}
                 <img src="/images/store/{{user._storeId.logo}}" alt="..." height="80px" width="80px">
             {{else}}
                 <img src="/images/store/store.jpeg" alt="..." height="80px" width="80px">
@@ -91,7 +91,7 @@
                     </li>
                     {{!-- <li><a><i class="fa fa-windows"></i> Subscription <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu subs">
-                        {{!-- <li><a href="/subscription">Manage subscription</a></li> --}}
+                        <li><a href="/subscription">Manage subscription</a></li>
                         <li><a href="/subscription/license">Enter License Key</a></li>
                     </ul>
                     </li> --}}
@@ -234,25 +234,4 @@
 </div>
 
 {{#extend 'scripts'}}
-
-    {{!-- <script>
-
-        var activeSub = {{JSON getExpire}}
-
-        console.log(activeSub, 'you');
-
-        if(activeSub.expired === true){
-            $('a').each(function(){
-                $(this).data("href", $(this).attr("href")).removeAttr("href");
-            });
-
-        } else {
-
-            $('.subs a').each(function(){
-                $(this).attr("href", $(this).data("href"));
-            });
-        }
-        
-    </script> --}}
-
 {{/extend}}
