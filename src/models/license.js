@@ -12,7 +12,9 @@ const license = new Schema({
   purchasedBy: String,
   licenseGenBy: String,
   licenseName: String,
-  licensePrice: String
+  licensePrice: String,
+  licensePeriod: String,
+  licenseDuration: Number
 });
 
 

@@ -144,6 +144,8 @@ router.post('/license', async (req, res, next) => {
     license.licenseGenBy = licenseGenBy;
     license.licenseName = licenseName;
     license.licensePrice = 'NGN 20,000';
+    license.licensePeriod = 'Year';
+    license.licenseDuration = 1;
 
   } else if (licenseName === 'Premium') {
 
@@ -151,7 +153,8 @@ router.post('/license', async (req, res, next) => {
     license.purchasedBy = userId;
     license.licenseGenBy = licenseGenBy;
     license.licenseName = licenseName;
-    license.licensePrice = 'NGN 50,000';
+    license.licensePeriod = 'Year';
+    license.licenseDuration = 1;
 
   } else if (licenseName === 'Enterprise') {
 
@@ -160,6 +163,8 @@ router.post('/license', async (req, res, next) => {
     license.licenseGenBy = licenseGenBy;
     license.licenseName = licenseName;
     license.licensePrice = 'NGN 100,000';
+    license.licensePeriod = 'Year';
+    license.licenseDuration = 1;
 
   } else if (category.category === 'Value') {
 
@@ -224,9 +229,9 @@ router.post('/activate/license/key', guard.ensureLoggedIn(), async (req, res) =>
 
     const currentDate = new Date();
 
-    if (license._packageId.period === 'Month' || license._packageId.period === 'Months') {
-      const monthlyDuration = license._packageId.duration;
-      currentDate.setMonth(currentDate.getMonth() + monthlyDuration);
+    if (license.licensePeriod === 'Year') {
+      const YearlyDuration = license.licenseDuration;
+      currentDate.setFullYear(currentDate.getFullYear() + YearlyDuration);
 
     } else if (license._packageId.period === 'Year' || license._packageId.period === 'Years') {
       const YearlyDuration = license._packageId.duration;
