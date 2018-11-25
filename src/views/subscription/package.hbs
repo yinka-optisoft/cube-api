@@ -93,7 +93,7 @@
                 <th>Period</th>
                 <th>Duration</th>
                 <th>Number Of User</th>
-                <th>Number Of Admin</th>
+                <th>Number Of Shop</th>
                 <th>Price</th>
                 <th>Actions</th>
             </tr>
@@ -108,11 +108,11 @@
                     <td id="{{_id}}">{{period}}</td>
                     <td id="{{_id}}">{{duration}}</td>
                     <td id="{{_id}}">{{numberOfUser}}</td>
-                    <td id="{{_id}}">{{numberOfAdmin}}</td>
+                    <td id="{{_id}}">{{numberOfShop}}</td>
                     <td id="{{_id}}">{{price}}</td>
 
                     <td>
-                        <button title="Edit" data-toggle="modal" _packageId="{{_id}}" category="{{category}}" period="{{period}}" duration="{{duration}}" price="{{price}}" email="{{email}}" numberOfAdmin="{{numberOfAdmin}}" numberOfUser="{{numberOfUser}}" data-target="#editPackage" class="btn btn-primary btn-sm">
+                        <button title="Edit" data-toggle="modal" _packageId="{{_id}}" category="{{category}}" period="{{period}}" duration="{{duration}}" price="{{price}}" email="{{email}}" numberOfShop="{{numberOfShop}}" numberOfUser="{{numberOfUser}}" data-target="#editPackage" class="btn btn-primary btn-sm">
                             <i class="fa fa-edit"></i>
                         </button>
                         <button title="Delete" onclick="deletePackage(this.value)" value="{{_id}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -147,10 +147,10 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="category" id="category" required>
-                            <option>Select Category</option>
-                            <option value="Basic">Basic</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Premium">Premium</option>
+                            <option value="" disabled>Select Category</option>
+                            <option value="Value">NGN 20,000</option>
+                            <option value="Premium">NGN 50,000</option>
+                            <option value="Enterprise">NGN 100,000</option>
                         </select>
                     </div>
                     </div>
@@ -158,9 +158,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Period</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="period" id="period" required>
-                            <option>Select Period</option>
-                            <option value="Month">Month</option>
-                            <option value="Months">Months</option>
+                            <option value="" disabled>Select Period</option>
                             <option value="Year">Year</option>
                             <option value="Years">Years</option>
                         </select>
@@ -172,16 +170,16 @@
                         <input type="text" name="duration" id="duration" class="form-control" placeholder="Duration" required>
                     </div>
                     </div>
-                    <div class="form-group">
+                    {{!-- <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <input type="text" name="price" id="price" class="form-control" placeholder="Price" required>
                     </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Admin</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Shop</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="numberOfAdmin" id="numberOfAdmin" class="form-control" placeholder="Number Of Admin" required>
+                        <input type="text" name="numberOfShop" id="numberOfShop" class="form-control" placeholder="Number Of Shop" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -230,10 +228,10 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="category" id="category" required>
-                            <option>Select Category</option>
-                            <option value="Basic">Basic</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Premium">Premium</option>
+                            <option value="" disabled>Select Category</option>
+                            <option value="Value">NGN 20,000</option>
+                            <option value="Premium">NGN 50,000</option>
+                            <option value="Enterprise">NGN 100,000</option>
                         </select>
                     </div>
                     </div>
@@ -242,8 +240,6 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="period" id="period" required>
                             <option>Select Period</option>
-                            <option value="Month">Month</option>
-                            <option value="Months">Months</option>
                             <option value="Year">Year</option>
                             <option value="Years">Years</option>
                         </select>
@@ -255,16 +251,16 @@
                         <input type="text" name="duration" id="duration" class="form-control" placeholder="Duration" required>
                     </div>
                     </div>
-                    <div class="form-group">
+                    {{!-- <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <input type="text" name="price" id="price" class="form-control" placeholder="Price" required>
                     </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Admin</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Shop</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="numberOfAdmin" id="numberOfAdmin" class="form-control" placeholder="Number Of Admin" required>
+                        <input type="text" name="numberOfShop" id="numberOfShop" class="form-control" placeholder="Number Of Shop" required>
                     </div>
                     </div>
                     <div class="form-group">
@@ -320,7 +316,7 @@
         var duration = $(opener).attr('duration');
         var price = $(opener).attr('price');
         var numberOfUser = $(opener).attr('numberOfUser'); 
-        var numberOfAdmin = $(opener).attr('numberOfAdmin');
+        var numberOfShop = $(opener).attr('numberOfShop');
         
 
         $('#packageForm').find('[name="_packageId"]').val(_packageId);
@@ -329,7 +325,7 @@
         $('#packageForm').find('[name="price"]').val(price);
         $('#packageForm').find('[name="duration"]').val(duration);
         $('#packageForm').find('[name="numberOfUser"]').val(numberOfUser);
-        $('#packageForm').find('[name="numberOfAdmin"]').val(numberOfAdmin);
+        $('#packageForm').find('[name="numberOfShop"]').val(numberOfShop);
     });
 
 

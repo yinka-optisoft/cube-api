@@ -112,9 +112,8 @@ router.post('/login', passport.authenticate('local',
                                                            //  sub.save();
 
                                                            req.flash('success', 'Subscription Expired');
-                                                           //  res.redirect('/login');
                                                            if (user.roleId === 'admin') {
-                                                             res.redirect('/admin/dashboard');
+                                                             res.render('subscription/license', { expressFlash: req.flash('success'), layout: 'layouts/user' });
                                                            }
                                                          }
                                                        });

@@ -8,7 +8,11 @@ const license = new Schema({
   key: String,
   status: String,
   usedDate: Date,
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  purchasedBy: String,
+  licenseGenBy: String,
+  licenseName: String,
+  licensePrice: String
 });
 
 
