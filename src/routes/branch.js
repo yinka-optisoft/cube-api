@@ -13,6 +13,7 @@ import { check, validationResult } from 'express-validator/check';
 import Product from '../models/product';
 import BranchProduct from '../models/branchProduct';
 import jwt from 'jsonwebtoken';
+import Subscription from '../models/subscription';
 
 const router = express.Router();
 
@@ -49,33 +50,93 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
 // create new branch
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
-  const newBranch = await Branch();
-  newBranch._storeId = req.session._storeId;
-  newBranch.name = req.body.name;
-  newBranch.email = req.body.email;
-  newBranch.phone = req.body.phone;
-  newBranch.address = req.body.address;
-  newBranch.country = req.body.country;
-  newBranch.state = req.body.state;
-  newBranch.city = req.body.city;
-  newBranch.status = true;
-  newBranch.mainBranch = false;
+  // get current date
+  const currentDate = new Date();
 
-  newBranch.save(function(err) {
-    if (err) {
-      console.log(err);
+  const numOfBra = await Branch.count({ _storeId: req.user._storeId });
+  const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
+                                .populate('_packageId').populate('_licenseId');
+  
+
+  if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
+
+    if (numOfBra !== 1) {
+
+      const newBranch = await Branch();
+      newBranch._storeId = req.session._storeId;
+      newBranch.name = req.body.name;
+      newBranch.email = req.body.email;
+      newBranch.phone = req.body.phone;
+      newBranch.address = req.body.address;
+      newBranch.country = req.body.country;
+      newBranch.state = req.body.state;
+      newBranch.city = req.body.city;
+      newBranch.status = true;
+      newBranch.mainBranch = false;
+      newBranch.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          req.flash('info', 'Branch Saved Successfully');
+          res.redirect('/branch');
+        }
+      });
     } else {
-      req.flash('info', 'Branch Saved Successfully');
+      req.flash('info', 'Sorry You can\'t Have More than 1 Shop On This Package');
       res.redirect('/branch');
     }
-  });
 
-  // const response = {
-  //   status: 200,
-  //   message: 'Branch save successfully',
-  // };
+  } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
 
-  // res.send(response);
+    if (numOfBra !== 3) {
+      
+      const newBranch = await Branch();
+      newBranch._storeId = req.session._storeId;
+      newBranch.name = req.body.name;
+      newBranch.email = req.body.email;
+      newBranch.phone = req.body.phone;
+      newBranch.address = req.body.address;
+      newBranch.country = req.body.country;
+      newBranch.state = req.body.state;
+      newBranch.city = req.body.city;
+      newBranch.status = true;
+      newBranch.mainBranch = false;
+      newBranch.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          req.flash('info', 'Branch Saved Successfully');
+          res.redirect('/branch');
+        }
+      });
+    } else {
+      req.flash('info', 'Sorry You can\'t Have More than 3 Shops On This Package');
+      res.redirect('/branch');
+    }
+
+  } else if (sub._licenseId.licenseName === 'Diamond' || sub._packageId.category === 'Diamond') {
+      
+    const newBranch = await Branch();
+    newBranch._storeId = req.session._storeId;
+    newBranch.name = req.body.name;
+    newBranch.email = req.body.email;
+    newBranch.phone = req.body.phone;
+    newBranch.address = req.body.address;
+    newBranch.country = req.body.country;
+    newBranch.state = req.body.state;
+    newBranch.city = req.body.city;
+    newBranch.status = true;
+    newBranch.mainBranch = false;
+    newBranch.save(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        req.flash('info', 'Branch Saved Successfully');
+        res.redirect('/branch');
+      }
+    });
+
+  }
 });
 
 
@@ -250,27 +311,27 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
   const id = req.body.id;
   const user = await Account.findById(id);
   // if(user.roleId === 'admin' && user.rightToDeleteAdmin === true){
-  if(user.roleId === 'admin'){
+  if (user.roleId === 'admin') {
     res.send('fail');
-    } else if (user.status === false) {
-        user.status = 1;
-        user.save(function(err) {
-          if (err) {
-            console.log(err);
-          } else {
-            res.send('success');
-          };
-        });
-    } else {
-      user.status = 0;
-      user.save(function(err) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send('success');
-        };
-      });
-      }
+  } else if (user.status === false) {
+    user.status = 1;
+    user.save(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send('success');
+      };
+    });
+  } else {
+    user.status = 0;
+    user.save(function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send('success');
+      };
+    });
+  }
 });
 
 

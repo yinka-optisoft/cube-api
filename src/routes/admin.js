@@ -124,66 +124,216 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
   form.parse(req, async (err, fields, files) => {
 
+    // get current date
+    const currentDate = new Date();
+
+    const numOfUser = await Account.count({ _storeId: req.user._storeId });
+    const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
+                                  .populate('_packageId').populate('_licenseId');
+
     const user = await Account.findOne({ email: fields.email });
 
-    if (user) {
+    if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
-      req.flash('success', 'E-mail Or Username Already Exist');
-      res.redirect('/admin/staff/');
+      if (numOfUser !== 3) {
 
-    } else {
+        if (user) {
 
-      const store = await Store.findById(req.user._storeId);
+          req.flash('success', 'E-mail Or Username Already Exist');
+          res.redirect('/admin/staff/');
+
+        } else {
+
+          const store = await Store.findById(req.user._storeId);
 
 
-      if (!store)
-        return res.status(400).json({ message: 'Store doesn\'t exist!' });
-      // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
-      const passport = files.passport;
-      const member = fields;
-      const password = member.password;
-      delete member.password;
-      member._storeId = store._id;
-      member._branchId = member._branchId;
-      member.status = 1;
-      // member.username = await generateUniqueID(store.shortCode);
-      // member.username = `${storeSub}-field.username`;
-      member.phone = `+234${fields.phone}`;
-      member.username = fields.username;
-      member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
-      if (passport && passport.name) {
-        const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-        const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
-        const data = fs.readFileSync(passport.path);
-        fs.writeFileSync(dest, data);
-        fs.unlinkSync(passport.path);
-        member.passport = name;
+          if (!store)
+            return res.status(400).json({ message: 'Store doesn\'t exist!' });
+          // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+          const passport = files.passport;
+          const member = fields;
+          const password = member.password;
+          delete member.password;
+          member._storeId = store._id;
+          member._branchId = member._branchId;
+          member.status = 1;
+          // member.username = await generateUniqueID(store.shortCode);
+          // member.username = `${storeSub}-field.username`;
+          member.phone = `+234${fields.phone}`;
+          member.username = fields.username;
+          member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
+          if (passport && passport.name) {
+            const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+            const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+            const data = fs.readFileSync(passport.path);
+            fs.writeFileSync(dest, data);
+            fs.unlinkSync(passport.path);
+            member.passport = name;
+          }
+          // console.log(member);
+          Account.register(new Account(member), password,
+                           async (err, account) => {
+
+                             // return false;
+                             const tokenG = await Account.findById(account._id);
+                             //  console.log(tokenG);
+                             tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                             await tokenG.save(function(err) {
+                               if (err) {
+                                 console.log(err);
+                               }
+                               //  console.log(tokenG);
+                             });
+
+                             if (err) {
+                               console.log(err);
+                             } else if (account.roleId === 'admin') {
+                               req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                               res.redirect('/admin/admins');
+                             } else {
+                               req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                               res.redirect('/admin/staff');
+                             }
+                           });
+
+        }
+      } else {
+        
+        req.flash('success', 'Sorry You Can\'t Register More Than 3 Users On This Package');
+        res.redirect('/admin/staff');
       }
-      // console.log(member);
-      Account.register(new Account(member), password,
-                       async (err, account) => {
+
+    } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
+
+      if (numOfUser !== 10) {
+
+        if (user) {
+
+          req.flash('success', 'E-mail Or Username Already Exist');
+          res.redirect('/admin/staff/');
+
+        } else {
+
+          const store = await Store.findById(req.user._storeId);
+
+
+          if (!store)
+            return res.status(400).json({ message: 'Store doesn\'t exist!' });
+          // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+          const passport = files.passport;
+          const member = fields;
+          const password = member.password;
+          delete member.password;
+          member._storeId = store._id;
+          member._branchId = member._branchId;
+          member.status = 1;
+          // member.username = await generateUniqueID(store.shortCode);
+          // member.username = `${storeSub}-field.username`;
+          member.phone = `+234${fields.phone}`;
+          member.username = fields.username;
+          member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
+          if (passport && passport.name) {
+            const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+            const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+            const data = fs.readFileSync(passport.path);
+            fs.writeFileSync(dest, data);
+            fs.unlinkSync(passport.path);
+            member.passport = name;
+          }
+          // console.log(member);
+          Account.register(new Account(member), password,
+                           async (err, account) => {
+
+                             // return false;
+                             const tokenG = await Account.findById(account._id);
+                             //  console.log(tokenG);
+                             tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                             await tokenG.save(function(err) {
+                               if (err) {
+                                 console.log(err);
+                               }
+                               //  console.log(tokenG);
+                             });
+
+                             if (err) {
+                               console.log(err);
+                             } else if (account.roleId === 'admin') {
+                               req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                               res.redirect('/admin/admins');
+                             } else {
+                               req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                               res.redirect('/admin/staff');
+                             }
+                           });
+
+        }
+      } else {
+        req.flash('success', 'Sorry You Can\'t Register More Than 10 Users On This Package');
+        res.redirect('/admin/staff');
+      }
+
+    } else if (sub._licenseId.licenseName === 'Diamond' || sub._packageId.category === 'Diamond') {
+
+      if (user) {
+
+        req.flash('success', 'E-mail Or Username Already Exist');
+        res.redirect('/admin/staff/');
+
+      } else {
+
+        const store = await Store.findById(req.user._storeId);
+
+
+        if (!store)
+          return res.status(400).json({ message: 'Store doesn\'t exist!' });
+        // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+        const passport = files.passport;
+        const member = fields;
+        const password = member.password;
+        delete member.password;
+        member._storeId = store._id;
+        member._branchId = member._branchId;
+        member.status = 1;
+        // member.username = await generateUniqueID(store.shortCode);
+        // member.username = `${storeSub}-field.username`;
+        member.phone = `+234${fields.phone}`;
+        member.username = fields.username;
+        member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
+        if (passport && passport.name) {
+          const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+          const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+          const data = fs.readFileSync(passport.path);
+          fs.writeFileSync(dest, data);
+          fs.unlinkSync(passport.path);
+          member.passport = name;
+        }
+        // console.log(member);
+        Account.register(new Account(member), password,
+                         async (err, account) => {
 
                          // return false;
-                         const tokenG = await Account.findById(account._id);
-                         //  console.log(tokenG);
-                         tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                         await tokenG.save(function(err) {
+                           const tokenG = await Account.findById(account._id);
+                           //  console.log(tokenG);
+                           tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+                           await tokenG.save(function(err) {
+                             if (err) {
+                               console.log(err);
+                             }
+                           //  console.log(tokenG);
+                           });
+
                            if (err) {
                              console.log(err);
+                           } else if (account.roleId === 'admin') {
+                             req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                             res.redirect('/admin/admins');
+                           } else {
+                             req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+                             res.redirect('/admin/staff');
                            }
-                           //  console.log(tokenG);
                          });
 
-                         if (err) {
-                           console.log(err);
-                         } else if (account.roleId === 'admin') {
-                           req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                           res.redirect('/admin/admins');
-                         } else {
-                           req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                           res.redirect('/admin/staff');
-                         }
-                       });
+      }
 
     }
   });
