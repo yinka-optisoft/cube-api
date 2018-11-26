@@ -13,6 +13,7 @@ import path from 'path';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import jwt from 'jsonwebtoken';
+import BranchProduct from '../models/branchProduct';
 
 const router = express.Router();
 
@@ -32,7 +33,8 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
   const suppliers = await Supply.count({ _storeId: req.user._storeId });
   const sub = await Subscription.findOne({ _storeId: req.user._storeId,
                                            $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] });
-  res.render('admin/dashboard', { user, branch, product, account, suppliers, sub, expressFlash: req.flash('success'),
+  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate('_productId');
+  res.render('admin/dashboard', { user, branch, product, products, account, suppliers, sub, expressFlash: req.flash('success'),
                                   layout: 'layouts/user' });
 });
 
@@ -149,7 +151,11 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
           if (!store)
             return res.status(400).json({ message: 'Store doesn\'t exist!' });
-          // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+
+          const convertToUpper = store.name;
+          const storeName = convertToUpper.toUpperCase();
+          const storeSub = storeName.substring(0, 3);
+      
           const passport = files.passport;
           const member = fields;
           const password = member.password;
@@ -157,10 +163,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
           member._storeId = store._id;
           member._branchId = member._branchId;
           member.status = 1;
-          // member.username = await generateUniqueID(store.shortCode);
-          // member.username = `${storeSub}-field.username`;
           member.phone = `+234${fields.phone}`;
-          member.username = fields.username;
+          member.username = `${storeSub}-${fields.username}`;
           member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
           if (passport && passport.name) {
             const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
@@ -219,7 +223,11 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
           if (!store)
             return res.status(400).json({ message: 'Store doesn\'t exist!' });
-          // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+          
+          const convertToUpper = store.name;
+          const storeName = convertToUpper.toUpperCase();
+          const storeSub = storeName.substring(0, 3);
+
           const passport = files.passport;
           const member = fields;
           const password = member.password;
@@ -227,10 +235,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
           member._storeId = store._id;
           member._branchId = member._branchId;
           member.status = 1;
-          // member.username = await generateUniqueID(store.shortCode);
-          // member.username = `${storeSub}-field.username`;
+          member.username = `${storeSub}-${fields.username}`;
           member.phone = `+234${fields.phone}`;
-          member.username = fields.username;
           member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
           if (passport && passport.name) {
             const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
@@ -286,7 +292,11 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
         if (!store)
           return res.status(400).json({ message: 'Store doesn\'t exist!' });
-        // const passport = (files.passport !== '') ? files.passport : 'defaultUser.png';
+        
+        const convertToUpper = store.name;
+        const storeName = convertToUpper.toUpperCase();
+        const storeSub = storeName.substring(0, 3);
+
         const passport = files.passport;
         const member = fields;
         const password = member.password;
@@ -294,10 +304,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
         member._storeId = store._id;
         member._branchId = member._branchId;
         member.status = 1;
-        // member.username = await generateUniqueID(store.shortCode);
-        // member.username = `${storeSub}-field.username`;
+        member.username = `${storeSub}-`.fields.username;
         member.phone = `+234${fields.phone}`;
-        member.username = fields.username;
         member.enterProduct = (fields.enterProduct !== '') ? fields.enterProduct : '';
         if (passport && passport.name) {
           const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;

@@ -16,6 +16,7 @@ import BranchProduct from '../models/branchProduct';
 import ProductTransfer from '../models/productTransfer';
 import Sales from '../models/sales';
 import { Types } from 'mongoose';
+import ProductUpdateHistory from '../models/productUpdateHistory';
 
 
 const router = express.Router();
@@ -55,7 +56,6 @@ router.post('/check/barcodeNumber', guard.ensureLoggedIn(), async (req, res) => 
     res.send('failure');
   }
 });
-
 
 
 router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
@@ -109,7 +109,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
         branchproduct.save((err) => {
           if (err) {
             console.log(err);
-            
+
           } else {
             req.flash('info', 'Product Created');
             res.redirect('/product');
@@ -186,24 +186,39 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
 
   console.log(errors);
 
-  if (errors) {
-    req.session.errors = errors;
+  if (errors == null) {
+    // req.session.errors = errors;
+    req.flash('info', 'Product and Price is required');
     res.redirect('/product');
   } else {
 
     const product = await BranchProduct.findOne({ _storeId: req.session._storeId, _branchId: req.user._branchId, _productId: req.body.productId })
                                           .populate('_categoryId').populate('_productId');
 
-    product._createdBy = req.user._id;
-    product.pieces += parseFloat(req.body.pieces);
-    // product.sellingPrice = req.body.sellingPrice;
-    // product.note = req.body.note;
-    product.save((err, product) => {
+    const productHistory = new ProductUpdateHistory();
+    productHistory._storeId = req.user._storeId;
+    productHistory._branchId = req.user._branchId;
+    productHistory._updatedBy = req.user._id;
+    productHistory._productId = product._productId;
+    productHistory.oldPieces = product.pieces;
+    productHistory.newPieces = req.body.pieces;
+    productHistory.totalPieces = (parseFloat(product.pieces) + parseFloat(req.body.pieces));
+    productHistory.save((err) => {
       if (err) {
         console.log(err);
       }
-      return res.json(product);
     });
+
+    product._createdBy = req.user._id;
+    product.pieces += parseFloat(req.body.pieces);
+    product.save((err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+    return res.json(product);
+
   }
 });
 
@@ -214,11 +229,7 @@ router.post('/delete', guard.ensureLoggedIn(), async (req, res) => {
 
   const findSales = await Sales.findOne({ _productId: id });
 
-  //console.log(findSales);
-
-  //return false;
-
-  if(findSales === null){
+  if (findSales === null) {
     await Product.findByIdAndRemove(id);
     res.send('success');
   } else {

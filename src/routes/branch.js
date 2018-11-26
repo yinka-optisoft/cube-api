@@ -56,7 +56,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const numOfBra = await Branch.count({ _storeId: req.user._storeId });
   const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
                                 .populate('_packageId').populate('_licenseId');
-  
+
 
   if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
@@ -89,7 +89,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
 
     if (numOfBra !== 3) {
-      
+
       const newBranch = await Branch();
       newBranch._storeId = req.session._storeId;
       newBranch.name = req.body.name;
@@ -115,7 +115,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
     }
 
   } else if (sub._licenseId.licenseName === 'Diamond' || sub._packageId.category === 'Diamond') {
-      
+
     const newBranch = await Branch();
     newBranch._storeId = req.session._storeId;
     newBranch.name = req.body.name;
@@ -243,7 +243,7 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
 
     } else {
 
-      const store = await Store.findById(req.session._storeId);
+      const store = await Store.findById(req.user._storeId);
 
       const convertToUpper = store.name;
       const storeName = convertToUpper.toUpperCase();
@@ -257,50 +257,43 @@ router.post('/member/:_branchId', guard.ensureLoggedIn(), async (req, res, next)
       const member = fields;
       const password = member.password;
       delete member.password;
-      const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-      const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
       member._storeId = store._id;
       member._branchId = branchId;
       member.status = 1;
-      member.username = `${storeSub}-field.username`;
-      // member.username = await generateUniqueID(store.shortCode);
-      fs.readFile(passport.path, function(err, data) {
-        fs.writeFile(dest,
-                     data, function(err) {
-                       fs.unlink(passport.path, function(err) {
-                         if (err) {
-                           res.status(500);
-                           res.json(err);
-                         } else {
-                           member.passport = name;
-                           Account.register(
-                             new Account(member), password, async (err, account) => {
-                               const tokenG = await Account.findById(account._id);
-                               console.log(tokenG);
-                               tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                               await tokenG.save(function(err) {
-                                 if (err) {
-                                   console.log(err);
-                                 }
-                                 console.log(tokenG);
-                               });
+      member.phone = `+234${fields.phone}`;
+      member.username = `${storeSub}-${fields.username}`;
+      if (passport && passport.name) {
+        const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+        const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+        const data = fs.readFileSync(passport.path);
+        fs.writeFileSync(dest, data);
+        fs.unlinkSync(passport.path);
+        member.passport = name;
+      }
+      Account.register(
+        new Account(member), password, async (err, account) => {
+          const tokenG = await Account.findById(account._id);
+          // console.log(tokenG);
+          tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+          await tokenG.save(function(err) {
+            if (err) {
+              console.log(err);
+            }
+            // console.log(tokenG);
+          });
 
-                               if (err) {
-                                 res.status(500);
-                                 res.send(err);
-                               } else {
-                                 req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
-                                 if (req.user._roleId === 'admin') {
-                                   res.redirect('/admin/staff/');
-                                 } else if (req.user._roleId === 'staff') {
-                                   res.redirect(`/branch/view/${ branchId}`);
-                                 }
-                               }
-                             });
-                         }
-                       });
-                     });
-      });
+          if (err) {
+            res.status(500);
+            res.send(err);
+          } else {
+            req.flash('success', `Saved Successfully! Your Username is ${member.username}`);
+            if (req.user._roleId === 'admin') {
+              res.redirect('/admin/staff/');
+            } else if (req.user._roleId === 'staff') {
+              res.redirect(`/branch/view/${ branchId}`);
+            }
+          }
+        });
     };
   });
 });
@@ -359,29 +352,22 @@ router.post('/user/update/:_branchId', guard.ensureLoggedIn(), async (req, res, 
       return res.status(400).json({ message: 'Store doesn\'t exist!' });
     const passport = files.passport;
     const member = fields;
-    const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
-    const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
-    fs.readFile(passport.path, function(err, data) {
-      fs.writeFile(dest,
-                   data, function(err) {
-                     fs.unlink(passport.path, function(err) {
-                       if (err) {
-                         res.status(500);
-                         res.json(err);
-                       } else {
-                         member.passport = name;
-                         getmember.update(member, function(err) {
-                           if (err) {
-                             console.log(err);
-                           } else {
-                             req.flash('success', 'Profile Update Successfully');
-                             // req.flash('success', `${getmember.firstname} update successfully`);
-                             res.redirect(`/branch/user/view/${getmember._id}`);
-                           }
-                         });
-                       }
-                     });
-                   });
+    if (passport && passport.name) {
+      const name = `${Math.round(Math.random() * 10000)}.${passport.name.split('.').pop()}`;
+      const dest = path.join(__dirname, '..', 'public', 'images', 'member', name);
+      const data = fs.readFileSync(passport.path);
+      fs.writeFileSync(dest, data);
+      fs.unlinkSync(passport.path);
+      member.passport = name;
+    }
+    getmember.update(member, function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        req.flash('success', 'Profile Update Successfully');
+        // req.flash('success', `${getmember.firstname} update successfully`);
+        res.redirect(`/branch/user/view/${getmember._id}`);
+      }
     });
   });
 

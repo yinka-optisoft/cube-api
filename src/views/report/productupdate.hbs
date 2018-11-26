@@ -1,0 +1,278 @@
+{{#extend 'stylesheets'}}
+<!-- Datatables -->
+    <link href="/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+    {{!-- <link src="/vendors/jquery.datepicker/jquery-ui.css">
+    <link src="/vendors/jquery.datepicker/jquery-confirm.min.css"> --}}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 100px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
+    </style>
+
+{{/extend}}
+
+{{# if errors }}
+    {{# each errors }}
+          <p class="alert alert-danger">{{ this.msg }}</p>
+    {{/each}}
+{{/if}}
+
+<div class="alertMsg">
+
+</div>
+
+
+<div class="text-center">
+
+    <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#reportModal">
+    <i class="fa fa-plus fa-2x"></i>
+    <span>View Product Report</span>
+    </a>
+    
+</div>
+
+
+<div class="col-md-12 col-sm-12 col-xs-12">
+    
+    <div class="x_panel">
+        <div class="x_title">
+        <h2>Reports</h2>
+        <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+            </ul>
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="datatable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>N/S</th>
+                        <th>Product Name</th>
+                        <th>Old Pieces</th>
+                        <th>New Pieces</th>
+                        <th>Total Pieces</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+
+                <tbody id="reportTable">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Small modal -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="reportModal">
+<div class="modal-dialog modal-sm" style="width: 400px;">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel2">Report</h4>
+        </div>
+        <div class="modal-body">
+            
+            <div class="x_panel">
+                
+                <div class="x_content">
+                <br />
+                <form class="form-horizontal form-label-left" id="reportForm">
+
+                    {{#if (eq user.roleId 'admin')}}
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Branch</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" name="branchId" id="branchId" required>
+                                    <option>Select Branch</option>
+                                    {{#each branches}}
+                                    <option value="{{_id}}">{{name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                    {{else}}
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Select Branch</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" name="branchId" id="branchId" required>
+                                    <option>Select Branch</option>
+                                    <option value="{{user._branchId._id}}">{{user._branchId.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    {{/if}}
+
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Between</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="dateBet" id="dateBet" class="form-control col-md-7 col-xs-12">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Till</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" name="dateTill" id="dateTill" class="form-control col-md-7 col-xs-12">
+                    </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- /modals -->
+
+
+{{#extend 'scripts'}}
+    <!-- Datatables -->
+    <script src="/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+
+    <script src="/vendors/jquery.datepicker/jquery-ui.js"></script>
+    <script src="/vendors/jquery.datepicker/jquery-confirm.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    {{!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> --}}
+
+<script>
+
+    $( function() {
+        $( "#dateBet" ).datepicker();
+        $( "#dateTill" ).datepicker();
+    });
+
+    $(document).ready(function() {
+        $("#reportForm").submit(function(e) {
+            e.preventDefault();
+            var branchId = $("#branchId option:selected").val();
+            var dateBet = $('#dateBet').val();
+            var dateTill = $('#dateTill').val();
+
+            console.log(branchId);
+            console.log(dateBet);
+            console.log(dateTill);
+
+            $.ajax({
+                type: 'POST',
+                url: '/report/get/product/update',
+                dataType: 'json',
+                data: {branchId: branchId, dateBet: dateBet, dateTill: dateTill },
+                success: function(data) {
+
+                    if ( $.fn.DataTable.isDataTable('#datatable') ) {
+                        $('#datatable').DataTable().destroy();
+                    }
+
+                    $('#datatable tbody').empty();
+
+                    for(var i = 0; i < data.length; i++){
+
+                            var tr = '<tr>'+
+                                '<td>'+(i + 1)+'</td>'+
+                                '<td>'+data[i]._productId.productName+'</td>'+
+                                '<td>'+data[i].oldPieces+'</td>'+
+                                '<td>'+data[i].newPieces+'</td>'+
+                                '<td>'+data[i].totalPieces+'</td>'+
+                                '<td>'+data[i]._productId.sellingPrice+'</td>'+
+                                '<td>'+data[i]._productId._categoryId.name+'</td>'+
+                            '</tr>'
+
+                            $('#reportTable').append(tr);
+                            $('#reportModal').modal('hide');
+                    }
+
+                    $('#reportModal').modal('hide');
+
+                    $('#datatable').dataTable({
+                        "autoWidth":false
+                        , "info":false
+                        , "JQueryUI":true
+                        , "ordering":true
+                        , "paging":true
+                        //, "scrollY":"500px"
+                        , "scrollCollapse":false
+                    });
+
+                }
+            });
+        });
+    });
+
+</script>
+
+{{/extend}}

@@ -1,6 +1,6 @@
 // get current date
 var inDate = new Date();
-var invoiceDates = `${inDate.getMonth() + 1 } /${  inDate.getDate()  }/${  inDate.getFullYear()}`;
+var invoiceDates = `${inDate.getMonth() + 1 } /${ inDate.getDate() }/${ inDate.getFullYear()}`;
 
 // generate invoice number
 function genInvoiceNumb() {
@@ -75,7 +75,7 @@ function getBarcode(id) {
         $('#_productId').val(data._productId._id);
 
         // check if product is empty
-        if (data.pieces < 1) {
+        /* if (data.pieces < 1) {
 
           var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">' +
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' +
@@ -94,17 +94,17 @@ function getBarcode(id) {
 
           $('#getPrice').empty();
           $('#getPrice').val(0);
-        } else {
+        } else {*/
 
-          $('#piecesSold').removeAttr('disabled');
-          $('#productPrice').removeAttr('disabled');
+        $('#piecesSold').removeAttr('disabled');
+        $('#productPrice').removeAttr('disabled');
 
-          $('#piecesAvai').empty();
-          $('#piecesAvai').val(data.pieces);
+        $('#piecesAvai').empty();
+        $('#piecesAvai').val(data.pieces);
 
-          $('#getPrice').empty();
-          $('#getPrice').val(data._productId.sellingPrice);
-        }
+        $('#getPrice').empty();
+        $('#getPrice').val(data._productId.sellingPrice);
+        // }
       }
     },
     error: function(jqXHR, textStatus, errorThrow) {
@@ -123,7 +123,7 @@ function getPieces(id) {
     dataType: 'json',
     data: { _productId: productId },
     success: function(data) {
-      if (data.pieces < 0) {
+      /* if (data.pieces < 1) {
 
         var msg = '<div class="alert alert-danger alert-dismissible fade in" role="alert">' +
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' +
@@ -143,17 +143,19 @@ function getPieces(id) {
 
         $('#getPrice').empty();
         $('#getPrice').val(0);
-      } else {
+      }*/
+      // else {
 
-        $('#piecesSold').removeAttr('disabled');
-        $('#productPrice').removeAttr('disabled');
+      $('#piecesSold').removeAttr('disabled');
+      $('#productPrice').removeAttr('disabled');
 
-        $('#piecesAvai').empty();
-        $('#piecesAvai').val(data.pieces);
+      $('#piecesAvai').empty();
+      $('#piecesAvai').val(data.pieces);
 
-        $('#getPrice').empty();
-        $('#getPrice').val(data._productId.sellingPrice);
-      }
+      $('#getPrice').empty();
+      $('#getPrice').val(data._productId.sellingPrice);
+
+      // }
     },
     error: function(jqXHR, textStatus, errorThrow) {
       $.alert(errorThrow);
@@ -177,11 +179,11 @@ function pricePay(price) {
   var presentPrice = $('#getPrice').val();
 
   if (parseFloat(initPrice) < parseFloat(presentPrice)) {
-    var msg = `${'<div class="alert alert-danger alert-dismissible fade in" role="alert">'+
-                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'+
-                        '</button>'+
-                        'You can\'t sell below '}${  presentPrice
-                        }</div>`;
+    var msg = `${'<div class="alert alert-danger alert-dismissible fade in" role="alert">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' +
+                        '</button>' +
+                        'You can\'t sell below '}${ presentPrice
+    }</div>`;
 
     $('#productPrice').val(0);
   } else {
@@ -292,7 +294,7 @@ $('#saleProduct').submit(function(e) {
     console.log('enter');
     checkexist();
 
-  } else{
+  } else {
 
     console.log('create if zero');
 
@@ -327,17 +329,17 @@ function tableAppend() {
     totalCal.push(cal);
 
 
-    var tr = `${'<tr>'+
-                    '<td>'}${ 1 + i }</td>`+
-                    `<td>${salesArray[i].productName}</td>`+
-                    `<td>${salesArray[i].piecesSold}</td>`+
-                    `<td>${salesArray[i].productPrice}</td>`+
-                    `<td>${cal}</td>`+
-                    `<td>`+
-                        /*'<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+*/
-                        `<button type="button" value="${ salesArray[i]._productId }" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>`
-                        +`</td>`+
-                `</tr>`;
+    var tr = `${'<tr>' +
+                    '<td>'}${ 1 + i }</td>` +
+                    `<td>${salesArray[i].productName}</td>` +
+                    `<td>${salesArray[i].piecesSold}</td>` +
+                    `<td>${salesArray[i].productPrice}</td>` +
+                    `<td>${cal}</td>` +
+                    '<td>' +
+                        /* '<button type="button" productId="'+ salesArray[i]._productId +'" pieces="'+ salesArray[i].piecesSold +'" price="'+ salesArray[i].productPrice +'" data-target="#updateSales"  data-toggle="modal" value="'+ salesArray[i]._productId +'" class="btn btn-success btn-sm">Edit</button>'+*/
+                        `<button type="button" value="${ salesArray[i]._productId }" onclick="deleteProduct(this.value)" class="btn btn-danger btn-sm">Delete</button>`+
+                        '</td>' +
+                '</tr>';
 
     $('#saleTable').append(tr);
     $('#saleProduct')[0].reset();
@@ -466,7 +468,7 @@ $(function() {
     source: function(request, response) {
       // console.log(request.term);
       $.ajax({
-        url: '/sales/get/product/' + request.term,
+        url: `/sales/get/product/${  request.term}`,
         type: 'GET',
         dataType: 'json',
         data: {
