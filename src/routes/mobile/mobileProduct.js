@@ -202,6 +202,8 @@ router.post('/fetchData', verifyToken, async (req, res) => {
       model: 'categories'
     }
   });
+
+  //console.log(fetchProduct);
   return res.json({ head: 'Success', title: 'Products have been saved', data: fetchProduct });
 });
 export default router;

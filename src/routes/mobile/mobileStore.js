@@ -57,7 +57,6 @@ router.get('/details/staff', verifyToken, async (req, res) => {
   const branchCount = await Branch.find({ _storeId: req.user._storeId }).count();
   const UsersCount = await Account.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).count();
   if (findStoreDetails) {
-    console.log(findStoreDetails);
     return res.json({ success: true, userCount: UsersCount, storeDetails:  findStoreDetails, branchCount: branchCount });
   } else {
     return res.json({ error:  'Error occured fetching store details' });
