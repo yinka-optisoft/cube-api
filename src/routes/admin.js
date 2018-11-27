@@ -161,7 +161,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
           const password = member.password;
           delete member.password;
           member._storeId = store._id;
-          member._branchId = member._branchId;
+          member._branchId = fields._branchId;
           member.status = 1;
           member.phone = `+234${fields.phone}`;
           member.username = `${storeSub}-${fields.username}`;
@@ -233,7 +233,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
           const password = member.password;
           delete member.password;
           member._storeId = store._id;
-          member._branchId = member._branchId;
+          member._branchId = fields._branchId;
           member.status = 1;
           member.username = `${storeSub}-${fields.username}`;
           member.phone = `+234${fields.phone}`;
@@ -302,7 +302,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
         const password = member.password;
         delete member.password;
         member._storeId = store._id;
-        member._branchId = member._branchId;
+        member._branchId = fields._branchId;
         member.status = 1;
         member.username = `${storeSub}-`.fields.username;
         member.phone = `+234${fields.phone}`;

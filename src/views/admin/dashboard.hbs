@@ -14,106 +14,107 @@
         }
     </style>
 {{/extend}}
-<div class="">
-    <div class="row top_tiles">
-        <a href="/branch">
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                    <div class="count">{{branch}}</div>
-                    <h3>Number Of Branches</h3>
-                </div>
-            </div>
-        </a>
-        <a href="/product">
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-comments-o"></i></div>
-                    <div class="count">{{product}}</div>
-                    <h3>Number Of All Products</h3>
-                </div>
-            </div>
-        </a>
-        <a href="/admin/staff">
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="tile-stats">
-                <div class="icon"><i class="fa fa-user"></i></div>
-                <div class="count">{{account}}</div>
-                <h3>Total Number Of Admins And Staff</h3>
-            </div>
-            </div>
-        </a>
-        <a href="/supplier">
-            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="tile-stats">
-                <div class="icon"><i class="fa fa-check-square-o"></i></div>
-                <div class="count">{{suppliers}}</div>
-                <h3>Total Number Of Suppliers</h3>
-            </div>
-            </div>
-        </a>
-    </div>
 
+    <div class="">
 
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        
-        <div class="x_panel">
-            <div class="x_title">
-            <h2>All Branch</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Settings 1</a>
+        <div class="row top_tiles">
+            <a href="/branch">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="tile-stats">
+                        <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
+                        <div class="count">{{branch}}</div>
+                        <h3>Number Of Branches</h3>
+                    </div>
+                </div>
+            </a>
+            <a href="/product">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="tile-stats">
+                        <div class="icon"><i class="fa fa-comments-o"></i></div>
+                        <div class="count">{{product}}</div>
+                        <h3>Number Of All Products</h3>
+                    </div>
+                </div>
+            </a>
+            <a href="/admin/staff">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-user"></i></div>
+                    <div class="count">{{account}}</div>
+                    <h3>Total Number Of Admins And Staff</h3>
+                </div>
+                </div>
+            </a>
+            <a href="/supplier">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-check-square-o"></i></div>
+                    <div class="count">{{suppliers}}</div>
+                    <h3>Total Number Of Suppliers</h3>
+                </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            
+            <div class="x_panel">
+                <div class="x_title">
+                <h2>Out Of Stock Product Notification</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
-                    <li><a href="#">Settings 2</a>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                    </ul>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
                     </li>
                 </ul>
-                </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
+                <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
 
-            <table id="datatable" class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th>N/S</th>
-                    <th>Product</th>
-                    <th>Available Pieces</th>
-                    <th>Branch</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-
-
-                <tbody>
-                    {{#each products}}
+                <table id="datatable" class="table table-striped table-bordered">
+                    <thead>
                     <tr>
-                        <td>{{inc @index}}</td>
-                        <td id="name{{_id}}">{{_productId.productName}}</td>
-                        <td id="email{{_id}}">{{pieces}}</td>
-                        <td id="phone{{_id}}">{{_branchId.name}}</td>
-                        <td>
-                            {{#if (gte pieces 10)}}
-                            <button class="btn btn-primary btn-sm"></button>
-                            {{else if (gt pieces 1)}}
-                            <button class="btn btn-success btn-sm"></button>
-                            {{else if (lt pieces 1)}}
-                            <button class="btn btn-danger btn-sm"></button>
-                            {{/if}}
-                        </td>
+                        <th>N/S</th>
+                        <th>Product</th>
+                        <th>Available Pieces</th>
+                        <th>Branch</th>
+                        <th>Actions</th>
                     </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+                    </thead>
+
+
+                    <tbody>
+                        {{#each products}}
+                        <tr>
+                            <td>{{inc @index}}</td>
+                            <td id="name{{_id}}">{{_productId.productName}}</td>
+                            <td id="email{{_id}}">{{pieces}}</td>
+                            <td id="phone{{_id}}">{{_branchId.name}}</td>
+                            <td>
+                                {{#if (gte pieces 10)}}
+                                <button class="btn btn-primary btn-sm"></button>
+                                {{else if (gt pieces 1)}}
+                                <button class="btn btn-success btn-sm"></button>
+                                {{else if (lt pieces 1)}}
+                                <button class="btn btn-danger btn-sm"></button>
+                                {{/if}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                </div>
             </div>
         </div>
-    </div>
 
     </div>
 

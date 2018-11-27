@@ -31,12 +31,10 @@ router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), asyn
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(req.params._branchId);
-  const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id })
-                                      .populate(
-                                        { path: '_productId',
-                                          populate: { path: '_categoryId' } });
+  const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id });
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId');
 
-  res.render('branch/adminDashboard', { user, expressFlash: req.flash('info'), branch, branches, productCount, layout: 'layouts/user' });
+  res.render('branch/adminDashboard', { user, products, expressFlash: req.flash('info'), branch, branches, productCount, layout: 'layouts/user' });
 });
 
 
@@ -303,8 +301,8 @@ router.post('/ban', guard.ensureLoggedIn(), async (req, res) => {
 
   const id = req.body.id;
   const user = await Account.findById(id);
-  // if(user.roleId === 'admin' && user.rightToDeleteAdmin === true){
-  if (user.roleId === 'admin') {
+  if (user.roleId === 'admin' && user.rightToDeleteAdmin === true) {
+  // if (user.roleId === 'admin') {
     res.send('fail');
   } else if (user.status === false) {
     user.status = 1;

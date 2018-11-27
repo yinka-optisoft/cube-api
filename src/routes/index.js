@@ -16,11 +16,11 @@ router.get('/dashboard', async (req, res) => {
   } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
     res.redirect('/admin/dashboard');
   } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {
-    res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId._id}`);
+    res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId}`);
   } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Branch') {
-    res.redirect(`/branch/admin/dashboard/${user._storeId._id}/${user._branchId._id}`);
+    res.redirect(`/branch/admin/dashboard/${user._storeId._id}/${user._branchId}`);
   } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Branch') {
-    res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId._id}`);
+    res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId}`);
   }
 });
 
@@ -96,11 +96,11 @@ router.post('/login', passport.authenticate('local',
                                                                  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Store') {
                                                                    res.redirect('/admin/dashboard');
                                                                  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Store') {
-                                                                   res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId._id}`);
+                                                                   res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId}`);
                                                                  } else if (user._roleId.name === 'admin' && user._roleId.roleType === 'Branch') {
-                                                                   res.redirect(`/branch/admin/dashboard/${user._storeId._id}/${user._branchId._id}`);
+                                                                   res.redirect(`/branch/admin/dashboard/${user._storeId._id}/${user._branchId}`);
                                                                  } else if (user._roleId.name === 'staff' && user._roleId.roleType === 'Branch') {
-                                                                   res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId._id}`);
+                                                                   res.redirect(`/staff/dashboard/${user._storeId._id}/${user._branchId}`);
                                                                  }
                                                                });
                                                              }
