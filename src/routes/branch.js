@@ -179,7 +179,8 @@ router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) =>
                                       .populate(
                                         { path: '_productId',
                                           populate: { path: '_categoryId' } });
-  res.render('branch/branchDashboard', { user, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branch._id }).populate('_branchId').populate('_productId');
+  res.render('branch/branchDashboard', { user, products, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 
 

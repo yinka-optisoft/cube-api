@@ -9,6 +9,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 
     <style>
+
+        .btn-primaryy {
+            background: green;
+            border: green;
+        }
+        .btn-successs {
+            background: yellow;
+            border: yellow;
+        }
+        .btn-dangerr {
+            background: red;
+            border: red;
+        }
+
         .quick-btn { background: #EEEEEE;
         box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
         color: #444444;
@@ -179,31 +193,69 @@
             </div>
             </div>
         </a>
-        {{!-- <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="tile-stats">
-            <div class="icon"><i class="fa fa-comments-o"></i></div>
-            <div class="count">179</div>
-            <h3>New Sign ups</h3>
-            <p>Lorem ipsum psdea itgum rixt.</p>
-        </div>
-        </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="tile-stats">
-            <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-            <div class="count">179</div>
-            <h3>New Sign ups</h3>
-            <p>Lorem ipsum psdea itgum rixt.</p>
-        </div>
-        </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <div class="tile-stats">
-            <div class="icon"><i class="fa fa-check-square-o"></i></div>
-            <div class="count">179</div>
-            <h3>New Sign ups</h3>
-            <p>Lorem ipsum psdea itgum rixt.</p>
-        </div>
-        </div> --}}
     </div>
+    </div>
+
+
+    
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        
+        <div class="x_panel">
+            <div class="x_title">
+            <h2>Out Of Stock Product Notification</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Settings 1</a>
+                    </li>
+                    <li><a href="#">Settings 2</a>
+                    </li>
+                </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            <table id="datatable" class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>N/S</th>
+                    <th>Product</th>
+                    <th>Available Pieces</th>
+                    <th>Branch</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td>{{inc @index}}</td>
+                        <td id="name{{_id}}">{{_productId.productName}}</td>
+                        <td id="email{{_id}}">{{pieces}}</td>
+                        <td id="phone{{_id}}">{{_branchId.name}}</td>
+                        <td>
+                            {{#if (gte pieces 10)}}
+                            <button class="btn btn-primaryy btn-sm"></button>
+                            {{else if (gt pieces 1)}}
+                            <button class="btn btn-successs btn-sm"></button>
+                            {{else if (lt pieces 1)}}
+                            <button class="btn btn-dangerr btn-sm"></button>
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            </div>
+        </div>
     </div>
 
 
