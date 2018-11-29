@@ -32,8 +32,7 @@ router.get('/admin/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), asyn
   const branches = await Branch.find({ _storeId: req.session._storeId });
   const branch = await Branch.findById(req.params._branchId);
   const productCount = await BranchProduct.count({ _storeId: req.user._storeId, _branchId: branch._id });
-  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId');
-
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, pieces: { $lte: 10 }, _branchId: req.user._branchId }).populate('_branchId').populate('_productId');
   res.render('branch/adminDashboard', { user, products, expressFlash: req.flash('info'), branch, branches, productCount, layout: 'layouts/user' });
 });
 
@@ -179,7 +178,7 @@ router.get('/view/:_branchId', guard.ensureLoggedIn(), async (req, res, next) =>
                                       .populate(
                                         { path: '_productId',
                                           populate: { path: '_categoryId' } });
-  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: branch._id }).populate('_branchId').populate('_productId');
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, pieces: { $lte: 10 }, _branchId: branch._id }).populate('_branchId').populate('_productId');
   res.render('branch/branchDashboard', { user, products, staff, roles, branch, productCount, expressFlash: req.flash('success'), layout: 'layouts/user' });
 });
 

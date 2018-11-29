@@ -351,7 +351,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Branch</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="_branchId" id="_branchId" required>
-                            <option>Select Branch</option>
+                            <option disabled selected>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
                             {{/each}}
@@ -363,9 +363,9 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="_supplierId" id="_supplierId">
                             {{!-- {{#select product._supplierId.firstname}} --}}
-                                <option>Select Supplier</option>
+                                <option disabled selected>Select Supplier</option>
                                 {{#each suppliers}}
-                                <option value="{{_id}}">{{firstname}} {{middlename}} {{lastname}}</option>
+                                <option value="{{_id}}">{{firstname}} {{lastname}}</option>
                                 {{/each}}
                             {{!-- {{/select}} --}}
                         </select>
@@ -381,30 +381,23 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Category</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="_categoryId" id="_categoryId" required>
-                            <option>Select Category</option>
+                            <option disabled selected>Select Category</option>
                             {{#each categories}}
                             <option value="{{_id}}">{{name}}</option>
                             {{/each}}
                         </select>
                     </div>
                     </div>
-                    {{!-- <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Pieces</label>
+                    <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Barcode</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="number" name="pieces" id="pieces" class="form-control" placeholder="Pieces" required>
+                        <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Barcode" required>
                     </div>
-                    </div> --}}
+                    </div>
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <input type="number" name="sellingPrice" id="sellingPrice" class="form-control" placeholder="Price" required>
-                    </div>
-                    </div>
-                    <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Note
-                    </label>
-                    <div class="col-md-9 col-sm-9 col-xs-12">
-                        <textarea class="form-control" name="note" id="note" rows="2" placeholder='Note'></textarea>
                     </div>
                     </div>
                     <input type="hidden" name="_productId" id="_productId" value=""/>
@@ -447,7 +440,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Send From</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="fromId" id="fromId" required>
-                            <option>Select Branch</option>
+                            <option disabled selected>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
                             {{/each}}
@@ -478,7 +471,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Send To</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" name="toId" id="toId" required>
-                            <option>Select Branch</option>
+                            <option disabled selected>Select Branch</option>
                             {{#each branches}}
                             <option value="{{_id}}">{{name}}</option>
                             {{/each}}

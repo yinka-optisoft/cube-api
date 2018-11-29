@@ -1,17 +1,52 @@
 {{#extend 'stylesheets'}}
     <style>
-        .btn-primary {
+        .btn-primaryy {
             background: green;
             border: green;
         }
-        .btn-success {
+        .btn-successs {
             background: yellow;
             border: yellow;
         }
-        .btn-danger {
+        .btn-dangerr {
             background: red;
             border: red;
         }
+    </style>
+
+    <style>
+        .quick-btn { background: #EEEEEE;
+        box-shadow: 0 0 0 1px #F8F8F8 inset, 0 0 0 1px #CCCCCC;
+        color: #444444;
+        display: inline-block;
+        height: 80px;
+        margin: 10px;
+        padding-top: 16px;
+        text-align: center;
+        text-decoration: none;
+        width: 90px;
+        position: relative;
+        }
+        .quick-btn span {
+        display: block;
+        }
+        .quick-btn .label {
+        position: absolute;
+        right: -5px;
+        top: -5px;
+        }
+        .quick-btn:hover {
+        text-decoration: none;
+        color: #fff;
+        background-color: #4d7589;
+        box-shadow: 3px 4px 1px #ccc;
+        }
+        .quick-btn.small {
+        width: 40px;
+        height: 30px;
+        padding-top: 6px;
+        }
+
     </style>
 {{/extend}}
 
@@ -55,6 +90,20 @@
                 </div>
             </a>
         </div>
+
+        <div class="text-center">
+
+            <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#newBarcode">
+                <i class="fa fa-plus fa-2x"></i>
+                <span>Gen New Barcode</span>
+            </a>
+
+            <a class="quick-btn text-red" href="#" data-toggle="modal" data-target="#existingBarcode">
+                <i class="fa fa-plus fa-2x"></i>
+                <span>Gen Existing Barcode</span>
+            </a>
+        </div>    
+
 
         <div class="col-md-12 col-sm-12 col-xs-12">
             
@@ -101,11 +150,11 @@
                             <td id="phone{{_id}}">{{_branchId.name}}</td>
                             <td>
                                 {{#if (gte pieces 10)}}
-                                <button class="btn btn-primary btn-sm"></button>
+                                <button class="btn btn-primaryy btn-sm"></button>
                                 {{else if (gt pieces 1)}}
-                                <button class="btn btn-success btn-sm"></button>
+                                <button class="btn btn-successs btn-sm"></button>
                                 {{else if (lt pieces 1)}}
-                                <button class="btn btn-danger btn-sm"></button>
+                                <button class="btn btn-dangerr btn-sm"></button>
                                 {{/if}}
                             </td>
                         </tr>
@@ -115,6 +164,91 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Small modal -->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="newBarcode">
+            <div class="modal-dialog modal-sm" style="width: 400px;">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel2">Generate New Barcode</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="x_panel">
+                            
+                            <div class="x_content">
+                            <br />
+                                <form class="form-horizontal form-label-left" method="POST" action="/admin/gen">
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Barcode To Print</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <input type="number" name="number" id="number" class="form-control" placeholder="Number Of Barcode" required>
+                                    </div>
+                                    </div>
+                                    <div class="ln_solid"></div>
+                                    <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /modals -->
+
+        <!-- Small modal -->
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="existingBarcode">
+            <div class="modal-dialog modal-sm" style="width: 400px;">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel2">Generate Existing Barcode</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="x_panel">
+                            
+                            <div class="x_content">
+                            <br />
+                            <form class="form-horizontal form-label-left" method="POST" action="/admin/gen/update">
+
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Barcode</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Scan Barcode" required>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Number Of Barcode To Print</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <input type="number" name="number" id="number" class="form-control" placeholder="Number Of Barcode" required>
+                                </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                                </div>
+
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /modals -->
 
     </div>
 
@@ -136,31 +270,13 @@
 
     <script>
 
-        if($("#mybarChart").length){
-            var f=document.getElementById("mybarChart");
-            new Chart(f,{
-                type:"bar",
-                data:{
-                    labels:["January","February","March","April","May","June","July","August", "September", "October", "November", "December"],
-                    datasets:[{
-                        label:"# of Votes",
-                        backgroundColor:"#26B99A",
-                        data:[51,30,40,28,92,50,45,51,30,40,28,92]},
-                        /*{label:"# of Votes",
-                        backgroundColor:"#03586A",
-                        data:[41,56,25,48,72,34,12]}*/
-                        ]
-                    },
-                    options:{
-                        scales:{
-                            yAxes:[{
-                                ticks:{beginAtZero:!0}
-                            }]
-                        }
-                    }
-            })
-        }
-
+        $('button.Submit').click( function() {
+            var t=$(this);
+            var form=t.parents('form');
+            form.attr('target',t.data('target'));
+            form.submit();
+            return false;
+        });
     </script>
 
 {{/extend}}

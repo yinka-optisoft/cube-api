@@ -145,7 +145,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
   console.log(errors);
 
   if (errors) {
-    req.session.errors = errors;
+    req.flash('info', 'Fill The Form Correctly');
     res.redirect('/product');
   } else {
 
@@ -156,7 +156,7 @@ router.post('/update', guard.ensureLoggedIn(), async (req, res, next) => {
     product.name = req.body.name;
     // product.pieces = req.body.pieces;
     product.sellingPrice = req.body.sellingPrice;
-    product.note = req.body.note;
+    product.barcodeNumber = req.body.barcode;
     product.save((err) => {
       if (err) {
         console.log(err);

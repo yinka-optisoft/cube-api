@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="/vendors/JsBarcode.all.js"></script>
+	<script>
+		Number.prototype.zeroPadding = function(){
+			var ret = "" + this.valueOf();
+			return ret.length == 1 ? "0" + ret : ret;
+		};
+	</script>
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/admin/dashboard"><button type="submit" class="button">Go Back</button></a>
+    {{#each genArrays}}
+    <div style="text-align: center">
+        <div>
+            <img id="barcode1{{code}}"/>
+            <script>JsBarcode("#barcode1{{code}}", '{{code}}');</script>
+        </div>
+    </div>
+    {{/each}}
+
+</body>
+</html>

@@ -30,7 +30,7 @@ router.get('/dashboard/:_storeId/:_branchId', guard.ensureLoggedIn(), async (req
   const suppliers = await Account.find({ _storeId: req.user._storeId, _supllyId: 'supplier' });
   const categories = await Category.find({ _storeId: req.session._storeId });
   const branches = await Branch.find({ _storeId: req.session._storeId });
-  const products = await BranchProduct.find({ _storeId: req.user._storeId, _branchId: req.user._branchId }).populate('_branchId').populate('_productId');
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, pieces: { $lte: 10 }, _branchId: req.user._branchId }).populate('_branchId').populate('_productId');
   res.render('staff/dashboard', { user, products, expressFlash: req.flash('info'), suppliers, branches, categories, layout: 'layouts/user' });
 });
 

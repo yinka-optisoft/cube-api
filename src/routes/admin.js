@@ -33,7 +33,7 @@ router.get('/dashboard', guard.ensureLoggedIn(), async (req, res) => {
   const suppliers = await Supply.count({ _storeId: req.user._storeId });
   const sub = await Subscription.findOne({ _storeId: req.user._storeId,
                                            $and: [ { activateDate: { $lte: new Date() } }, { expiredDate: { $gte: new Date() } }] });
-  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate('_productId');
+  const products = await BranchProduct.find({ _storeId: req.user._storeId, pieces: { $lte: 10 } }).populate('_branchId').populate('_productId');
   res.render('admin/dashboard', { user, branch, product, products, account, suppliers, sub, expressFlash: req.flash('success'),
                                   layout: 'layouts/user' });
 });
@@ -155,7 +155,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
           const convertToUpper = store.name;
           const storeName = convertToUpper.toUpperCase();
           const storeSub = storeName.substring(0, 3);
-      
+
           const passport = files.passport;
           const member = fields;
           const password = member.password;
@@ -202,7 +202,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
         }
       } else {
-        
+
         req.flash('success', 'Sorry You Can\'t Register More Than 3 Users On This Package');
         res.redirect('/admin/staff');
       }
@@ -223,7 +223,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
           if (!store)
             return res.status(400).json({ message: 'Store doesn\'t exist!' });
-          
+
           const convertToUpper = store.name;
           const storeName = convertToUpper.toUpperCase();
           const storeSub = storeName.substring(0, 3);
@@ -292,7 +292,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
         if (!store)
           return res.status(400).json({ message: 'Store doesn\'t exist!' });
-        
+
         const convertToUpper = store.name;
         const storeName = convertToUpper.toUpperCase();
         const storeSub = storeName.substring(0, 3);
@@ -411,6 +411,59 @@ router.post('/right/product', guard.ensureLoggedIn(), async (req, res) => {
       req.flash('success', `${post.firstname} ${post.lastname} Given Right To Enter Product`);
       res.redirect('/admin/staff/enter/product');
     };
+  });
+});
+
+function genInvoiceNumb() {
+  var text = '';
+  var alph = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var numb = `0123456789${alph}`;
+
+  for (let i = 0; i < 13; i++)
+    text += numb.charAt(Math.floor(Math.random() * numb.length));
+
+  return text;
+}
+
+router.post('/gen', guard.ensureLoggedIn(), async (req, res) => {
+
+  const num = req.body.number;
+  const genArrays = [];
+  const code = genInvoiceNumb();
+
+  for (let i = 0; i < num; i++) {
+    genArrays.push({ code: code });
+  }
+
+  res.render('barcode/barcode', { genArrays });
+});
+
+
+router.post('/gen/update', guard.ensureLoggedIn(), async (req, res) => {
+
+  const num = req.body.number;
+  const barcodNum = req.body.barcode;
+  const genArrays = [];
+
+  const barcode = Product.findOne({ _storeId: req.user._storeId, barcodeNumber: barcodNum }, (err, barcode) => {
+
+    if (err) {
+      console.log(err);
+    } else if (barcode !== null) {
+
+      const code = barcode.barcodeNumber;
+
+      for (let i = 0; i < num; i++) {
+        genArrays.push({ code: code });
+      }
+
+      res.render('barcode/barcode', { genArrays });
+
+    } else {
+
+      req.flash('success', 'Invalid Barcode');
+      res.redirect('/admin/dashboard');
+    }
   });
 });
 
