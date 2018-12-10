@@ -125,11 +125,21 @@ passport.deserializeUser(Account.deserializeUser());
 
 try {
 
+<<<<<<< HEAD
   mongoose.connect('mongodb://localhost/cube');
   // mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin');
 
 } catch (e) {
   throw e;
+=======
+   mongoose.connect('mongodb://localhost/cube');
+   //mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin');
+
+} catch (e) {
+
+  throw e;
+  
+>>>>>>> first commit
 }
 
 

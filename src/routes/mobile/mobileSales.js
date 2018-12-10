@@ -360,6 +360,7 @@ router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
 router.get('/showreceipt/:salesId', async (req, res, next) => {
 
   const saleId = req.params.salesId;
+<<<<<<< HEAD
   console.log(saleId);
   const sale = await Sales.findById(saleId)
                               .populate('_customerId').populate('_productId');
@@ -367,6 +368,14 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
 
 
   console.log(sale);
+=======
+  // const userId = req.params.userId;
+  // const findUser = Account.findOne({ _id: userId });
+  const sale = await Sales.findById(saleId)
+                              .populate('_customerId').populate('_productId').populate('_salesBy');
+  const store = await Store.findOne({ _id: sale._storeId });
+
+>>>>>>> first commit
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
     salesObj.push(sale._productId[i].productName);
@@ -378,14 +387,23 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
                              if (!err) {
                                Sales.findById(
                                  saleId
+<<<<<<< HEAD
                                ).populate('_customerId').populate('_productId')
+=======
+                               ).populate('_customerId').populate('_productId').populate('salesBy')
+>>>>>>> first commit
                               .exec((err, sales) => {
                                 if (!err) {
                                   let html = Handlebars.compile(data)({
                                     sales,
                                     sale,
                                     store,
+<<<<<<< HEAD
                                     salesObj
+=======
+                                    salesObj,
+
+>>>>>>> first commit
                                   });
 
                                   html = html.replace('storelogo',
@@ -497,7 +515,11 @@ router.post('/blockUser', verifyToken, async (req, res) => {
 
 router.post('/submitPending', verifyToken, async (req, res) => {
   console.log(req.body);
+<<<<<<< HEAD
   //var task = Fawn.Task();
+=======
+  // var task = Fawn.Task();
+>>>>>>> first commit
   const details = req.body.pendingSale;
   const submittedIds = [];
   // const enterEmpty = await new Sales();
@@ -509,7 +531,11 @@ router.post('/submitPending', verifyToken, async (req, res) => {
 
   for (let i = 0; i < details.length; i++) {
     const checkOfflineId = await Sales.findOne({ offlineId: details[i]._id, _branchId: req.user._branchId, _storeId: req.user._storeId,
+<<<<<<< HEAD
     _salesBy: req.user._id });
+=======
+                                                 _salesBy: req.user._id });
+>>>>>>> first commit
     if (checkOfflineId) {
       submittedIds.push(details[i]._id);
       continue;
