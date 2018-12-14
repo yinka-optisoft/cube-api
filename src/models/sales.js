@@ -18,11 +18,7 @@ const Sale = new Schema({
   piecesSold: [Number],
   unitPrice: [Number],
   subtotal: [Number],
-<<<<<<< HEAD
-  totalPrice: Number,
-=======
   totalPrice: [Number],
->>>>>>> first commit
   offlineId: String,
   paidBy: { type: String, lowercase: true, trim: true,
             enum: ['cash', 'pos', 'transfer'] },
