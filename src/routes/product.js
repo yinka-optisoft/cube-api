@@ -90,8 +90,6 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   } else {
 
-    console.log(req.body);
-
     const product = await Product(req.body);
     product._storeId = req.user._storeId;
     product._createdBy = req.user._id;
@@ -192,7 +190,7 @@ router.post('/update/existing/product', guard.ensureLoggedIn(), async (req, res,
     res.redirect('/product');
   } else {
 
-    const product = await BranchProduct.findOne({ _storeId: req.session._storeId, _branchId: req.user._branchId, _productId: req.body.productId })
+    const product = await BranchProduct.findOne({ _storeId: req.user._storeId, _branchId: req.user._branchId, _productId: req.body.productId })
                                           .populate('_categoryId').populate('_productId');
 
     const productHistory = new ProductUpdateHistory();
