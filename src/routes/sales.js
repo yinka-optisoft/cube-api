@@ -250,7 +250,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                                               'public',
                                                               'images',
                                                               'store',
-                                                              store.logo
+                                                              // store.logo
                                                     ));
 
                                 htmlPdf.create(html, {

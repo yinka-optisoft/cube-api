@@ -260,9 +260,17 @@
 
                     for(var i = 0; i < data.length; i++){
                         var proName = [];
+                        TotalPrice = [];
                         for(var j = 0; j < data[i]._productId.length; j++){
                             proName.push(data[i]._productId[j].productName);
                         }
+
+                        for(var j = 0; j < data[i]._productId.length; j++){
+                            TotalPrice.push(data[i].totalPrice);
+                        }
+
+                        sumTotalCal = 0;
+                        $.each(TotalPrice, function() { sumTotalCal += parseFloat(this) || 0; });
 
                             var tr = (
                             '<tr>'+
@@ -273,7 +281,7 @@
                                 '<td>'+data[i].piecesSold+'</td>'+
                                 '<td>'+data[i].unitPrice+'</td>'+
                                 '<td>'+data[i].subtotal+'</td>'+
-                                '<td>'+data[i].totalPrice+'</td>'+
+                                '<td>'+sumTotalCal+'</td>'+
                                 '<td>'+data[i].paidBy+'</td>'+
                                 '<td>'+data[i].createdAt+'</td>'+
                                 '<td>'+data[i]._branchId.name+'</td>'+
