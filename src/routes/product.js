@@ -264,7 +264,7 @@ router.post('/get/category', guard.ensureLoggedIn(), async (req, res, next) => {
 
 
 router.post('/get/pieces', guard.ensureLoggedIn(), async (req, res, next) => {
-
+  
   const product = await BranchProduct.findOne({ _productId: req.body._productId, _branchId: req.body.branchId })
                                     .populate('_categoryId').populate('_productId');
   return res.json(product);

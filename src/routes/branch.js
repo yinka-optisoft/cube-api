@@ -51,9 +51,19 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const currentDate = new Date();
 
   const numOfBra = await Branch.count({ _storeId: req.user._storeId });
-  const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
-                                .populate('_packageId').populate('_licenseId');
+  // const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
+  //                               .populate('_packageId').populate('_licenseId');
 
+  const sub = {
+    _storeId: {},
+    _packageId: { category: "Diamond"},
+    _licenseId: { licenseName : "Diamond"},
+    _entryBy: { },
+    activateDate: Date.now(),
+    expiredDate: Date.now(),
+    expired: false,
+    createdAt: Date.now
+  };
 
   if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 

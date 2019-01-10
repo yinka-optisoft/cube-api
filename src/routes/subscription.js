@@ -14,6 +14,7 @@ const router = express.Router();
 router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId');
   const packages = await Package.find();
+  
   res.render('subscription/index', { user, packages, expressFlash: req.flash('info'), layout: 'layouts/user' });
 });
 

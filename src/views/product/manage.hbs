@@ -451,7 +451,8 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Product</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select onchange="getPieces(this.value)" class="form-control" name="productId" id="productId" required>
-      
+                            <option disabled selected>Select a Product</option>
+                            
                         </select>
                     </div>
                     </div>
@@ -620,21 +621,33 @@
             success: function(data) {
                 $('#get_pieces').empty();
                 $('#get_pieces').val(data.pieces);
+                
             },
             error: function(jqXHR, textStatus, errorThrow) {
                 $.alert(errorThrow);
+                console.log(errorThrow)
             }
         });
     }
+    
+    var totalPieces = null;
 
     function countPieces(count){
 
-     var getPieces = $('#get_pieces').val();
-     var pieces =  count;
+        if(totalPieces == null){
+             totalPieces = $('#get_pieces').val();
+        }
+        if(totalPieces <= 0){
+            return;
+        }
+        
+    
+     
+        var pieces =  count;
 
-     var sub = (getPieces - pieces);
+        var sub = (totalPieces - pieces);
 
-     $('#get_pieces').val(sub);
+        $('#get_pieces').val(sub);
     }
     
     $('#editProduct').on('show.bs.modal', function (e) {
