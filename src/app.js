@@ -33,6 +33,7 @@ import sales from './routes/sales';
 import report from './routes/report';
 import promo from './routes/promo';
 import subscription from './routes/subscription';
+import expense from './routes/expense';
 import mobileStore from './routes/mobile/mobileStore';
 import mobileSales from './routes/mobile/mobileSales';
 import adminDashboard from './routes/mobile/adminDashboard';
@@ -105,7 +106,7 @@ app.use('/sales', sales);
 app.use('/report', report);
 app.use('/promo', promo);
 app.use('/subscription', subscription);
-
+app.use('/expense', expense);
 // app.use('/store', store);
 // app.use('/branch', branch);
 app.use('/mobilestore', mobileStore);
