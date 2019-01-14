@@ -134,8 +134,8 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                                   .populate('_packageId').populate('_licenseId');
 
     const user = await Account.findOne({ email: fields.email });
-
-    if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
+    // TODO remove comment for Production
+    if ( sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
       if (numOfUser !== 3) {
 

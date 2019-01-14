@@ -7,7 +7,7 @@ import Expense from '../models/expense';
 import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import BranchProduct from '../models/branchProduct';
-
+var verifyToken = require('../helpers/verifyToken');
 
 
 const router = express.Router();
@@ -35,20 +35,41 @@ router.get('/all', guard.ensureLoggedIn(), async (req, res, next) => {
 
 });
 
-router.get('/add', guard.ensureLoggedIn(), async (req, res, next) => {
-    
-        var category = req.query.category;
-        var amount = parseInt(req.query.amount);
+router.post('/mobile/add', verifyToken, async (req, res, next) => {
+
+        var expense = req.body;
         
-        var expense = await Expense({category, amount});
+        
+        var expense = await Expense({expense});
         expense._createdBy = req.user._id;
         expense._storeId = req.user._storeId;
         expense._branchId = req.user._branchId;
         expense.save((err, exp) => {
             if(err) return next(err);
 
-            res.json(exp)
+            res.status(200).json({status:"ok"});
         })
+        
+    
+  });
+
+  router.post('/add', guard.ensureLoggedIn(), async (req, res, next) => {
+
+    let expense = req.body;
+    console.log(expense);
+    
+        // var category = req.query.category;
+        // var amount = parseInt(req.query.amount);
+        
+        // var expense = await Expense({category, amount});
+        // expense._createdBy = req.user._id;
+        // expense._storeId = req.user._storeId;
+        // expense._branchId = req.user._branchId;
+        // expense.save((err, exp) => {
+        //     if(err) return next(err);
+
+        //     res.json(exp)
+        // })
         
     
   });

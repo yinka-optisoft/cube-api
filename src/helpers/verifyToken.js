@@ -6,7 +6,7 @@ import Account from '../models/account';
 
 function verifyToken(req, res, next) {
   var token = req.headers.authorization;
-  console.log(req.body);
+  // console.log("Log now: ",req.headers);
   if (!token)
     return res.status(403).send({ auth: false, message: 'No token provided.' });
   jwt.verify(token, 'cube7000Activated', async (err, decoded) => {

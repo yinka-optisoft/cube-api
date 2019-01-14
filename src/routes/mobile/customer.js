@@ -1,5 +1,6 @@
 var express = require('express');
 import Customers from '../../models/customer';
+import { runInNewContext } from 'vm';
 var verifyToken = require('../../helpers/verifyToken');
 var multer = require('multer');
 var path = require('path');
@@ -21,6 +22,7 @@ const router = express.Router();
 
 
 router.post('/addCustomer', verifyToken, async (req, res) => {
+  console.log("Customer Added")
   const AddCustomer = await new Customers();
     AddCustomer.name = req.body.customerName;
     AddCustomer.email = req.body.customerEmail;
@@ -36,6 +38,19 @@ router.post('/addCustomer', verifyToken, async (req, res) => {
    }
    return res.json({ success: 'Customer has been added, you can add the customer from drop down list', addCustomer: AddCustomer });
   })
+});
+
+router.get('/allCustomers', verifyToken, async (req, res) => {
+  const customers = await Customers.find({}, function(err, cus){
+      if(err) return next(err);
+      
+      
+
+        console.log(cus);
+        res.json(cus)
+
+
+  });
 })
 module.exports = router;
 // export default router;

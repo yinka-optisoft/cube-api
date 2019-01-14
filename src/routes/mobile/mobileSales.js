@@ -7,6 +7,7 @@ import BranchProduct from '../../models/branchProduct';
 import ProductMoveProcess from '../../models/productTransfer';
 import Sales from '../../models/sales';
 import Role from '../../models/role';
+import Customer from '../../models/customer';
 import Handlebars from 'handlebars';
 import htmlPdf from 'html-pdf';
 import fs from 'fs';
@@ -35,11 +36,43 @@ var upload = multer({ storage: storage });
 
 const router = express.Router();
 
+async function checkCustomerInDb(oldId){
+  
+}
 
-router.post('/addSales', verifyToken, async (req, res) => {
+router.post('/addSales', verifyToken, async (req, res, next) => {
+
+  console.log(req.body)
+
+  // let customerId;
+  // let oldId;
+  // if(typeof req.body.customerId == 'object'){
+  //   console.log("Customer is an object")
+  //   oldId = req.body.customerId.customerId;
+
+  //   // Customer.find({oldId}, async function(err, customer){
+  //   //   if(err){
+  //   //     const newCustomer = await Customer();
+  //   //     newCustomer.name = req.body.customerId.name;
+  //   //     newCustomer.email = req.body.customerId.email;
+  //   //     newCustomer.phone = req.body.customerId.phone;
+  //   //     newCustomer.address = req.body.customerId.address;
+  //   //     newCustomer._storeId = req.body.customerId._storeId;
+  //   //     newCustomer._branchId = req.body.customerId._branchId;
+  //   //     newCustomer._createdBy = req.body.customerId._createdBy;
+  //   //     newCustomer.save(function(err, newCus){
+  //   //       customerId = newCus._id;
+  //   //     })
+  //   //     return;
+  //   //   }
+
+  //   //   customerId = customer._id;
+  //   // })
+  // }
+  
+
   try {
     const invoiceDetails = req.body.invoiceDetails;
-    const customerId = req.body.customerId;
     const productBought = req.body.productBought;
     const date = req.body.date;
     const salesDetails = req.body.salesDetails;
@@ -56,6 +89,8 @@ router.post('/addSales', verifyToken, async (req, res) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
     newSales._customerId = customerId;
+    newSales.customerName = req.body._customerId.customerName;
+    newSales.customerPhone = req.body._customerId.phoneNumber
 
     await newSales.save(function(err) {
       if (err) {
@@ -102,12 +137,13 @@ router.get('/fetchSales', verifyToken, async (req, res) => {
   let pagiSales;
   const page = parseInt(req.headers.page);
   const total = parseInt(req.headers.total);
-  // const allSales = await Sales.find({ _storeId: req.user._storeId, _branchId: req.user._branchId })
+  // const allSales = await Sales.fxnd({ _storeId: req.user._storeId, _branchId: req.user._branchId })
   //   .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 }); ;
-
+  console.log("hey");
   pagiSales = await Sales.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
                                    { offset: page, limit: 10, populate: ['_branchId', '_userId', '_salesBy', '_productId'] });
 
+  console.log("aFTER")
   // console.log(req.headers.page);
 
   // if (total > pagiSales.total && page == parseInt(pagiSales.page)) {
@@ -358,23 +394,36 @@ router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
 
 
 router.get('/showreceipt/:salesId', async (req, res, next) => {
-
+              
+  const userId = req.userId;
+  const findUser = Account.findOne({ _id: userId });
   const saleId = req.params.salesId;
-  // const userId = req.params.userId;
-  // const findUser = Account.findOne({ _id: userId });
-  const sale = await Sales.findById(saleId)
-                              .populate('_customerId').populate('_productId').populate('_salesBy');
+  let sale;
+  console.log(saleId)
+  try{
+    sale = await Sales.findById(saleId)
+                              .populate('_productId').populate('_salesBy');
+  }
+  catch(err){
+    console.log("Error getting sale")
+  }
+  
   const store = await Store.findOne({ _id: sale._storeId });
+ 
+
 
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
     salesObj.push(sale._productId[i].productName);
   }
 
+
+
   const html = fs.readFile(path.join(__dirname, '..', '..', 'views', 'pdf', 'invoice.html'),
                            { encoding: 'utf8' },
                            (err, data) => {
                              if (!err) {
+                              
                                Sales.findById(
                                  saleId
                                ).populate('_customerId').populate('_productId').populate('_salesBy')
@@ -388,30 +437,45 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
 
                                   });
 
-                                  html = html.replace('storelogo',
-                                                      path.join('file://',
-                                                                __dirname, '..',
-                                                                'public',
-                                                                'images',
-                                                                'store',
-                                                                store.logo
-                                                      ));
+                                  
+                                  
+                                  try{
+                                    // html = html.replace('storelogo',
+                                    //                   path.join('file://',
+                                    //                             __dirname, '..',
+                                    //                             'public',
+                                    //                             'images',
+                                    //                             'store',
+                                    //                             store.logo
+                                    //                   ));
+                                  }
+                                  catch(err){
+                                    console.log("There was an error: ", err)
+                                   
+                                  }
+                                  
+
+                                                     
 
                                   htmlPdf.create(html, {
                                     format: 'A4',
                                     orientation: 'portrait',
                                     border: '10mm'
-                                  })
-                                          .toStream((err, stream) => {
-                                            if (!err) {
-                                              res.setHeader('Content-type', 'application/pdf');
-                                              stream.pipe(res);
-                                            }
-                                          });
+                                  }).toStream((err, stream) => {
+                                      if (!err) {
+                                        res.setHeader('Content-type', 'application/pdf');
+                                        stream.pipe(res);
+                                      }
+                                    });
+
+                                    console.log("Yay!!!")
+                                   
+                                    
                                 }
                               });
                              }
                            });
+                           
 
 });
 
@@ -495,14 +559,35 @@ router.post('/blockUser', verifyToken, async (req, res) => {
   });
 });
 
+async function createNewCustomer(oldCustomer, callback){
+  let newCustomer = await Customer.find({email: oldCustomer.email});
+  if(!newCustomer){
+    newCustomer = await new Customer();
+    newCustomer.name = oldCustomer.name;
+    newCustomer.email = oldCustomer.email;
+    newCustomer.phone = oldCustomer.phone;
+    newCustomer._storeId = oldCustomer._storeId;
+    newCustomer._branchId = oldCustomer._branchId;
+    newCustomer._createdBy = oldCustomer._createdBy;
+    newCustomer.createdAt = oldCustomer.createdAt;
+    newCustomer.save((err, newCus ) => {
+      if(err) console.log(err);
+      if(newCus) callback(newCus);
+    });
+  }
+  else{
+    callback(newCustomer);
+  }
+}
+
 router.post('/submitPending', verifyToken, async (req, res) => {
-  console.log(req.body);
+  console.log(req.body.pendingSale[0]._customerId);
+ 
   //var task = Fawn.Task();
   const details = req.body.pendingSale;
   const submittedIds = [];
   // const enterEmpty = await new Sales();
   // await enterEmpty.save();
-
 
   const newSales = await new Sales();
 
@@ -525,6 +610,12 @@ router.post('/submitPending', verifyToken, async (req, res) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
     newSales.offlineId = details[i]._id;
+    newSales.customerName = details[i]._customerId.name
+    newSales.customerPhone = details[i]._customerId.phone;
+    createNewCustomer(details[i]._customerId, function(newCustomer){
+      newSales._customerId = newCustomer._id;
+    });
+
     submittedIds.push(details[i]._id);
     // fawnSale._customerId = customerId;
     for (let k = 0; k < details[i]._productId.length; k++) {
@@ -547,14 +638,16 @@ router.post('/submitPending', verifyToken, async (req, res) => {
         }
       });
     }
-
+      
+    
     await newSales.save(function(err) {
-      if (err) {
-
-      }
-    });
+        if (err) {
+          console.log(err);
+        }
+      });
+    
   }
-
+  
   return res.json({ head: 'success', data:  submittedIds });
 });
 export default router;

@@ -104,7 +104,7 @@ router.post('/login', function(req, res, next) {
     if (!user)
       return res.json({ 'error': 'Invalid login two' });
     req.logIn(user, function(err) {
-      if (err) {
+      if (err) { 
         console.log(err);
         return res.json({ 'error': 'An error occured' });
       }

@@ -9,6 +9,8 @@ const Sale = new Schema({
   _salesBy: { type: Schema.Types.ObjectId, ref: 'accounts' },
   _customerId: { type: Schema.Types.ObjectId, ref: 'customers' },
   invoiceDate: Date,
+  customerName: String,
+  customerPhone: String,
   invoiceNumber: String,
   waybillNumber: String,
   amountDue: Number,
