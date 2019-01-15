@@ -35,15 +35,38 @@ router.get('/all', guard.ensureLoggedIn(), async (req, res, next) => {
 
 });
 
+router.get('/mobile/all', verifyToken, async (req, res, next) => {
+    if(req.user.roleId == 'admin'){
+        Expense.find({_storeId: req.user._storeId}, function(err, docs){
+            if(err){
+                return next(err);
+            }
+    
+            res.json(docs)
+        }).populate('_branchId');
+    }
+    else{
+        const storeId = req.user._storeId, userId = req.user._id, branchId = req.user._branchId;
+        Expense.find({_storeId: storeId, _createdBy: userId, _branchId: branchId}, function(err, docs){
+            if(err){
+                return next(err);
+            }
+    
+            res.json(docs)
+        }).populate('_branchId');
+    }
+
+});
+
 router.post('/mobile/add', verifyToken, async (req, res, next) => {
 
-        var expense = req.body;
-        
-        
-        var expense = await Expense({expense});
+        var expense = await Expense();
         expense._createdBy = req.user._id;
         expense._storeId = req.user._storeId;
         expense._branchId = req.user._branchId;
+        expense.amount = req.body.amount;
+        expense.category = req.body.category;
+        expense.description = req.body.description;
         expense.save((err, exp) => {
             if(err) return next(err);
 
