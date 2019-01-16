@@ -42,8 +42,6 @@ async function checkCustomerInDb(oldId){
 
 router.post('/addSales', verifyToken, async (req, res, next) => {
 
-  console.log(req.body)
-  return res.status(500).end();
 
   // let customerId;
   // let oldId;
