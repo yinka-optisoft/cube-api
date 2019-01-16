@@ -43,6 +43,7 @@ async function checkCustomerInDb(oldId){
 router.post('/addSales', verifyToken, async (req, res, next) => {
 
   console.log(req.body)
+  return res.status(500).end();
 
   // let customerId;
   // let oldId;
@@ -88,9 +89,8 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales._salesBy = req.user._id;
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
-    newSales._customerId = customerId;
-    newSales.customerName = req.body._customerId.customerName;
-    newSales.customerPhone = req.body._customerId.phoneNumber
+    newSales.customerName = req.body.customerId.name;
+    newSales.customerPhone = req.body.customerId.phone;
 
     await newSales.save(function(err) {
       if (err) {
@@ -130,6 +130,8 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
 
   } catch (e) {
     console.log(e);
+   
+    res.status(500).end();
   }
 });
 
