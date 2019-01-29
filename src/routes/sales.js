@@ -127,8 +127,11 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   const invoiceDate = req.body.invoiceDate;
   const invoiceNumber = req.body.invoiceNumber;
   const waybillNumber = req.body.waybillNumber;
-  // const customerId = req.body.customerId;
+  const customerId = req.body.customerId;
 
+
+  
+  
   var errors = req.validationErrors();
 
 
@@ -144,11 +147,13 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   console.log(errors);
 
   if (errors) {
-    req.session.errors = errors;
+    // req.session.errors = errors;
+    req.flash('info', 'Error');
     res.redirect('/sales/create/sales');
   } else {
 
     const sale = new Sales();
+    const customer = await Customer.findById(customerId );
     sale._storeId = req.user._storeId;
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
@@ -163,7 +168,9 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale.balanceTransaction = req.body.balanceTransaction;
     sale.discount = req.body.discount;
     sale.paidBy = req.body.paidBy;
-
+    sale.customerName = customer.name;
+    sale.customerPhone = customer.phone;
+    console.log(customer)
     for (let i = 0; i < req.body.salesArray.length; i++) {
       sale._productId.push(req.body.salesArray[i]._productId);
       sale.piecesSold.push(req.body.salesArray[i].piecesSold);

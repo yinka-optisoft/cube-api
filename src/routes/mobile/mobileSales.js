@@ -84,9 +84,11 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales.balanceTransaction = salesDetails.balance;
     newSales.amountDue = salesDetails.amountDue;
     newSales.amountPaid = salesDetails.amountPaid;
+    newSales.totalPrice = salesDetails.sumAmount;
     newSales._salesBy = req.user._id;
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
+   
     newSales.customerName = req.body.customerId.name;
     newSales.customerPhone = req.body.customerId.phone;
 
