@@ -134,10 +134,10 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                                   .populate('_packageId').populate('_licenseId');
 
     const user = await Account.findOne({ email: fields.email });
-    // TODO remove comment for Production
+
     if ( sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
-      if (numOfUser !== 3) {
+      if (numOfUser < 3) {
 
         if (user) {
 
@@ -174,7 +174,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
             fs.unlinkSync(passport.path);
             member.passport = name;
           }
-          // console.log(member);
+
           Account.register(new Account(member), password,
                            async (err, account) => {
 
@@ -209,7 +209,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
     } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
 
-      if (numOfUser !== 10) {
+      if (numOfUser < 10) {
 
         if (user) {
 

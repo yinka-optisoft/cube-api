@@ -51,23 +51,12 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const currentDate = new Date();
 
   const numOfBra = await Branch.count({ _storeId: req.user._storeId });
-  // const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
-  //                               .populate('_packageId').populate('_licenseId');
-
-  const sub = {
-    _storeId: {},
-    _packageId: { category: "Diamond"},
-    _licenseId: { licenseName : "Diamond"},
-    _entryBy: { },
-    activateDate: Date.now(),
-    expiredDate: Date.now(),
-    expired: false,
-    createdAt: Date.now
-  };
+  const sub = await Subscription.findOne({ _storeId: req.user._storeId, expiredDate: { $gte: currentDate } })
+                                .populate('_packageId').populate('_licenseId');
 
   if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
-    if (numOfBra !== 1) {
+    if (numOfBra < 0) {
 
       const newBranch = await Branch();
       newBranch._storeId = req.session._storeId;
@@ -95,7 +84,7 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
 
   } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
 
-    if (numOfBra !== 3) {
+    if (numOfBra < 3) {
 
       const newBranch = await Branch();
       newBranch._storeId = req.session._storeId;
