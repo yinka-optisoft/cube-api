@@ -17,7 +17,7 @@ const Account = new Schema({
   username: String,
   password: String,
   email: { type: String, index: { unique: true } },
-  phone: Number,
+  phone: String,
   address: String,
   gender: String,
   passport: String,

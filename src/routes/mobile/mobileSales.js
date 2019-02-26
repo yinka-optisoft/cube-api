@@ -625,10 +625,15 @@ router.post('/submitPending', verifyToken, async (req, res) => {
     newSales.customerPhone = details[i]._customerId.phone;
      
     }
-    
-    createNewCustomer(details[i]._customerId, function(newCustomer){
-      newSales._customerId = newCustomer._id;
-    });
+
+    if(details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === ''){     
+      console.log("No customer to create")
+    } else {
+      createNewCustomer(details[i]._customerId, function(newCustomer){
+        newSales._customerId = newCustomer._id;
+      });
+    }
+   
 
     submittedIds.push(details[i]._id);
     // fawnSale._customerId = customerId;
