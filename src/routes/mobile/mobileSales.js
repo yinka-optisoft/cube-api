@@ -89,9 +89,9 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
    
-    if(req.body.customerId === null || req.body._customerId === undefined || req.body._customerId === ''){
-      newSales.customerName = "Anonymous"
-      newSales.customerPhone = "08100000000"
+    if(req.body.customerId === null || req.body.customerId === undefined || req.body.customerId === ''){
+      newSales.customerName = "Anonymous";
+      newSales.customerPhone = "08100000000";
     } else {
       newSales.customerName = req.body.customerId.name;
       newSales.customerPhone = req.body.customerId.phone;
