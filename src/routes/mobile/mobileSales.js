@@ -612,8 +612,20 @@ router.post('/submitPending', verifyToken, async (req, res) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
     newSales.offlineId = details[i]._id;
-    newSales.customerName = details[i]._customerId.name
+    if(details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === ''){
+      // var anonymousCustomer = await Account.findById(Types.ObjectId('5b87a5f019e03f50077a671b'))
+      // console.log("Anonymous Customer:  ", anonymousCustomer);
+      console.log("CustomerId is Null or undefined");
+      newSales.customerName = "Anonymous"
+    newSales.customerPhone = "08100000000"
+      
+    } else {
+      console.log("CustomerId is not Null or undefined");
+      newSales.customerName = details[i]._customerId.name
     newSales.customerPhone = details[i]._customerId.phone;
+     
+    }
+    
     createNewCustomer(details[i]._customerId, function(newCustomer){
       newSales._customerId = newCustomer._id;
     });
