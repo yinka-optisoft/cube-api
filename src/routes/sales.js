@@ -247,9 +247,10 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                              if (!err) {
                                Sales.findById(
                                  req.params.saleId
-                               ).populate('_customerId').populate('_productId')
+                               ).populate('_customerId').populate('_productId').populate('_salesBy')
                             .exec((err, sales) => {
                               if (!err) {
+                                console.log(sales,'Sales')
                                 let html = Handlebars.compile(data)({
                                   sales,
                                   sale,

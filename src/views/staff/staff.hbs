@@ -421,17 +421,15 @@
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                           <select class="form-control" name="state" id="state" required>
-                            <option value="">Select State</option>
-                            <option value="Lagos State">Lagos State</option>
-                            <option value="Kwara State">Kwara State</option>
+                            
+                            
                         </select>
                       </div>
 
                       <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                           <select class="form-control" name="lga" id="lga" required>
-                            <option>Select L.G.A</option>
-                            <option value="ikeja">Ikeja</option>
-                            <option value="ilorin">Ilorin</option>
+                           
+                            
                         </select>
                       </div>
 
@@ -547,6 +545,8 @@
     <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="/assets/js/states.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
@@ -715,6 +715,43 @@ $(document).ready(function() {
             console.log(data);
         });
     });*/
+
+</script>
+
+<script>
+    $(function(){
+        var stateElement = $('#state');
+        var lgaElement = $('#lga');
+        stateElement.html('');
+        stateElement.append('<option value="">Select State</option>')
+        allStates.forEach(function({state}){
+            stateElement.append('<option value="' + state.name + '">'+ state.name + '</option>')
+        })
+        
+        var defaultLocals = allStates[0].state.locals;
+        lgaElement.append('<option value="">Select L.G.A</option>')
+        defaultLocals.forEach(function(local){
+            lgaElement.append('<option value="' + local.name + '">'+ local.name + '</option>')
+        })
+
+        stateElement.change(function(e){
+            var stateName = $(this).val();
+            let locals;
+            allStates.forEach(({state}) => {
+                if(state.name == stateName){
+                    locals = state.locals;
+                }
+                
+            })
+        lgaElement.html('')
+        lgaElement.append('<option value="">Select L.G.A</option>')
+            locals.forEach(function(lga){
+                lgaElement.append('<option value="' + lga.name + '">'+ lga.name + '</option>')
+            })
+            console.log(locals)
+        })
+    })
+    
 
 </script>
 

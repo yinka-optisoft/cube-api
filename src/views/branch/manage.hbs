@@ -179,15 +179,16 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <select class="form-control" id="state" name="state" required>
-                            <option>Select State</option>
-                            <option value="Lagos State">Lagos State</option>
+                            
                         </select>
                     </div>
                     </div>
                     <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">L.G.A</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="city" id="city" class="form-control" placeholder="City" required>
+                         <select class="form-control" name="lga" id="lga"  required>
+                            
+                        </select>
                     </div>
                     </div>
                     <div class="ln_solid"></div>
@@ -262,16 +263,17 @@
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12">State</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <select class="form-control" id="state" name="state" required>
-                            <option>Select State</option>
-                            <option value="Lagos State">Lagos State</option>
+                        <select class="form-control" id="ustate" name="state" required>
+                            
                         </select>
                     </div>
                     </div>
                     <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">City</label>
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">L.G.A</label>
                     <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input type="text" name="city" id="city" class="form-control" placeholder="City" required>
+                         <select class="form-control" name="lga" id="ulga"  required>
+                            
+                        </select>
                     </div>
                     </div>
                     <input type="hidden" name="_branchId" id="_branchId" value=""/>
@@ -303,6 +305,7 @@
     <script src="/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
     <script src="/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+     <script src="/assets/js/states.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
@@ -382,5 +385,49 @@
     }
 
 </script>
+
+<script>
+
+    function handleStates(state, lga){
+        
+        var stateElement = $(state);
+        var lgaElement = $(lga);
+        stateElement.html('');
+        stateElement.append('<option value="">Select State</option>')
+        allStates.forEach(function({state}){
+            stateElement.append('<option value="' + state.name + '">'+ state.name + '</option>')
+        })
+        
+        var defaultLocals = allStates[0].state.locals;
+        lgaElement.append('<option value="">Select L.G.A</option>')
+        defaultLocals.forEach(function(local){
+            lgaElement.append('<option value="' + local.name + '">'+ local.name + '</option>')
+        })
+
+        stateElement.change(function(e){
+            var stateName = $(this).val();
+            let locals;
+            allStates.forEach(({state}) => {
+                if(state.name == stateName){
+                    locals = state.locals;
+                }
+                
+            })
+        lgaElement.html('')
+        lgaElement.append('<option value="">Select L.G.A</option>')
+            locals.forEach(function(lga){
+                lgaElement.append('<option value="' + lga.name + '">'+ lga.name + '</option>')
+            })
+            console.log(locals)
+        })
+    }
+    $(function(){
+        handleStates('#state', '#lga')
+        handleStates('#ustate', '#ulga')
+    })
+    
+
+</script>
+
 
 {{/extend}}

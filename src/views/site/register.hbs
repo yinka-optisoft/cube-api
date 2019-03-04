@@ -126,13 +126,14 @@
                                 <div class="form-group">
                                     <label>Select State: <span>*</span></label>
                                     <select name="state" class="form-control required" id="businessState">
-                                        <option value="Lagos state">Lagos state</option>
-                                        <option value="Kwara state">Kwara state</option>
+                                        
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>City: <span>*</span></label>
-                                    <input type="text" name="city" id="businessCity" placeholder="City" class="form-control required">
+                                    <label>L.G.A: <span>*</span></label>
+                                    <select name="lga" class="form-control required" placeholder="L.G.A" id="businessLga">
+                                        
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Website: </label>
@@ -275,7 +276,7 @@
                                 <h4>Success Account: <span>Step 2 - 2</span></h4>
                                 <div style="clear:both;"></div>
                                     <div class="success">
-                                            <h3>Sing Up Success</h3>
+                                            <h3>Sign Up Success</h3>
                                             <div class="success-icon"><i class="fa fa-check" aria-hidden="true"></i></div>					  
                                     </div>
                                 <div class="form-wizard-buttons">
@@ -304,6 +305,8 @@
     
     <!-- Plugin Custom JS -->
     <script src="/assets1/custom/js/form-wizard.js"></script>
+        <script src="/assets/js/states.js"></script>
+
 
     <script>
         /*$('#storeForm').submit(function(e){
@@ -331,4 +334,41 @@
             });
         });*/
     </script>
+    <script>
+    $(function(){
+        var stateElement = $('#businessState');
+        var lgaElement = $('#businessLga');
+        stateElement.html('');
+        stateElement.append('<option value="">Select State</option>')
+        allStates.forEach(function({state}){
+            stateElement.append('<option value="' + state.name + '">'+ state.name + '</option>')
+        })
+        
+        var defaultLocals = allStates[0].state.locals;
+        lgaElement.append('<option value="">Select L.G.A</option>')
+        defaultLocals.forEach(function(local){
+            lgaElement.append('<option value="' + local.name + '">'+ local.name + '</option>')
+        })
+
+        stateElement.change(function(e){
+            var stateName = $(this).val();
+            let locals;
+            allStates.forEach(({state}) => {
+                if(state.name == stateName){
+                    locals = state.locals;
+                }
+                
+            })
+        lgaElement.html('')
+        lgaElement.append('<option value="">Select L.G.A</option>')
+            locals.forEach(function(lga){
+                lgaElement.append('<option value="' + lga.name + '">'+ lga.name + '</option>')
+            })
+            console.log(locals)
+        })
+    })
+    
+
+</script>
+
 {{/extend}}
