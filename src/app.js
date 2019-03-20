@@ -126,8 +126,8 @@ passport.deserializeUser(Account.deserializeUser());
 
 try {
 
-//mongoose.connect('mongodb://localhost:27017/cube');
-mongoose.connect('mongodb://cube_master:JustSomeCleanup@cube700-shard-00-00-52rkf.mongodb.net:27017,cube700-shard-00-01-52rkf.mongodb.net:27017,cube700-shard-00-02-52rkf.mongodb.net:27017/test?ssl=true&replicaSet=cube700-shard-0&authSource=admin');
+// mongoose.connect('mongodb://localhost:27017/cube');
+  mongoose.connect('mongodb://optisoft:Xbh42698bJrMeaf@cluster0-shard-00-00-ddq6l.mongodb.net:27017,cluster0-shard-00-01-ddq6l.mongodb.net:27017,cluster0-shard-00-02-ddq6l.mongodb.net:27017/cube700?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true');
 
 } catch (e) {
   throw e;
