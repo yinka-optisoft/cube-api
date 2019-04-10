@@ -170,7 +170,6 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
     sale.paidBy = req.body.paidBy;
     sale.customerName = customer.name;
     sale.customerPhone = customer.phone;
-    console.log(customer)
     for (let i = 0; i < req.body.salesArray.length; i++) {
       sale._productId.push(req.body.salesArray[i]._productId);
       sale.piecesSold.push(req.body.salesArray[i].piecesSold);

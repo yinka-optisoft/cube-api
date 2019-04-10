@@ -36,8 +36,8 @@ var upload = multer({ storage: storage });
 
 const router = express.Router();
 
-async function checkCustomerInDb(oldId){
-  
+async function checkCustomerInDb(oldId) {
+
 }
 
 router.post('/addSales', verifyToken, async (req, res, next) => {
@@ -68,7 +68,7 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
   //   //   customerId = customer._id;
   //   // })
   // }
-  
+
 
   try {
     const invoiceDetails = req.body.invoiceDetails;
@@ -88,23 +88,22 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales._salesBy = req.user._id;
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
-   
-    if(req.body.customerId === null || req.body.customerId === undefined || req.body.customerId === ''){
-      newSales.customerName = "Anonymous";
-      newSales.customerPhone = "08100000000";
+
+    if (req.body.customerId === null || req.body.customerId === undefined || req.body.customerId === '') {
+      newSales.customerName = 'Anonymous';
+      newSales.customerPhone = '08100000000';
     } else {
       newSales.customerName = req.body.customerId.name;
       newSales.customerPhone = req.body.customerId.phone;
     }
-    
+
 
     await newSales.save(function(err) {
       if (err) {
         console.log(err);
         return res.json({ error: 'An error occured, pease try again later' });
       }
-      const findId = Sales.findOne({ _id: newSales._id }, async (err, doc) => {
-        console.log(productBought.length);
+      const findId = Sales.findById(newSales._id, async (err, doc) => {
 
         for (let i = 0; i < productBought.length; i++) {
 
@@ -115,7 +114,7 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
           // console.log(productBought[i].piecesDetails.piecesSold);
           doc.unitPrice.push(productBought[i].piecesDetails.unitPrice);
           // console.log(productBought[i].piecesDetails.unitPrice)
-          doc.totalPrice.push(productBought[i].piecesDetails.totalPrice);
+          // doc.totalPrice.push(productBought[i].piecesDetails.totalPrice);
           // console.log(productBought[i].piecesDetails.priceSold);
           const deductProduct = await BranchProduct.findOne({ _productId: productBought[i]._productDetail._productId._id, _branchId: req.user._branchId });
           deductProduct.pieces -= productBought[i].piecesDetails.piecesSold;
@@ -136,7 +135,7 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
 
   } catch (e) {
     console.log(e);
-   
+
     res.status(500).end();
   }
 });
@@ -147,11 +146,11 @@ router.get('/fetchSales', verifyToken, async (req, res) => {
   const total = parseInt(req.headers.total);
   // const allSales = await Sales.fxnd({ _storeId: req.user._storeId, _branchId: req.user._branchId })
   //   .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 }); ;
-  console.log("hey");
+  console.log('hey');
   pagiSales = await Sales.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
                                    { offset: page, limit: 10, populate: ['_branchId', '_userId', '_salesBy', '_productId'] });
 
-  console.log("aFTER")
+  console.log('aFTER');
   // console.log(req.headers.page);
 
   // if (total > pagiSales.total && page == parseInt(pagiSales.page)) {
@@ -402,42 +401,44 @@ router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
 
 
 router.get('/showreceipt/:salesId', async (req, res, next) => {
-              
-  const userId = req.userId;
-  const findUser = Account.findOne({ _id: userId });
-  const saleId = req.params.salesId;
+  const saleId = await Sales.findById(req.params.salesId);
+  const findUser = Account.findById(saleId._salesBy);
   let sale;
-  console.log(saleId)
-  try{
+  try {
     sale = await Sales.findById(saleId)
                               .populate('_productId').populate('_salesBy');
+  } catch (err) {
+    console.log('Error getting sale');
   }
-  catch(err){
-    console.log("Error getting sale")
-  }
-  
-  const store = await Store.findOne({ _id: sale._storeId });
- 
 
+  const store = await Store.findById(sale._storeId);
+
+  // const salesObj = [];
+  // for (let i = 0; i < sale._productId.length; i++) {
+  //   salesObj.push(sale._productId[i].productName);
+  // }
 
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
-    salesObj.push(sale._productId[i].productName);
+    const productId = sale._productId[i];
+    const qty = sale.piecesSold[i];
+    const unitPrice = sale.unitPrice[i];
+    const subTotal = (unitPrice * qty);
+    const findProduct = await Product.findOne({ _id: productId });
+    salesObj.push({ productName: findProduct.productName, qty: qty, unitPrice: unitPrice, subTotal: subTotal });
   }
-
-
 
   const html = fs.readFile(path.join(__dirname, '..', '..', 'views', 'pdf', 'invoice.html'),
                            { encoding: 'utf8' },
                            (err, data) => {
                              if (!err) {
-                              
+
                                Sales.findById(
                                  saleId
                                ).populate('_customerId').populate('_productId').populate('_salesBy')
                               .exec((err, sales) => {
                                 if (!err) {
-                                  let html = Handlebars.compile(data)({
+                                  const html = Handlebars.compile(data)({
                                     sales,
                                     sale,
                                     store,
@@ -445,9 +446,8 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
 
                                   });
 
-                                  
-                                  
-                                  try{
+
+                                  try {
                                     // html = html.replace('storelogo',
                                     //                   path.join('file://',
                                     //                             __dirname, '..',
@@ -456,34 +456,33 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
                                     //                             'store',
                                     //                             store.logo
                                     //                   ));
-                                  }
-                                  catch(err){
-                                    console.log("There was an error: ", err)
-                                   
-                                  }
-                                  
+                                  } catch (err) {
+                                    console.log('There was an error: ', err);
 
-                                                     
+                                  }
+
+
+
 
                                   htmlPdf.create(html, {
                                     format: 'A4',
                                     orientation: 'portrait',
                                     border: '10mm'
                                   }).toStream((err, stream) => {
-                                      if (!err) {
-                                        res.setHeader('Content-type', 'application/pdf');
-                                        stream.pipe(res);
-                                      }
-                                    });
+                                    if (!err) {
+                                      res.setHeader('Content-type', 'application/pdf');
+                                      stream.pipe(res);
+                                    }
+                                  });
 
-                                    console.log("Yay!!!")
-                                   
-                                    
+                                  console.log('Yay!!!');
+
+
                                 }
                               });
                              }
                            });
-                           
+
 
 });
 
@@ -567,9 +566,9 @@ router.post('/blockUser', verifyToken, async (req, res) => {
   });
 });
 
-async function createNewCustomer(oldCustomer, callback){
-  let newCustomer = await Customer.find({email: oldCustomer.email});
-  if(!newCustomer){
+async function createNewCustomer(oldCustomer, callback) {
+  let newCustomer = await Customer.find({ email: oldCustomer.email });
+  if (!newCustomer) {
     newCustomer = await new Customer();
     newCustomer.name = oldCustomer.name;
     newCustomer.email = oldCustomer.email;
@@ -578,20 +577,19 @@ async function createNewCustomer(oldCustomer, callback){
     newCustomer._branchId = oldCustomer._branchId;
     newCustomer._createdBy = oldCustomer._createdBy;
     newCustomer.createdAt = oldCustomer.createdAt;
-    newCustomer.save((err, newCus ) => {
-      if(err) console.log(err);
-      if(newCus) callback(newCus);
+    newCustomer.save((err, newCus) => {
+      if (err) console.log(err);
+      if (newCus) callback(newCus);
     });
-  }
-  else{
+  } else {
     callback(newCustomer);
   }
 }
 
 router.post('/submitPending', verifyToken, async (req, res) => {
   console.log(req.body.pendingSale[0]._customerId);
- 
-  //var task = Fawn.Task();
+
+  // var task = Fawn.Task();
   const details = req.body.pendingSale;
   const submittedIds = [];
   // const enterEmpty = await new Sales();
@@ -602,7 +600,7 @@ router.post('/submitPending', verifyToken, async (req, res) => {
 
   for (let i = 0; i < details.length; i++) {
     const checkOfflineId = await Sales.findOne({ offlineId: details[i]._id, _branchId: req.user._branchId, _storeId: req.user._storeId,
-    _salesBy: req.user._id });
+                                                 _salesBy: req.user._id });
     if (checkOfflineId) {
       submittedIds.push(details[i]._id);
       continue;
@@ -618,28 +616,28 @@ router.post('/submitPending', verifyToken, async (req, res) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
     newSales.offlineId = details[i]._id;
-    if(details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === ''){
+    if (details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === '') {
       // var anonymousCustomer = await Account.findById(Types.ObjectId('5b87a5f019e03f50077a671b'))
       // console.log("Anonymous Customer:  ", anonymousCustomer);
-      console.log("CustomerId is Null or undefined");
-      newSales.customerName = "Anonymous"
-    newSales.customerPhone = "08100000000"
-      
+      console.log('CustomerId is Null or undefined');
+      newSales.customerName = 'Anonymous';
+      newSales.customerPhone = '08100000000';
+
     } else {
-      console.log("CustomerId is not Null or undefined");
-      newSales.customerName = details[i]._customerId.name
-    newSales.customerPhone = details[i]._customerId.phone;
-     
+      console.log('CustomerId is not Null or undefined');
+      newSales.customerName = details[i]._customerId.name;
+      newSales.customerPhone = details[i]._customerId.phone;
+
     }
 
-    if(details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === ''){     
-      console.log("No customer to create")
+    if (details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === '') {
+      console.log('No customer to create');
     } else {
-      createNewCustomer(details[i]._customerId, function(newCustomer){
+      createNewCustomer(details[i]._customerId, function(newCustomer) {
         newSales._customerId = newCustomer._id;
       });
     }
-   
+
 
     submittedIds.push(details[i]._id);
     // fawnSale._customerId = customerId;
@@ -663,16 +661,16 @@ router.post('/submitPending', verifyToken, async (req, res) => {
         }
       });
     }
-      
-    
+
+
     await newSales.save(function(err) {
-        if (err) {
-          console.log(err);
-        }
-      });
-    
+      if (err) {
+        console.log(err);
+      }
+    });
+
   }
-  
+
   return res.json({ head: 'success', data:  submittedIds });
 });
 export default router;
