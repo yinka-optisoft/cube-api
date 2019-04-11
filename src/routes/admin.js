@@ -135,7 +135,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
 
     const user = await Account.findOne({ email: fields.email });
 
-    if ( sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
+    if (sub._licenseId.licenseName === 'Value' || sub._packageId.category === 'Value') {
 
       if (numOfUser < 3) {
 
@@ -179,7 +179,7 @@ router.post('/new-member', guard.ensureLoggedIn(), async (req, res, next) => {
                            async (err, account) => {
 
                              // return false;
-                             const tokenG = await Account.findById(account._id);
+                             const tokenG = await Account.findOne({ _id: account._id, _storeId: account._storeId });
                              //  console.log(tokenG);
                              tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
                              await tokenG.save(function(err) {
