@@ -76,6 +76,10 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     const date = req.body.date;
     const salesDetails = req.body.salesDetails;
 
+    // TODO: i need to work on subtotal product
+    // console.log(productBought, 'productBought');
+    // console.log(salesDetails, 'salesDetails');
+
     const newSales = await new Sales();
     newSales.invoiceNumber = invoiceDetails.invoiceNumber;
     newSales.waybillNumber = invoiceDetails.wayBillNumber;
@@ -274,7 +278,7 @@ router.get('/fetchUser', verifyToken, async (req, res) => {
   const storeUsers = await Account.find({
     $and: [
       { $or: [{ _storeId: req.user._storeId }] },
-      { $or: [{ _id: { $ne: req.user._id } } ] }
+      { $or: [{ _id: { $ne: req.user._id } }] }
     ]
   }).populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
@@ -337,7 +341,7 @@ router.post('/moveProductToBranch', verifyToken, async (req, res) => {
       _fromId: findMover._branchId,
       _toId: newBranch,
       _productId: findProduct._id,
-      pieces:  piecesAdded,
+      pieces: piecesAdded,
     });
     findMover.pieces = parseFloat(findMover.pieces) - piecesAdded;
     findMover.updatedAt = new Date();
@@ -390,7 +394,7 @@ router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
   findUser.passport = imageName;
   console.log(imageName);
 
-  await findUser.save(function(err) {
+  await findUser.save((err) => {
     if (err) {
       console.log(err);
     }
@@ -402,22 +406,10 @@ router.post('/edit', verifyToken, upload.single('avatar'), async (req, res) => {
 
 router.get('/showreceipt/:salesId', async (req, res, next) => {
   const saleId = await Sales.findById(req.params.salesId);
-  const findUser = Account.findById(saleId._salesBy);
-  let sale;
-  try {
-    sale = await Sales.findById(saleId)
-                              .populate('_productId').populate('_salesBy');
-  } catch (err) {
-    console.log('Error getting sale');
-  }
-
+  const sale = await Sales.findById(saleId)
+                          .populate('_productId')
+                          .populate('_salesBy');
   const store = await Store.findById(sale._storeId);
-
-  // const salesObj = [];
-  // for (let i = 0; i < sale._productId.length; i++) {
-  //   salesObj.push(sale._productId[i].productName);
-  // }
-
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
     const productId = sale._productId[i];
@@ -434,52 +426,49 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
                              if (!err) {
 
                                Sales.findById(
-                                 saleId
+                                 saleId._id
                                ).populate('_customerId').populate('_productId').populate('_salesBy')
-                              .exec((err, sales) => {
-                                if (!err) {
-                                  const html = Handlebars.compile(data)({
-                                    sales,
-                                    sale,
-                                    store,
-                                    salesObj,
-
-                                  });
-
-
-                                  try {
-                                    // html = html.replace('storelogo',
-                                    //                   path.join('file://',
-                                    //                             __dirname, '..',
-                                    //                             'public',
-                                    //                             'images',
-                                    //                             'store',
-                                    //                             store.logo
-                                    //                   ));
-                                  } catch (err) {
-                                    console.log('There was an error: ', err);
-
-                                  }
+          .exec((err, sales) => {
+            if (!err) {
+              const html = Handlebars.compile(data)({
+                sales,
+                sale,
+                store,
+                salesObj,
+              });
 
 
+              try {
+                // html = html.replace('storelogo',
+                //                   path.join('file://',
+                //                             __dirname, '..',
+                //                             'public',
+                //                             'images',
+                //                             'store',
+                //                             store.logo
+                //                   ));
+              } catch (err) {
+                console.log('There was an error: ', err);
+
+              }
 
 
-                                  htmlPdf.create(html, {
-                                    format: 'A4',
-                                    orientation: 'portrait',
-                                    border: '10mm'
-                                  }).toStream((err, stream) => {
-                                    if (!err) {
-                                      res.setHeader('Content-type', 'application/pdf');
-                                      stream.pipe(res);
-                                    }
-                                  });
+              htmlPdf.create(html, {
+                format: 'A4',
+                orientation: 'portrait',
+                border: '10mm'
+              }).toStream((err, stream) => {
+                if (!err) {
+                  res.setHeader('Content-type', 'application/pdf');
+                  stream.pipe(res);
+                }
+              });
 
-                                  console.log('Yay!!!');
+              console.log('Yay!!!');
 
 
-                                }
-                              });
+            }
+          });
                              }
                            });
 
@@ -514,7 +503,7 @@ router.get('/fetchBranchDetails', verifyToken, upload.single('avatar'), async (r
   const todaySales = await Sales.find({
     $and: [
       { $and: [{ _storeId: req.user._storeId }, { _branchId: branchId }] },
-      { $and: [{ createdAt: { $gt: new Date(todaysDate) } } ] }
+      { $and: [{ createdAt: { $gt: new Date(todaysDate) } }] }
     ]
   }).count();
   const sumVal = await Sales.aggregate([
@@ -599,8 +588,10 @@ router.post('/submitPending', verifyToken, async (req, res) => {
 
 
   for (let i = 0; i < details.length; i++) {
-    const checkOfflineId = await Sales.findOne({ offlineId: details[i]._id, _branchId: req.user._branchId, _storeId: req.user._storeId,
-                                                 _salesBy: req.user._id });
+    const checkOfflineId = await Sales.findOne({
+      offlineId: details[i]._id, _branchId: req.user._branchId, _storeId: req.user._storeId,
+      _salesBy: req.user._id
+    });
     if (checkOfflineId) {
       submittedIds.push(details[i]._id);
       continue;
@@ -671,6 +662,6 @@ router.post('/submitPending', verifyToken, async (req, res) => {
 
   }
 
-  return res.json({ head: 'success', data:  submittedIds });
+  return res.json({ head: 'success', data: submittedIds });
 });
 export default router;

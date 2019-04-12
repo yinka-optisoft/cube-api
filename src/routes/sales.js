@@ -128,9 +128,6 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   const invoiceNumber = req.body.invoiceNumber;
   const waybillNumber = req.body.waybillNumber;
   const customerId = req.body.customerId;
-
-
-  
   
   var errors = req.validationErrors();
 
@@ -153,7 +150,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   } else {
 
     const sale = new Sales();
-    const customer = await Customer.findById(customerId );
+    const customer = await Customer.findById(customerId);
     sale._storeId = req.user._storeId;
     sale._branchId = req.user._branchId;
     sale._salesBy = req.user._id;
@@ -222,11 +219,11 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
   const sale = await Sales.findById(req.params.saleId)
                             .populate('_customerId').populate('_productId');
 
-  const fullname = sale._customerId.name;
-  console.log(fullname);
-  const name = fullname.split(' ');
-  const firstname = name[0];
-  const lastname = name[1] ? fullname.substr(fullname.indexOf(' ') + 1) : '';
+  // const fullname = sale._customerId.name;
+  // console.log(fullname);
+  // const name = fullname.split(' ');
+  // const firstname = name[0];
+  // const lastname = name[1] ? fullname.substr(fullname.indexOf(' ') + 1) : '';
 
   // iterate tru product and send it to salesObject
   const salesObj = [];
@@ -249,11 +246,10 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                ).populate('_customerId').populate('_productId').populate('_salesBy')
                             .exec((err, sales) => {
                               if (!err) {
-                                console.log(sales,'Sales')
                                 let html = Handlebars.compile(data)({
                                   sales,
                                   sale,
-                                  firstname,
+                                  // firstname,
                                   store,
                                   salesObj
                                 });
