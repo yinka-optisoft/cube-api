@@ -42,45 +42,38 @@ async function checkCustomerInDb(oldId) {
 
 router.post('/addSales', verifyToken, async (req, res, next) => {
 
-
-  // let customerId;
-  // let oldId;
-  // if(typeof req.body.customerId == 'object'){
-  //   console.log("Customer is an object")
-  //   oldId = req.body.customerId.customerId;
-
-  //   // Customer.find({oldId}, async function(err, customer){
-  //   //   if(err){
-  //   //     const newCustomer = await Customer();
-  //   //     newCustomer.name = req.body.customerId.name;
-  //   //     newCustomer.email = req.body.customerId.email;
-  //   //     newCustomer.phone = req.body.customerId.phone;
-  //   //     newCustomer.address = req.body.customerId.address;
-  //   //     newCustomer._storeId = req.body.customerId._storeId;
-  //   //     newCustomer._branchId = req.body.customerId._branchId;
-  //   //     newCustomer._createdBy = req.body.customerId._createdBy;
-  //   //     newCustomer.save(function(err, newCus){
-  //   //       customerId = newCus._id;
-  //   //     })
-  //   //     return;
-  //   //   }
-
-  //   //   customerId = customer._id;
-  //   // })
-  // }
-
-
   try {
     const invoiceDetails = req.body.invoiceDetails;
     const productBought = req.body.productBought;
     const date = req.body.date;
     const salesDetails = req.body.salesDetails;
+    const customer = req.body.customerId;
 
     // TODO: i need to work on subtotal product
     // console.log(productBought, 'productBought');
     // console.log(salesDetails, 'salesDetails');
 
     const newSales = await new Sales();
+
+    // get customer or create new
+    const getCust = await Customer.findOne({
+      _branchId: req.user._branchId, _storeId: req.user._storeId, phone: customer.phone
+    });
+    if (getCust) {
+      newSales._customerId = getCust._id;
+    } else {
+      const newCust = new Customer();
+      newCust._storeId = req.user._storeId;
+      newCust._branchId = req.user._branchId;
+      newCust._createdBy = req.user._id;
+      newCust.name = customer.name;
+      newCust.phone = customer.phone;
+      newCust.email = customer.email;
+      newCust.address = customer.address;
+      newCust.save();
+      newSales._customerId = newCust._id;
+    }
+
     newSales.invoiceNumber = invoiceDetails.invoiceNumber;
     newSales.waybillNumber = invoiceDetails.wayBillNumber;
     newSales.invoiceDate = date;
@@ -92,15 +85,6 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales._salesBy = req.user._id;
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
-
-    if (req.body.customerId === null || req.body.customerId === undefined || req.body.customerId === '') {
-      newSales.customerName = 'Anonymous';
-      newSales.customerPhone = '08100000000';
-    } else {
-      newSales.customerName = req.body.customerId.name;
-      newSales.customerPhone = req.body.customerId.phone;
-    }
-
 
     await newSales.save(function(err) {
       if (err) {
@@ -408,7 +392,14 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
   const saleId = await Sales.findById(req.params.salesId);
   const sale = await Sales.findById(saleId)
                           .populate('_productId')
+                          .populate('_customerId')
                           .populate('_salesBy');
+
+  const fullname = sale._customerId.name;
+  const name = fullname.split(' ');
+  const firstname = name[0];
+  const lastname = name[1] ? fullname.substr(fullname.indexOf(' ') + 1) : '';
+
   const store = await Store.findById(sale._storeId);
   const salesObj = [];
   for (let i = 0; i < sale._productId.length; i++) {
@@ -433,6 +424,7 @@ router.get('/showreceipt/:salesId', async (req, res, next) => {
               const html = Handlebars.compile(data)({
                 sales,
                 sale,
+                fullname,
                 store,
                 salesObj,
               });
@@ -576,10 +568,8 @@ async function createNewCustomer(oldCustomer, callback) {
 }
 
 router.post('/submitPending', verifyToken, async (req, res) => {
-  console.log(req.body.pendingSale[0]._customerId);
-
   // var task = Fawn.Task();
-  const details = req.body.pendingSale;
+  const details = req.body.findSale;
   const submittedIds = [];
   // const enterEmpty = await new Sales();
   // await enterEmpty.save();
@@ -596,6 +586,26 @@ router.post('/submitPending', verifyToken, async (req, res) => {
       submittedIds.push(details[i]._id);
       continue;
     }
+
+    // check customer if exist
+    const getCust = await Customer.findOne({
+      _branchId: req.user._branchId, _storeId: req.user._storeId, phone: details[i]._customerId.phone
+    });
+    if (getCust) {
+      newSales._customerId = getCust._id;
+    } else {
+      const newCust = new Customer();
+      newCust._storeId = req.user._storeId;
+      newCust._branchId = req.user._branchId;
+      newCust._createdBy = req.user._id;
+      newCust.name = details[i]._customerId.name;
+      newCust.phone = details[i]._customerId.phone;
+      newCust.email = details[i]._customerId.email;
+      newCust.address = details[i]._customerId.address;
+      newCust.save();
+      newSales._customerId = newCust._id;
+    }
+
     newSales.invoiceNumber = details[i].invoiceNumber;
     newSales.waybillNumber = details[i].wayBillNumber;
     newSales.invoiceDate = details[i].invoiceDate;
@@ -607,27 +617,6 @@ router.post('/submitPending', verifyToken, async (req, res) => {
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
     newSales.offlineId = details[i]._id;
-    if (details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === '') {
-      // var anonymousCustomer = await Account.findById(Types.ObjectId('5b87a5f019e03f50077a671b'))
-      // console.log("Anonymous Customer:  ", anonymousCustomer);
-      console.log('CustomerId is Null or undefined');
-      newSales.customerName = 'Anonymous';
-      newSales.customerPhone = '08100000000';
-
-    } else {
-      console.log('CustomerId is not Null or undefined');
-      newSales.customerName = details[i]._customerId.name;
-      newSales.customerPhone = details[i]._customerId.phone;
-
-    }
-
-    if (details[i]._customerId === null || details[i]._customerId === undefined || details[i]._customerId === '') {
-      console.log('No customer to create');
-    } else {
-      createNewCustomer(details[i]._customerId, function(newCustomer) {
-        newSales._customerId = newCustomer._id;
-      });
-    }
 
 
     submittedIds.push(details[i]._id);

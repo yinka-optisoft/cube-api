@@ -128,7 +128,7 @@ router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
   const invoiceNumber = req.body.invoiceNumber;
   const waybillNumber = req.body.waybillNumber;
   const customerId = req.body.customerId;
-  
+
   var errors = req.validationErrors();
 
 
@@ -219,11 +219,10 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
   const sale = await Sales.findById(req.params.saleId)
                             .populate('_customerId').populate('_productId');
 
-  // const fullname = sale._customerId.name;
-  // console.log(fullname);
-  // const name = fullname.split(' ');
-  // const firstname = name[0];
-  // const lastname = name[1] ? fullname.substr(fullname.indexOf(' ') + 1) : '';
+  const fullname = sale._customerId.name;
+  const name = fullname.split(' ');
+  const firstname = name[0];
+  const lastname = name[1] ? fullname.substr(fullname.indexOf(' ') + 1) : '';
 
   // iterate tru product and send it to salesObject
   const salesObj = [];
@@ -249,7 +248,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                 let html = Handlebars.compile(data)({
                                   sales,
                                   sale,
-                                  // firstname,
+                                  fullname,
                                   store,
                                   salesObj
                                 });
@@ -260,7 +259,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                                               'public',
                                                               'images',
                                                               'store',
-                                                              // store.logo
+                                                      // store.logo
                                                     ));
 
                                 htmlPdf.create(html, {
