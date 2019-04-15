@@ -48,6 +48,7 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     const date = req.body.date;
     const salesDetails = req.body.salesDetails;
     const customer = req.body.customerId;
+    const paidBy = req.body.paidBy;
 
     // TODO: i need to work on subtotal product
     // console.log(productBought, 'productBought');
@@ -85,6 +86,7 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
     newSales._salesBy = req.user._id;
     newSales._branchId = req.user._branchId;
     newSales._storeId = req.user._storeId;
+    newSales.paidBy = paidBy;
 
     await newSales.save(function(err) {
       if (err) {
@@ -608,6 +610,7 @@ router.post('/submitPending', verifyToken, async (req, res) => {
 
     newSales.invoiceNumber = details[i].invoiceNumber;
     newSales.waybillNumber = details[i].wayBillNumber;
+    newSales.paidBy = details[i].paidBy;
     newSales.invoiceDate = details[i].invoiceDate;
     newSales.discount = details[i].discount;
     newSales.balanceTransaction = details[i].balanceTransaction;
