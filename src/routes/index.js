@@ -26,10 +26,6 @@ router.get('/dashboard', async (req, res) => {
 
 
 router.get('/', async (req, res) => {
-  const newBusiness = new Business();
-  newBusiness.name = "IT and Software development";
-  newBusiness.createdAt = new Date();
-  await newBusiness.save();
   res.render('site/index', { msg: req.flash('info'), layout: 'layouts/site' });
 });
 
