@@ -2,6 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import Store from '../models/store';
 import Branch from '../models/branch';
+import Package from '../models/package';
 import Role from '../models/role';
 import Category from '../models/category';
 import Business from '../models/business';
@@ -13,6 +14,7 @@ import guard from 'connect-ensure-login';
 import { check, validationResult } from 'express-validator/check';
 import jwt from 'jsonwebtoken';
 import Subscription from '../models/subscription';
+import License from '../models/license';
 
 const router = express.Router();
 
@@ -102,7 +104,7 @@ router.post('/create-store', async (req, res, next) => {
           fs.unlinkSync(logo.path);
           newStore.logo = name;
         }
-        await newStore.save(function(err) {
+        await newStore.save(function (err) {
           if (err) {
             console.log(err);
           }
@@ -118,7 +120,29 @@ router.post('/create-store', async (req, res, next) => {
         newBranch.state = newStore.state;
         newBranch.city = newStore.city;
         newBranch.headBranch = true;
-        await newBranch.save(function(err) {
+        await newBranch.save((err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        const newPackage = new Package();
+        newPackage.category = 'Value';
+        newPackage.period = 'Month';
+        newPackage.price = 'NGN 20,000';
+        newPackage.numberOfUser = 3;
+        newPackage.numberOfShop = 1;
+        newPackage.duration = 1;
+        newPackage.save((err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+
+        const newLicense = new License();
+        newLicense._packageId = newPackage._id;
+        newLicense.licenseName = 'Value';
+        newLicense.save((err) => {
           if (err) {
             console.log(err);
           }
@@ -128,6 +152,8 @@ router.post('/create-store', async (req, res, next) => {
         currentDate.setMonth(currentDate.getMonth() + 1);
 
         const sub = await Subscription();
+        sub._packageId = newPackage._id;
+        sub._licenseId = newLicense._id;
         sub._storeId = newStore._id;
         sub.activateDate = Date();
         sub.expiredDate = currentDate;
@@ -154,26 +180,24 @@ router.post('/create-store', async (req, res, next) => {
                                newAdmin.phone = fields.admin_phone;
                                newAdmin.email = fields.admin_email;*/
         Account.register(new Account(newAdmin), password,
-                         async (err, account) => {
+          async (err, account) => {
+            const tokenG = await Account.findById(account._id);
+            console.log(tokenG);
+            tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
+            await tokenG.save((err) => {
+              if (err) {
+                console.log(err);
+              }
+              console.log(tokenG);
+            });
 
-                           // return false;
-                           const tokenG = await Account.findById(account._id);
-                           console.log(tokenG);
-                           tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
-                           await tokenG.save(function(err) {
-                             if (err) {
-                               console.log(err);
-                             }
-                             console.log(tokenG);
-                           });
-
-                           if (err) {
-                             console.log(err);
-                           } else {
-                             req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
-                             res.redirect('/login');
-                           }
-                         });
+            if (err) {
+              console.log(err);
+            } else {
+              req.flash('info', `Store created successfully Your Key is ${newAdmin.username}, This is the Key you will use to login to your Company`);
+              res.redirect('/login');
+            }
+          });
 
       } catch (e) {
         console.log(e);
@@ -200,7 +224,7 @@ router.post('/roles', guard.ensureLoggedIn(), async (req, res, next) => {
   role._storeId = req.session._storeId;
   role._accountId = req.user._id;
 
-  await role.save(function(err) {
+  await role.save(function (err) {
     if (err) {
       console.log(err);
     } else {
@@ -227,7 +251,7 @@ router.post('/business', guard.ensureLoggedIn(), async (req, res, next) => {
   const business = await Business();
 
   business.name = req.body.name;
-  await business.save(function(err) {
+  await business.save(function (err) {
     if (err) {
       console.log(err);
     } else {
@@ -254,7 +278,7 @@ router.post('/category', guard.ensureLoggedIn(), async (req, res, next) => {
   category._storeId = req.session._storeId;
   category.name = req.body.name;
   category.description = req.body.description;
-  await category.save(function(err) {
+  await category.save(function (err) {
     if (err) {
       console.log(err);
     } else {
@@ -274,7 +298,7 @@ router.post('/category/update', guard.ensureLoggedIn(), async (req, res, next) =
 
   category.name = req.body.name;
   category.description = req.body.description;
-  await category.save(function(err) {
+  await category.save(function (err) {
     if (err) {
       console.log(err);
     } else {
