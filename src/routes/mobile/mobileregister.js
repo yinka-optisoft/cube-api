@@ -96,9 +96,9 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
   }
 
 
-  const findUser = await Account.findOne({ username: req.body.username});
+  const findUser = await Account.findOne({ username: req.body.username });
 
-  if(findUser){
+  if (findUser) {
     return res.json({ exist: 'Username already exist' });
   }
 
@@ -175,8 +175,6 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
     console.log(e);
   }
 });
-
-
 
 
 export default router;
