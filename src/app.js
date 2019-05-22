@@ -127,7 +127,7 @@ passport.deserializeUser(Account.deserializeUser());
 try {
   // mongoose.connect('mongodb://localhost:27017/cube');
   // new DB connection string
-  mongoose.connect('mongodb://cubeUser:cube24700@127.0.0.1:27017/cube700?authSource=cube700');
+  mongoose.connect('mongodb://cubeUser:cube24700@localhost:27017/cube700?authSource=cube700');
 
   // mongoose.connect('mongodb://cubeUser:cube24700@216.158.237.236:27017/cube700?authSource=cube700');
   // old DB connection string
