@@ -146,7 +146,6 @@ router.get('/sales', verifyToken, async (req, res) => {
   return res.json({ sales: sales });
 });
 
-
 router.get('/fetchSales', verifyToken, async (req, res) => {
   let pagiSales;
   const page = parseInt(req.headers.page);
