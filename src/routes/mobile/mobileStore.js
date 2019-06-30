@@ -221,6 +221,27 @@ router.get('/getCategories', verifyToken, async (req, res) => {
   return res.json({ category: getCategory, branch: getBranch });
 });
 
+router.get('/products', verifyToken, async (req, res) => {
+
+  let categories = [];
+  let branches = [];
+  const page = parseInt(req.headers.page);
+
+  const products = await BranchProduct.find({ _storeId: req.user._storeId }).populate('_branchId').populate({
+    path: '_productId',
+    populate: {
+      path: '_categoryId',
+      model: 'categories'
+    }
+  }).sort({ 'createdAt': -1 });
+
+  if (page == 0) {
+    categories = await Category.find({ _storeId: req.user._storeId });
+    branches = await Branch.find({ _storeId: req.user._storeId });
+  }
+  return res.json({ products: products, branches: branches, categories: categories });
+});
+
 router.get('/fetchProduct', verifyToken, async (req, res) => {
 
   let categories = [];

@@ -130,6 +130,23 @@ router.post('/addSales', verifyToken, async (req, res, next) => {
   }
 });
 
+
+router.get('/sales', verifyToken, async (req, res) => {
+  console.log(req.body, 'req.body');
+  let pagiSales;
+  const page = parseInt(req.headers.page);
+  const total = parseInt(req.headers.total);
+  const sales = await Sales.find({ _storeId: req.user._storeId })
+    .populate('_branchId').populate('_productId').populate('_userId').sort({ 'createdAt': -1 });
+  // console.log('hey');
+  // pagiSales = await Sales.paginate({ _storeId: req.user._storeId, _branchId: req.user._branchId },
+  //                                  { offset: page, limit: 10, populate: ['_branchId', '_userId', '_salesBy', '_productId'] });
+
+  console.log(sales, 'sales');
+  return res.json({ sales: sales });
+});
+
+
 router.get('/fetchSales', verifyToken, async (req, res) => {
   let pagiSales;
   const page = parseInt(req.headers.page);
