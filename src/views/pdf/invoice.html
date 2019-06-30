@@ -6,9 +6,8 @@
     <title>Sales Invoice</title>
     <style>
       body{      
-        /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
-        /* font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace; */
-        font-family:'Courier New', Courier, monospace;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* font-family:"Courier New", Courier, monospace; */
         font-size: 10px;
         min-width: 100%;
         min-height: 100%;
@@ -26,7 +25,7 @@
       }
 
       .totalprice{
-        font-weight: 100;
+        font-weight: bold;
       }
 
       /* table{
@@ -56,7 +55,7 @@
     <hr/>
 
     <div class="info">
-      <p>Store Name: {{store.name}}</p>
+      <p>Store Name: <b>{{store.name}}</b></p>
       <p>ADD: {{store.address}}</p>
       <p>Phone: {{store.phone}}</p>
     </div>
@@ -64,14 +63,14 @@
     <hr/>
 
     <div class="info">
-      <p>Customer Name: {{fullname}}</p>
+      <p>Customer Name: <b>{{fullname}}</b></p>
       <p>Customer Phone No: {{sale._customerId.phone}}</p>
     </div>
 
     <hr/>
 
     <div class="info">
-      <p>Paid By: {{sales.paidBy}}</p>
+      <p>Paid By: <b>{{sales.paidBy}}</b></p>
     </div>
 
     <hr/>
