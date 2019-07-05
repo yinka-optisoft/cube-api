@@ -55,16 +55,16 @@
     <hr/>
 
     <div class="info">
-      <p>Store: <b>{{store.name}}</b></p>
+      <p>Store Name: <b>{{store.name}}</b></p>
       <p>ADD: {{store.address}}</p>
-      <p>Num: {{store.phone}}</p>
+      <p>Phone: {{store.phone}}</p>
     </div>
 
     <hr/>
 
     <div class="info">
-      <p>Customer: <b>{{fullname}}</b></p>
-      <p>Num: {{sale._customerId.phone}}</p>
+      <p>Customer Name: <b>{{fullname}}</b></p>
+      <p>Customer Phone No: {{sale._customerId.phone}}</p>
     </div>
 
     <hr/>
@@ -109,8 +109,8 @@
         <tr>
           <th>PDT</th>
           <th>QTY</th>
-          <!-- <th>PRICE</th> -->
-          <!-- <th>SUBTOTAL</th> -->
+          <th>PRICE</th>
+          <th>SUBTOTAL</th>
         </tr>
       </thead>
       <tbody>
@@ -119,45 +119,35 @@
         <tr>
           <td>{{productName}}</td>
           <td>{{qty}}</td>
-          <!-- <td>{{unitPrice}}</td> -->
-          <!-- <td>{{subTotal}}</td> -->
+          <td>{{unitPrice}}</td>
+          <td>{{subTotal}}</td>
         </tr>
           {{/each}}
 
         <tr>
-          <td>PRICE</td>
-          <!-- <td>SUBTOTAL</td> -->
-          <!-- <td class="totalprice">Total Discount</td> -->
-          <td>NGN {{sale.unitPrice }}</td>
+          <td></td>
+          <td></td>
+          <td class="totalprice">Total Discount</td>
+          <td>NGN {{sale.discount }}</td>
         </tr>
 
         <tr>
-          <!-- <td></td>
-          <td></td> -->
-          <!-- <td>PRICE</td> -->
-          <td>SUBTOTAL</td>
-          <!-- <td class="totalprice">Total Discount</td> -->
-          <!-- <td>NGN {{subTotal}}</td> -->
-          <td>NGN {{sale.totalPrice}}</td>
-        </tr>
-
-        <tr>
-          <!-- <td></td>
-          <td></td> -->
+          <td></td>
+          <td></td>
           <td class="totalprice">AMT Paid</td>
           <td>NGN {{sale.amountPaid }}</td>
         </tr>
 
         <tr>
-          <!-- <td></td>bold
-          <td></td> -->
+          <td></td>bold
+          <td></td>
           <td class="totalprice">BLN Remain</td>
           <td>NGN {{sale.balanceTransaction }}</td>
         </tr>
 
         <tr>
-          <!-- <td></td>
-          <td></td> -->
+          <td></td>
+          <td></td>
           <td class="totalprice">Total Price</td>
           <td>NGN {{sale.totalPrice }}</td>
         </tr>

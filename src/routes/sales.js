@@ -250,7 +250,7 @@ router.get('/get/pdf/:saleId', guard.ensureLoggedIn(), async (req, res, next) =>
                                   sale,
                                   fullname,
                                   store,
-                                  salesObj
+                                  salesObj,
                                 });
 
                                 html = html.replace('storelogo',
