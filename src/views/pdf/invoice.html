@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="cache-control" content="no-cache" />
     <title>Sales Invoice</title>
+    <!-- <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Inconsolata" /> -->
     <style>
-      body{      
+      body{
         /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+        /* font-family: Inconsolata;  */
         font-family:"Courier New", Courier, monospace;
         font-size: 20px;
         min-width: 100%;
@@ -139,6 +141,13 @@
           <!-- <td class="totalprice">Total Discount</td> -->
           <!-- <td>NGN {{subTotal}}</td> -->
           <td>NGN {{sale.totalPrice}}</td>
+        </tr>
+
+        <tr>
+          <!-- <td></td>
+          <td></td> -->
+          <td class="totalprice">Discount</td>
+          <td>NGN {{sale.discount }}</td>
         </tr>
 
         <tr>
