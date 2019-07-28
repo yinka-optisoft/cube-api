@@ -13,7 +13,7 @@
         Arial Unicode MS", "Lucida Sans Unicode", "DejaVu Sans", "Quivira", "Symbola", "Code2000"
         /* font-family: "Arial Unicode MS", "Lucida Sans Unicode", "DejaVu Sans", "Quivira", "Symbola", "Code2000"; */
         /* font-family: "Arial Unicode MS", "Lucida Sans Unicode", "DejaVu Sans", "Quivira", "Symbola", "Code2000"; */
-        font-size: 20px;
+        font-size: 40px;
         min-width: 100%;
         min-height: 100%;
         margin: 5px;
@@ -47,7 +47,8 @@
   <body>
 
     <div class="header">
-      <p><b>{{store.name}}</b></p>
+      <!-- <p><b>{{store.name}}</b></p> -->
+      <p>{{store.name}}</p>
     </div>
     <hr/>
 
@@ -60,7 +61,8 @@
     <hr/>
 
     <div class="info">
-      <p>Store: <b>{{store.name}}</b></p>
+      <!-- <p>Store: <b>{{store.name}}</b></p> -->
+      <p>Store: {{store.name}}</p>
       <p>ADD: {{store.address}}</p>
       <p>Num: {{store.phone}}</p>
     </div>
@@ -68,14 +70,14 @@
     <hr/>
 
     <div class="info">
-      <p>Customer: <b>{{fullname}}</b></p>
+      <p>Customer: {{fullname}}</p>
       <p>Num: {{sale._customerId.phone}}</p>
     </div>
 
     <hr/>
 
     <div class="info">
-      <p>Paid By: <b>{{sales.paidBy}}</b></p>
+      <p>Paid By: {{sales.paidBy}}</p>
     </div>
 
     <hr/>
