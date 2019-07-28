@@ -4,10 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="cache-control" content="no-cache" />
     <title>Sales Invoice</title>
+    <!-- <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Inconsolata" /> -->
     <style>
-      body{      
+      body{
         /* font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+        /* font-family: Inconsolata;  */
         font-family:"Courier New", Courier, monospace;
+        /* Arial Unicode MS", "Lucida Sans Unicode", "DejaVu Sans", "Quivira", "Symbola", "Code2000" */
+        font-family: "Arial Unicode MS", "Lucida Sans Unicode", "DejaVu Sans", "Quivira", "Symbola", "Code2000";
         font-size: 20px;
         min-width: 100%;
         min-height: 100%;
@@ -55,16 +59,16 @@
     <hr/>
 
     <div class="info">
-      <p>Store Name: <b>{{store.name}}</b></p>
+      <p>Store: <b>{{store.name}}</b></p>
       <p>ADD: {{store.address}}</p>
-      <p>Phone: {{store.phone}}</p>
+      <p>Num: {{store.phone}}</p>
     </div>
 
     <hr/>
 
     <div class="info">
-      <p>Customer Name: <b>{{fullname}}</b></p>
-      <p>Customer Phone No: {{sale._customerId.phone}}</p>
+      <p>Customer: <b>{{fullname}}</b></p>
+      <p>Num: {{sale._customerId.phone}}</p>
     </div>
 
     <hr/>
@@ -109,8 +113,8 @@
         <tr>
           <th>PDT</th>
           <th>QTY</th>
-          <th>PRICE</th>
-          <th>SUBTOTAL</th>
+          <!-- <th>PRICE</th> -->
+          <!-- <th>SUBTOTAL</th> -->
         </tr>
       </thead>
       <tbody>
@@ -119,35 +123,52 @@
         <tr>
           <td>{{productName}}</td>
           <td>{{qty}}</td>
-          <td>{{unitPrice}}</td>
-          <td>{{subTotal}}</td>
+          <!-- <td>{{unitPrice}}</td> -->
+          <!-- <td>{{subTotal}}</td> -->
         </tr>
           {{/each}}
 
         <tr>
-          <td></td>
-          <td></td>
-          <td class="totalprice">Total Discount</td>
+          <td>PRICE</td>
+          <!-- <td>SUBTOTAL</td> -->
+          <!-- <td class="totalprice">Total Discount</td> -->
+          <td>NGN {{sale.unitPrice }}</td>
+        </tr>
+
+        <tr>
+          <!-- <td></td>
+          <td></td> -->
+          <!-- <td>PRICE</td> -->
+          <td>SUBTOTAL</td>
+          <!-- <td class="totalprice">Total Discount</td> -->
+          <!-- <td>NGN {{subTotal}}</td> -->
+          <td>NGN {{sale.totalPrice}}</td>
+        </tr>
+
+        <tr>
+          <!-- <td></td>
+          <td></td> -->
+          <td class="totalprice">Discount</td>
           <td>NGN {{sale.discount }}</td>
         </tr>
 
         <tr>
-          <td></td>
-          <td></td>
+          <!-- <td></td>
+          <td></td> -->
           <td class="totalprice">AMT Paid</td>
           <td>NGN {{sale.amountPaid }}</td>
         </tr>
 
         <tr>
-          <td></td>bold
-          <td></td>
+          <!-- <td></td>bold
+          <td></td> -->
           <td class="totalprice">BLN Remain</td>
           <td>NGN {{sale.balanceTransaction }}</td>
         </tr>
 
         <tr>
-          <td></td>
-          <td></td>
+          <!-- <td></td>
+          <td></td> -->
           <td class="totalprice">Total Price</td>
           <td>NGN {{sale.totalPrice }}</td>
         </tr>

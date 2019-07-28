@@ -50,7 +50,7 @@ router.get('/details', verifyToken, async (req, res) => {
     console.log(findStoreDetails);
     return res.json({ success: true, userCount: UsersCount, storeDetails: findStoreDetails, branchCount: branchCount });
   } else {
-    return res.json({ error: 'Error occured fetching store details' });
+    return res.json({ error: 'Error occurred fetching store details' });
   }
 });
 
@@ -440,4 +440,4 @@ router.post('/editStore', async (req, res) => {
 
 });
 export default router;
-// export default router;
+
