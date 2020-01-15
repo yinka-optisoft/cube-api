@@ -78,12 +78,12 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
   console.log(req.body);
 
-  const { store_name, store_email } = req.body;
+  const { companyName, email } = req.body;
 
-  const storeNameRex = new RegExp(['^', store_name, '$'].join(''), 'i');
-  const storeEmailRex = new RegExp(['^', store_email, '$'].join(''), 'i');
+  const storeNameRex = new RegExp(['^', companyName, '$'].join(''), 'i');
+  const storeEmailRex = new RegExp(['^', email, '$'].join(''), 'i');
 
-  const convertToUpper = store_name;
+  const convertToUpper = companyName;
   const storeName = convertToUpper.toUpperCase();
   const storeSub = storeName.substring(0, 3);
 
@@ -103,16 +103,16 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
     try {
       const newStore = new Store();
-      newStore.name = req.body.store_name;
-      newStore.email = req.body.store_email;
-      newStore.phone = req.body.store_phone;
-      newStore.address = req.body.store_address;
+      newStore.name = req.body.companyName;
+      newStore.email = req.body.email;
+      newStore.phone = req.body.phone;
+      newStore.address = req.body.address;
       newStore.shortCode = storeName;
       newStore.website = req.body.website;
       newStore.businessType = req.body.businessType;
-      newStore.country = req.body.storeCountry;
+      newStore.country = req.body.country;
       newStore.state = req.body.storeState;
-      newStore.city = req.body.storeCity;
+      newStore.city = req.body.city;
       newStore.logo = imageName;
       await newStore.save(function(err) {
         if (err) {
@@ -121,13 +121,13 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
       });
       const newBranch = new Branch();
       newBranch._storeId = newStore._id;
-      newBranch.name = req.body.store_name;
-      newBranch.address = req.body.store_address;
-      newBranch.email = req.body.store_email;
-      newBranch.phone = req.body.store_phone;
-      newBranch.country = req.body.storeCountry;
+      newBranch.name = req.body.companyName;
+      newBranch.address = req.body.address;
+      newBranch.email = req.body.email;
+      newBranch.phone = `+234${req.body.phone}`;
+      newBranch.country = req.body.country;
       newBranch.state = req.body.storeState;
-      newBranch.city = req.body.storeCity;
+      newBranch.city = req.body.city;
       newBranch.headBranch = true;
       await newBranch.save(function(err) {
         if (err) {
