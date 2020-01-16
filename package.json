@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon src/bin/www --inspect --exec babel-node",
-    "build": "babel src --plugins transform-remove-console --out-dir dist --copy-files &&  babel src/bin/www  --out-file dist/bin/www",
+    "build": "babel src --out-dir dist --copy-files &&  babel src/bin/www  --out-file dist/bin/www",
     "serve": "node dist/bin/www",
     "clean": "rm -rf dist",
     "lint": "eslint ./",
