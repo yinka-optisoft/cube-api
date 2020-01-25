@@ -76,7 +76,7 @@ const generateUniqueID = async storeShort => {
 
 router.post('/create/store', upload.single('avatar'), async (req, res) => {
 
-  console.log(req.body);
+  // console.log(req.body);
 
   const { companyName, email } = req.body;
 
@@ -183,13 +183,16 @@ router.post('/create/store', upload.single('avatar'), async (req, res) => {
       newAdmin.firstname = req.body.firstname;
       newAdmin.middlename = req.body.middlename;
       newAdmin.lastname = req.body.lastname;
-      newAdmin.address = req.body.store_addres;
-      newAdmin.phone = req.body.store_phone;
-      newAdmin.email = req.body.store_email;
+      newAdmin.address = req.body.addres;
+      newAdmin.phone = req.body.phoneNumber;
+      newAdmin.email = req.body.email;
       newAdmin.passport = 'defaultUser.png';
+
+      console.log(newAdmin, 'newAdmin');
 
       Account.register(new Account(newAdmin), password,
                        async (err, account) => {
+                         console.log(account, 'account');
                          const tokenG = await Account.findById(account._id);
                          console.log(tokenG);
                          tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
@@ -440,4 +443,3 @@ router.post('/editStore', async (req, res) => {
 
 });
 export default router;
-

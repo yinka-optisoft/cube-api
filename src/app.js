@@ -131,9 +131,9 @@ try {
     promiseLibrary: global.Promise
   };
   // local DB connection string
-  // mongoose.connect('mongodb://127.0.0.1:27017/cube', options);
+  mongoose.connect('mongodb://127.0.0.1:27017/cube', options);
   // new DB connection string
-  mongoose.connect('mongodb://cubeUser:cube24700@216.158.237.236:27017/cube700?authSource=cube700', options);
+  // mongoose.connect('mongodb://cubeUser:cube24700@216.158.237.236:27017/cube700?authSource=cube700', options);
 } catch (e) {
   throw e;
 }
