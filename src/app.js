@@ -133,7 +133,7 @@ try {
   // local DB connection string
   // mongoose.connect('mongodb://localhost:27017/cube', options);
   // new DB connection string
-  mongoose.connect('mongodb://cubeUser:cube24700@216.158.237.236:27017/cube700?authSource=cube700', options);
+  mongoose.connect('mongodb://cubeUser:cube24700@216.158.237.236:27017/cube700?authSource=cube700');
   // old DB connection string
   // mongoose.connect('mongodb://optisoft:Xbh42698bJrMeaf@cluster0-shard-00-00-ddq6l.mongodb.net:27017,cluster0-shard-00-01-ddq6l.mongodb.net:27017,cluster0-shard-00-02-ddq6l.mongodb.net:27017/cube700?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true');
 } catch (e) {

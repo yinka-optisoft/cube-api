@@ -367,7 +367,7 @@ router.get('/getProductDetails', verifyToken, async (req, res) => {
 
 
 router.post('/login', function(req, res, next) {
-  console.log(req.body.username, req.body.password);
+  console.log(req.body.username, req.body.password, 'req.body.username, req.body.password');
   passport.authenticate('local', function(err, user, info) {
     if (err)
       return res.json({ 'error': 'Invalid login one' });
