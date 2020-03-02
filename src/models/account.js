@@ -29,6 +29,8 @@ const Account = new Schema({
   rightToDeleteAdmin: { type: Boolean, default: false },
   status: { type: Boolean, default: true },
   enterProduct: { type: Boolean, default: false },
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   createdAt: { type: Date, default: Date.now }
 });
 

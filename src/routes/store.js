@@ -181,6 +181,7 @@ router.post('/create-store', async (req, res, next) => {
                                newAdmin.email = fields.admin_email;*/
         Account.register(new Account(newAdmin), password,
           async (err, account) => {
+            console.log(account);
             const tokenG = await Account.findById(account._id);
             console.log(tokenG);
             tokenG.token = await jwt.sign({ id: account._id }, 'cube7000Activated');
