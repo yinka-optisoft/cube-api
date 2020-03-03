@@ -185,13 +185,13 @@ router.post('/forgot/password', async (req, res, next) => {
       service: 'Gmail',
       host: 'smtp.gmail.com',
       auth: {
-        user: 'teslimafeez@gmail.com', // generated ethereal user
-        pass: 'Televisionhead' // generated ethereal password
+        user: 'cubeapp700@gmail.com', // generated ethereal user
+        pass: 'eoFseg@$$3AT' // generated ethereal password
       }
     });
     const mailOptions = {
       to: user.email,
-      from: 'teslimafeez@gmail.com',
+      from: 'cubeapp700@gmail.com',
       subject: 'Reset your password on Cube',
       text: `You are receiving this email because you ${user.firstname} ${user.lastname} have requested the reset of the password for your account.\n\n
             Please click on the following link, or paste this into your browser to complete the process:\n\n
@@ -210,8 +210,8 @@ router.post('/forgot/password', async (req, res, next) => {
             service: 'Gmail',
             host: 'smtp.gmail.com',
             auth: {
-              user: 'teslimafeez@gmail.com', // generated ethereal user
-              pass: 'Televisionhead' // generated ethereal password
+              user: 'cubeapp700@gmail.com', // generated ethereal user
+              pass: 'eoFseg@$$3AT' // generated ethereal password
             }
           });
           return transporter.sendMail(mailOptions)
@@ -263,8 +263,10 @@ router.post('/password/reset/:token', async (req, res, next) => {
 
   await Account.findOne({ passwordResetToken: req.params.token, passwordResetExpires: { $gt: Date.now() } }).then((sanitizedUser) => {
     if (!sanitizedUser) return;
+    console.log(newPassword, 'newPassword');
+    console.log(sanitizedUser, 'sanitizedUser');
     if (sanitizedUser) {
-      sanitizedUser.setPassword(newPassword, () => {
+      sanitizedUser.setPassword(req.body.password, () => {
         sanitizedUser.passwordResetToken = undefined;
         sanitizedUser.passwordResetExpires = undefined;
         return sanitizedUser.save().then(() => new Promise((resolve, reject) => {
@@ -280,13 +282,13 @@ router.post('/password/reset/:token', async (req, res, next) => {
       service: 'Gmail',
       host: 'smtp.gmail.com',
       auth: {
-        user: 'teslimafeez@gmail.com', // generated ethereal user
-        pass: 'Televisionhead' // generated ethereal password
+        user: 'cubeapp700@gmail.com', // generated ethereal user
+        pass: 'eoFseg@$$3AT' // generated ethereal password
       }
     });
     const mailOptions = {
       to: sanitizedUser.email,
-      from: 'teslimafeez@gmail.com',
+      from: 'cubeapp700@gmail.com',
       subject: 'Your Cube password has been changed',
       text: `Hello,\n\nThis is a confirmation that the password for your account ${sanitizedUser.email} has just been changed.\n`
     };
@@ -301,8 +303,8 @@ router.post('/password/reset/:token', async (req, res, next) => {
             service: 'Gmail',
             host: 'smtp.gmail.com',
             auth: {
-              user: 'teslimafeez@gmail.com', // generated ethereal user
-              pass: 'Televisionhead' // generated ethereal password
+              user: 'cubeapp700@gmail.com', // generated ethereal user
+              pass: 'eoFseg@$$3AT' // generated ethereal password
             }
           });
           return transporter.sendMail(mailOptions)
