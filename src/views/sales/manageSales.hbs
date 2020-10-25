@@ -63,6 +63,7 @@
                             <td id="phone{{_id}}">{{dateFormat createdAt "dddd, MMMM Do YYYY, h:mm:ss a"}}</td>
                             <td>
                                 <a href="/sales/get/pdf/{{_id}}" class="btn btn-primary btn-sm">View Invoice</a>
+                                <a href="/sales/reverse/{{_id}}" class="btn btn-danger btn-sm">Reverse sale</a>
                             </td>
                         </tr>
                         {{/each}}

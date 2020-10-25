@@ -97,13 +97,20 @@
                     <tr>
                         {{!-- <th>N/S</th> --}}
                         <th>Total Amount</th>
-                        <th>Total Balance Remain</th>
                         <th>Total Discount</th>
+                        <th>Total Balance Remain</th>
+                        
                     </tr>
                 </thead>
 
                 <tbody id="reportTable">
-                    
+                    {{#each sales}}
+                    <tr>
+                        <td>{{sumArray totalPrice}}</td>
+                        <td>{{discount}}</td>
+                        <td>{{balanceTransaction}}</td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>

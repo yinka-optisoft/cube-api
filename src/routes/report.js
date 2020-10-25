@@ -12,7 +12,11 @@ const router = express.Router();
 router.get('/', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
-  res.render('report/sales', { user, branches, layout: 'layouts/user' });
+  const sales = await Sales.find({ _storeId: req.user._storeId })
+                            .populate('_productId').populate('_branchId')
+                            .populate('_salesBy').populate('_customerId'); 
+                            console.log(sales, 'saless'); 
+  res.render('report/sales', { user, branches, sales, layout: 'layouts/user' });
 });
 
 
@@ -52,7 +56,13 @@ router.post('/get/sales', guard.ensureLoggedIn(), async (req, res) => {
 router.get('/product', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
-  res.render('report/product', { user, branches, layout: 'layouts/user' });
+  const products = await BranchProduct.find({ _storeId: req.user._storeId })
+                          .populate({
+                            path: '_productId',
+                            populate: { path: '_categoryId' }
+                          }).populate('_branchId')
+                          .populate('_movedBy');
+  res.render('report/product', { user, branches, products, layout: 'layouts/user' });
 });
 
 
@@ -99,7 +109,13 @@ router.post('/get/product', guard.ensureLoggedIn(), async (req, res) => {
 router.get('/product/update', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
-  res.render('report/productupdate', { user, branches, layout: 'layouts/user' });
+  const productUpdateHistory = await ProductUpdateHistory.find({ _storeId: req.user._storeId })
+                          .populate({
+                            path: '_productId',
+                            populate: { path: '_categoryId' }
+                          }).populate('_branchId')
+                          .populate('_updatedBy');
+  res.render('report/productupdate', { user, branches,productUpdateHistory, layout: 'layouts/user' });
 });
 
 
@@ -145,7 +161,11 @@ router.post('/get/product/update', guard.ensureLoggedIn(), async (req, res) => {
 router.get('/account', guard.ensureLoggedIn(), async (req, res) => {
   const user = await Account.findById(req.user._id).populate('_roleId').populate('_storeId').populate('_branchId');
   const branches = await Branch.find({ _storeId: req.user._storeId });
-  res.render('report/account', { user, branches, layout: 'layouts/user' });
+  const sales = await Sales.find({ _storeId: req.user._storeId })
+                            .populate('_productId').populate('_branchId')
+                            .populate('_salesBy').populate('_customerId');
+                            console.log(sales, 'saless')
+  res.render('report/account', { user, branches, sales, layout: 'layouts/user' });
 });
 
 

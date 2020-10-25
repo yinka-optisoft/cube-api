@@ -104,7 +104,15 @@
                 </thead>
 
                 <tbody id="reportTable">
-                    
+                    {{#each products}}
+                    <tr>
+                        <td>{{math @index "+" 1}}</td>
+                        <td>{{_productId.productName}}</td>
+                        <td>{{pieces}}</td>
+                        <td>{{_productId.sellingPrice}}</td>
+                        <td>{{_productId._categoryId.name}}</td>
+                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>

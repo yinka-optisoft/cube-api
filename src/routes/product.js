@@ -27,6 +27,7 @@ router.get('/', guard.ensureLoggedIn(), async (req, res, next) => {
   const categories = await Category.find({ _storeId: req.session._storeId });
   const suppliers = await Supply.find({ _storeId: req.user._storeId, show: true });
   const branches = await Branch.find({ _storeId: req.session._storeId });
+  console.log(products, 'pp');
   res.render('product/manage', { user, suppliers, expressFlash: req.flash('info'), products, branches, categories, layout: 'layouts/user' });
 });
 

@@ -106,7 +106,17 @@
                 </thead>
 
                 <tbody id="reportTable">
-                    
+                    {{#each productUpdateHistory}}
+                            <tr>
+                                <td>{{math @index "+" 1}}</td>
+                                <td>{{_productId.productName}}</td>
+                                <td>{{oldPieces}}</td>
+                                <td>{{newPieces}}</td>
+                                <td>{{totalPieces}}</td>
+                                <td>{{_productId.sellingPrice}}</td>
+                                <td>{{_productId._categoryId.name}}</td>
+                            </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>

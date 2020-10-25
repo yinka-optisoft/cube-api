@@ -118,6 +118,35 @@ router.post('/create/customer', guard.ensureLoggedIn(), async (req, res, next) =
 
 });
 
+router.get('/reverse/:saleId', async (req, res) => {
+  var saleId = req.params.saleId;
+  var productId = req.params.productId;
+  var piecesSold = req.params.piecesSold;
+  Sales.findById(saleId, function (err, sale) { 
+    console.log(sale._productId[0], 'pid');
+    console.log(sale.piecesSold[1], 'pieces');
+    
+    for (let i = 0; i < sale._productId.length; i++) { 
+      BranchProduct.findOne({ _productId: sale._productId[i], _branchId: req.user._branchId}, function (err, increaseProduct) { 
+        console.log(increaseProduct, 'before increase');
+        increaseProduct.pieces += sale.piecesSold[i];
+        increaseProduct.save((err) => {
+          if (err) {
+            console.log(err);
+          }else{
+            if(i == sale._productId.length - 1){
+              Sales.deleteOne({ _id: saleId}, function (err) {
+                var back = req.header('Referer');
+                return res.redirect(back);
+              });
+            }
+          }
+        });
+      });
+    }
+    
+  });
+});
 
 router.post('/create/sale', guard.ensureLoggedIn(), async (req, res, next) => {
 

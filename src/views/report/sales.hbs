@@ -109,7 +109,29 @@
                 </thead>
 
                 <tbody id="reportTable">
-                    
+                    {{#each sales}}
+                    <tr>
+                        <td>{{math @index "+" 1}}</td>
+                        <td>
+                            {{#each _productId}}
+                            <p>{{productName}}</p>
+                            {{/each}}
+                        </td>
+                        <td>{{piecesSold}}</td>
+                        <td>{{unitPrice}}</td>
+                        <td>{{subtotal}}</td>
+                        <td>{{sumArray totalPrice}}</td>
+                        <td>{{paidBy}}</td>
+                        <td>{{createdAt}}</td>
+                        <td>{{_branchId.name}}</td>
+                        <td>{{_salesBy.username}}</td>
+                    </tr>
+                    {{/each}}
+                    <tr>
+                        <td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td>
+                        <td>Total price:</td>
+                        <td>N{{getTotalPrice sales}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -232,6 +254,7 @@
     $(document).ready(function() {
         $("#reportForm").submit(function(e) {
             e.preventDefault();
+            $('#datatable tbody').empty();
             var branchId = $("#branchId option:selected").val();
             var dateBet = $('#dateBet').val();
             var dateTill = $('#dateTill').val();
@@ -292,7 +315,14 @@
                             $('#reportTable').append(tr);
                             $('#reportModal').modal('hide');
                     }
-
+                    var trr = (
+                        '<tr>'+
+                        '<td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td>'+
+                        '<td>Total price</td>'+
+                        '<td>N{{getTotalPrice sales}}</td>'+
+                    '</tr>'
+                    )
+                    $('#reportTable').prepend(trr);
                     $('#reportModal').modal('hide');
 
                     $('#datatable').dataTable({

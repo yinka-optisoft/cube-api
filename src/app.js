@@ -194,7 +194,35 @@ hbs.registerHelper({
   },
   or: (v1, v2) => {
     return v1 || v2;
-  }
+  },
+  math: function(lvalue, operator, rvalue, options) {
+    lvalue = parseFloat(lvalue);
+    rvalue = parseFloat(rvalue);
+  
+    return {
+      '+': lvalue + rvalue,
+      '-': lvalue - rvalue,
+      '*': lvalue * rvalue,
+      '/': lvalue / rvalue,
+      '%': lvalue % rvalue
+    }[operator];
+  },
+  sumArray: function(item) {
+    var result = 0;
+    for (var i=0; i<item.length; i++) {
+        result += item[i]; 
+    }
+    return result; 
+  },
+  getTotalPrice: function (items){
+    var result = 0;
+    items.forEach(function(item, index) {
+      for (var i=0; i<item['totalPrice'].length; i++) {
+          result += item['totalPrice'][i]; 
+      }
+    })
+    return result.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+},
 
 });
 
