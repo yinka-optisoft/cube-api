@@ -82,7 +82,36 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
       res.redirect('/branch');
     }
 
-  } else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
+  } 
+  // else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
+
+  //   if (numOfBra < 3) {
+
+  //     const newBranch = await Branch();
+  //     newBranch._storeId = req.session._storeId;
+  //     newBranch.name = req.body.name;
+  //     newBranch.email = req.body.email;
+  //     newBranch.phone = req.body.phone;
+  //     newBranch.address = req.body.address;
+  //     newBranch.country = req.body.country;
+  //     newBranch.state = req.body.state;
+  //     newBranch.city = req.body.city;
+  //     newBranch.status = true;
+  //     newBranch.mainBranch = false;
+  //     newBranch.save(function(err) {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         req.flash('info', 'Branch Saved Successfully');
+  //         res.redirect('/branch');
+  //       }
+  //     });
+  //   } 
+  //   else {
+  //     req.flash('info', 'Sorry You can\'t Have More than 3 Shops On This Package');
+  //     res.redirect('/branch');
+  //   }
+  else if (sub._licenseId.licenseName === 'Premium' || sub._packageId.category === 'Premium') {
 
     if (numOfBra < 3) {
 
@@ -105,32 +134,61 @@ router.post('/', guard.ensureLoggedIn(), async (req, res, next) => {
           res.redirect('/branch');
         }
       });
-    } else {
+    } 
+    else {
       req.flash('info', 'Sorry You can\'t Have More than 3 Shops On This Package');
       res.redirect('/branch');
     }
 
-  } else if (sub._licenseId.licenseName === 'Diamond' || sub._packageId.category === 'Diamond') {
+  } 
+  // else if (sub._licenseId.licenseName === 'Diamond' || sub._packageId.category === 'Diamond') {
 
-    const newBranch = await Branch();
-    newBranch._storeId = req.session._storeId;
-    newBranch.name = req.body.name;
-    newBranch.email = req.body.email;
-    newBranch.phone = req.body.phone;
-    newBranch.address = req.body.address;
-    newBranch.country = req.body.country;
-    newBranch.state = req.body.state;
-    newBranch.city = req.body.city;
-    newBranch.status = true;
-    newBranch.mainBranch = false;
-    newBranch.save(function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        req.flash('info', 'Branch Saved Successfully');
-        res.redirect('/branch');
-      }
-    });
+  //   const newBranch = await Branch();
+  //   newBranch._storeId = req.session._storeId;
+  //   newBranch.name = req.body.name;
+  //   newBranch.email = req.body.email;
+  //   newBranch.phone = req.body.phone;
+  //   newBranch.address = req.body.address;
+  //   newBranch.country = req.body.country;
+  //   newBranch.state = req.body.state;
+  //   newBranch.city = req.body.city;
+  //   newBranch.status = true;
+  //   newBranch.mainBranch = false;
+  //   newBranch.save(function(err) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       req.flash('info', 'Branch Saved Successfully');
+  //       res.redirect('/branch');
+  //     }
+  //   });
+
+  // }
+  else if (sub._licenseId.licenseName === 'Enterprise' || sub._packageId.category === 'Enterprise') {
+    if (numOfBra < 5) {
+      const newBranch = await Branch();
+      newBranch._storeId = req.session._storeId;
+      newBranch.name = req.body.name;
+      newBranch.email = req.body.email;
+      newBranch.phone = req.body.phone;
+      newBranch.address = req.body.address;
+      newBranch.country = req.body.country;
+      newBranch.state = req.body.state;
+      newBranch.city = req.body.city;
+      newBranch.status = true;
+      newBranch.mainBranch = false;
+      newBranch.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          req.flash('info', 'Branch Saved Successfully');
+          res.redirect('/branch');
+        }
+      });
+    }else {
+      req.flash('info', 'Sorry You can\'t Have More than 5 Shops On This Package');
+      res.redirect('/branch');
+    }
 
   }
 });
