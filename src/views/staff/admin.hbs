@@ -246,7 +246,7 @@
                                 <a href="/branch/user/view/{{_id}}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
 
                                 {{#if (eq status true)}}
-                                <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Di-activate</i></button>
+                                <Deactivate onclick="banMember(this.value)" value="{{_id}}" class="btn btn-danger btn-sm">Deactivate</i></button>
                                 {{else }}
                                 <button onclick="banMember(this.value)" value="{{_id}}" class="btn btn-info btn-sm">activate</button>
                                 {{/if}}

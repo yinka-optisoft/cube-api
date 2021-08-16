@@ -1,0 +1,18 @@
+
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} ^(.*)/index\.php 
+RewriteRule ^(.*)index.php$ http://127.0.0.1:8000/$1 [P,L]
+RewriteEngine on
+RewriteBase /
+RewriteRule (.*) http://127.0.0.1:8000/$1 [P,L]
+RewriteRule ^$ http://127.0.0.1:8000/ [L]
+
+
+# old
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^index.php$ http://127.0.0.1:8000/
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ http://127.0.0.1:8000/$1 [P,L]

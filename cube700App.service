@@ -1,0 +1,17 @@
+# copy to /lib/systemd/system/
+[Unit]
+Description=LTPS NodeJS Ezone Application
+After=network-online.target
+
+[Service]
+Restart=on-failure
+WorkingDirectory= /home/cubnet/cube700
+ExecStart= /usr/local/bin/node /home/cubnet/cube700/dist/bin/www
+
+[Install]
+WantedBy=muti-user.target
+
+# sudo cp /home/cubnet/public_html/app.cube700.net/cube700App.service /lib/systemd/system/
+# systemctl daemon-reload
+# systemctl enable cube700App
+# systemctl restart cube700App
